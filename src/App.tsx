@@ -9,6 +9,7 @@ import { ConnectButton } from '@mysten/dapp-kit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import GameBoard from './GameBoard';
 import Header from './Header';
+import Navbar from './Navbar';
 
 // Config options for the networks you want to connect to
 const networks = {
@@ -35,7 +36,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <WalletProvider>
           <div className="App">
-			<Header></Header>
+		  <Navbar />
+
+			{/* </Header> */}
 			<BrowserRouter>
 				<Routes>
                     <Route path="/"  Component={Home} />

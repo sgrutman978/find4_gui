@@ -17,7 +17,7 @@ body{
   }
 }
 
-.App-header {
+/* .App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -26,7 +26,7 @@ body{
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
+} */
 
 .App-link {
   color: #61dafb;
@@ -74,6 +74,7 @@ body{
   background-color:blue;
   margin:auto;
   position: relative;
+  margin-top: calc((100vh - 74px - 700px)/2);
 }
 
 .gamespace{
@@ -110,4 +111,64 @@ body{
   background-color: green;
   opacity: 0.5;
   cursor:pointer;
+}
+
+
+.App {
+  text-align: center;
+  /* background-color: #282c34; */
+  min-height: calc(100vh - 60px);
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  justify-content: center;
+  font-size: calc(10px + 1vmin);
+  color: white;
+  /* align-items: flex-end; */
+  flex-wrap: wrap;
+  /* gap: 16px; */
+}
+
+.App-header {
+  /* margin-top: 50px; */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 7px 30px;
+  flex-grow: 1;
+  /* flex-basis: 1060px; */
+  height:60px;
+}
+
+.logo {
+  font-size: 1.5em;
+  color: white;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li {
+  display: inline;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.nav-links a:hover {
+  color: #61dafb;
+}
+
+.new-game-button{
+  height:50px;
 }

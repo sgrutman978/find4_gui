@@ -50,7 +50,7 @@ function GameBoard() {
                 const row = [];
                 for (let r = 0; r < 7; r++) {
                     const color = (gameStats.version != "" &&  gameStats.data["board"]? gameStats.data["board"][c][r] : "");
-                    row.push(<div className={"gamespace spaceColor"+color}></div>);
+                    row.push(<div className={"gamespace spaceColor"+color} key={`${c*c}${r*r}`}></div>);
                 }
                 board.push(row);
             }
