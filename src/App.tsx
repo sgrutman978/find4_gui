@@ -8,8 +8,10 @@ import { getFullnodeUrl, SuiClient, SuiClientOptions, SuiHTTPTransport } from '@
 import { ConnectButton } from '@mysten/dapp-kit'; 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import GameBoard from './GameBoard';
-import Header from './Header';
+// import Header from './Header';
 import Navbar from './Navbar';
+import GameHomeScreen from './GameHomeScreen';
+// import { useLocation } from 'react-router-dom';
 
 // Config options for the networks you want to connect to
 const networks = {
@@ -20,6 +22,7 @@ const queryClient = new QueryClient();
  
 function App() {
 	const [activeNetwork, setActiveNetwork] = useState('devnet' as keyof typeof networks);
+	// const location = useLocation();
 	return (
 		<SuiClientProvider
 			networks={networks}
@@ -36,12 +39,13 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <WalletProvider>
           <div className="App">
-		  <Navbar />
+		  {window.location.pathname == "/" ? <Navbar /> : ""}
 
 			{/* </Header> */}
 			<BrowserRouter>
 				<Routes>
                     <Route path="/"  Component={Home} />
+					<Route path="/gameHomeScreen" Component={GameHomeScreen}/>
                     <Route path="/game/:gameID" Component={GameBoard}/>
 				</Routes>
             </BrowserRouter>

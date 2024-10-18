@@ -3,11 +3,18 @@ import React from 'react';
 
 function Home() {
   return (
-    <div className="App">
-		<header className="App-header">
-			<h1>Welcome to Connect Four!</h1>
-			<p>Your blockchain-powered Connect Four experience awaits.</p>
-		</header>
+		<div className="homeScreen">
+			<div style={{marginTop: 70}} className="homeScreenSection">
+				<div className="section">
+
+				</div>
+				<div className="section">
+					
+				</div>
+			</div>
+			<div className="homeScreenSection">
+				
+			</div>
 		</div>
   );
 }

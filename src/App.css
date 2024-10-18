@@ -1,9 +1,11 @@
 body{
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
-.App {
+.App, .homeScreen {
   text-align: center;
+  width:100%;
+  height:100%;
 }
 
 .App-logo {
@@ -16,17 +18,6 @@ body{
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
-/* .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-} */
 
 .App-link {
   color: #61dafb;
@@ -114,61 +105,126 @@ body{
 }
 
 
-.App {
-  text-align: center;
+/* .App { */
+  /* text-align: center; */
   /* background-color: #282c34; */
-  min-height: calc(100vh - 60px);
-  display: flex;
+  /* min-height: calc(100vh - 60px); */
+  /* display: flex; */
   /* flex-direction: column; */
   /* align-items: center; */
-  justify-content: center;
-  font-size: calc(10px + 1vmin);
-  color: white;
+  /* justify-content: center; */
+  /* font-size: calc(10px + 1vmin); */
+  /* color: white; */
   /* align-items: flex-end; */
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   /* gap: 16px; */
-}
+/* } */
 
-.App-header {
+/* .App-header { */
   /* margin-top: 50px; */
-}
+/* } */
 
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  padding: 7px 30px;
-  flex-grow: 1;
+  /* display: flex; */
+  position:fixed;
+  background-color: green;
+  padding: 15px 0px;
+  /* flex-grow: 1; */
   /* flex-basis: 1060px; */
-  height:60px;
+  height:40px;
+  width:100%;
+  z-index:10;
+  border-bottom: green solid 2px;
 }
 
 .logo {
   font-size: 1.5em;
   color: white;
+  float:left;
 }
 
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-
-.nav-links li {
-  display: inline;
-}
-
-.nav-links a {
-  color: white;
+.menuElement{
+  /* background-color: yellow; */
+  width:140px;
+  height:40px;
+  float:right;
+  border-radius:25px;
+  cursor: pointer;
+  font-size:18px;
   text-decoration: none;
-  font-size: 1.2em;
+  font-weight: 900;
+  margin-right:20px;
+  line-height: 40px;
+  color:yellow;
 }
 
-.nav-links a:hover {
-  color: #61dafb;
+.menuElement:hover{
+  /* font-weight:10000; */
+  color:red;
+  font-size:20px;
 }
 
-.new-game-button{
-  height:50px;
+.newGameButton {
+  background-color: rgba(1, 1, 1, 0);
+  border: none;
+  color: yellow;
+  font-size: 69px;
+  font-weight: 900;
+  float:left;
+  margin-top: 50px;
+  height:100px;
+  width:500px;
+  /* background-color: pink; */
+  position:relative;
+  /* position:absolute; */
+  /* top:300px; */
+  /* left: calc(50% - 250px); */
+}
+
+.newButtonsContainer{
+  position:absolute;
+  top:250px;
+  left: calc(50% - 250px);
+  width:500px;
+  height: 500px;
+  /* background-color: green; */
+}
+
+.newGameButton:hover{
+  color: red;
+  font-size: 75px;
+}
+
+.connectButtonWrapper{
+  position: absolute;
+  top:20px;
+  right:20px;
+}
+
+.homeScreenSection{
+  background-color: pink;
+  border: black 1px solid;
+  position: relative;
+  float:left;
+  height:540px;
+  width:100%;
+}
+
+.gameHomeScreen{
+  position:absolute;
+  top:0px;
+  left:0px;
+  width:100%;
+  height: 100%;
+  background-color: blue;
+}
+
+.launchAppButton {
+  border: yellow 1px solid;
+  width:150px;
+}
+
+.launchAppButton:hover{
+  border: red 1px solid;
+  /* padding:1px; */
 }

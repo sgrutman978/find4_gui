@@ -8,7 +8,7 @@ import { getFullnodeUrl, SuiClient, SuiEvent, Unsubscribe } from '@mysten/sui/cl
 // import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 // import { checkIfMyTurn } from './GameBoard';
  
- function NewGameButton() {
+ function NewGameButton(props: any) {
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 	const [digest, setDigest] = useState('');
 	const currentAccount = useCurrentAccount();
@@ -173,18 +173,20 @@ import { getFullnodeUrl, SuiClient, SuiEvent, Unsubscribe } from '@mysten/sui/cl
 	});					
 };
  
-	return (<>
-		{/* <a href={"/game/"} className='gameListItemLink'>
-            <button className="details-button">View Details</button>
-		</a> */}
-		<button className="new-game-button" onClick={async () => sendTransaction(await newGameTx())}>NEW GAME</button>
-		</>
+	return (
+	<>
+		<button className="newGameButton" onClick={async () => sendTransaction(await newGameTx())}>{props.label}</button></>
 	);
 }
 
 export default NewGameButton;
 
 
+// {/* <div className="menuElement">
+// 		{/* <a href={"/game/"} className='gameListItemLink'>
+//             <button className="details-button">View Details</button>
+// 		</a> */}
 
+		// {/* </div>*/}
 
 
