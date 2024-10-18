@@ -164,6 +164,15 @@ body{
   font-size:20px;
 }
 
+.newButtonsContainer{
+  position:absolute;
+  top:250px;
+  left: calc(50% - 250px);
+  width:500px;
+  height: 500px;
+  /* background-color: green; */
+}
+
 .newGameButton {
   background-color: rgba(1, 1, 1, 0);
   border: none;
@@ -179,15 +188,7 @@ body{
   /* position:absolute; */
   /* top:300px; */
   /* left: calc(50% - 250px); */
-}
-
-.newButtonsContainer{
-  position:absolute;
-  top:250px;
-  left: calc(50% - 250px);
-  width:500px;
-  height: 500px;
-  /* background-color: green; */
+  cursor:pointer;
 }
 
 .newGameButton:hover{
@@ -227,4 +228,20 @@ body{
 .launchAppButton:hover{
   border: red 1px solid;
   /* padding:1px; */
+}
+
+.ball{
+  width:30px;
+  height: 30px;
+  position: absolute;
+  border-radius: 15px;
+  float:"left";
+}
+
+.yellow{
+  background-color: yellow;
+}
+
+.red{
+  background-color: red;
 }
