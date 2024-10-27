@@ -14,19 +14,22 @@ function Find4Animation() {
 					];
 	const [items, setItems] = useState([<></>]);
 	const [reset, setReset] = useState(0);
+	const [counter, setCounter] = useState(0);
+
+
 
 	useEffect(() => {
 		let i = 0;
 		setItems([]);
 		pairs.forEach(([l,t,c]) => {
 			setTimeout(() => {
-				setItems(prev => [...prev, <div className={"ball " + (!c?"yellow":"red")} style={{left:(10+l*40), top:(10+t*40)}}></div>]);
+				setItems(prev => [...prev, <div className={"ball " + (!c?"yellow":"red")} style={{left:(10+l*40), top:(10+t*40)}}></div>]); //key={`ball${l}${t}${c}${reset}${i}${Date.now()}`}
 			}, (i+1)*100);
 			i = i + 1;
 		});
 		let x: JSX.Element[] = [];
 			pairs.forEach(([l,t,c]) => {
-				x.push(<div className={"ball " + (!c?"yellow":"red")} style={{left:(10+l*40), top:(10+t*40)}}></div>);
+				x.push(<div className={"ball " + (!c?"yellow":"red")} style={{left:(10+l*40), top:(10+t*40)}}></div>); //key={`ball${l}${t}${c}${reset}${Date.now()}2`}
 		});
 		for(let q = 1; q < 11; q=q+1){
 			setTimeout(() => {
@@ -38,10 +41,19 @@ function Find4Animation() {
 				}, (i+1)*100+q*200+5000);
 			}
 		}
+
+		// let li = [<></>];
+		// let i = 0;
+		// pairs.forEach(([l,t,c]) => {
+		// 	li.push(<div key={`balll${l}t${t}c${c}reset${reset}i${i}date${Date.now()}`} className={"ball " + (!c?"yellow":"red")} style={{left:(10+l*40), top:(10+t*40)}}></div>)
+		// 	i++;
+		// });
+		// setItems(li);
+
 	}, [reset])
 
   return (
-	<div style={{width:800, height: 300, position: "absolute", left:100, top:10}}>
+	<div className="find4AnimationContainer" key={"animationContainer"+Date.now()}>
 		{
 		    items
 		}

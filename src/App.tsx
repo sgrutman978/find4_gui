@@ -11,6 +11,7 @@ import GameBoard from './GameBoard';
 // import Header from './Header';
 import Navbar from './Navbar';
 import GameHomeScreen from './GameHomeScreen';
+import { myNetwork } from './sui_controller';
 // import { useLocation } from 'react-router-dom';
 
 // Config options for the networks you want to connect to
@@ -21,7 +22,7 @@ const networks = {
 const queryClient = new QueryClient();
  
 function App() {
-	const [activeNetwork, setActiveNetwork] = useState('devnet' as keyof typeof networks);
+	const [activeNetwork, setActiveNetwork] = useState(myNetwork as keyof typeof networks);
 	// const location = useLocation();
 	return (
 		<SuiClientProvider
@@ -32,7 +33,7 @@ function App() {
 			}}
       // defaultNetwork="devnet"
 			createClient={(network, config) => {
-        return new SuiClient({ url: getFullnodeUrl('devnet') });
+        return new SuiClient({ url: getFullnodeUrl(network) });
 			}}
 		>
       
