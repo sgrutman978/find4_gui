@@ -9,7 +9,7 @@ import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecu
 function Navbar(props: any) {
   return (
     <nav className="navbar">
-      <a href="/" className="logo">Connect Four</a>
+      <a href="/" className="logo"><span style={{position: "relative", bottom: 14}}>Find</span><img src="../f4-42.png" style={{width: 50, height: 50, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 13}}>.io</span></a>
       {/* <ul className="nav-links"> */}
         {/* <li> */}
             {/* <BrowserRouter>

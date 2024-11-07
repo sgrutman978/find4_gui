@@ -102,13 +102,13 @@ function GameBoard() {
             <div id="gameboard">
             {displayRows(key)}
             {myTurn ? <>
-                <button className="selectColumn" style={{left: "7px"}} onClick={() => {sendTransaction(0)}}>0</button>
-                <button className="selectColumn" style={{left: "121px"}} onClick={() => {sendTransaction(1)}}>1</button>
-                <button className="selectColumn" style={{left: "235px"}} onClick={() => {sendTransaction(2)}}>2</button>
-                <button className="selectColumn" style={{left: "349px"}} onClick={() => {sendTransaction(3)}}>3</button>
-                <button className="selectColumn" style={{left: "463px"}} onClick={() => {sendTransaction(4)}}>4</button>
-                <button className="selectColumn" style={{left: "577px"}} onClick={() => {sendTransaction(5)}}>5</button>
-                <button className="selectColumn" style={{left: "691px"}} onClick={() => {sendTransaction(6)}}>6</button>
+                <button className="selectColumn" style={{left: "7px"}} onClick={() => {sendTransaction(0)}}></button>
+                <button className="selectColumn" style={{left: "121px"}} onClick={() => {sendTransaction(1)}}></button>
+                <button className="selectColumn" style={{left: "235px"}} onClick={() => {sendTransaction(2)}}></button>
+                <button className="selectColumn" style={{left: "349px"}} onClick={() => {sendTransaction(3)}}></button>
+                <button className="selectColumn" style={{left: "463px"}} onClick={() => {sendTransaction(4)}}></button>
+                <button className="selectColumn" style={{left: "577px"}} onClick={() => {sendTransaction(5)}}></button>
+                <button className="selectColumn" style={{left: "691px"}} onClick={() => {sendTransaction(6)}}></button>
             </> : <></>}
             </div>
             </div>

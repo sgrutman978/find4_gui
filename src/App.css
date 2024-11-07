@@ -66,7 +66,7 @@ body{
   background-color:blue;
   margin:auto;
   position: relative;
-  margin-top: calc((100vh - 74px - 700px)/2);
+  margin-top: 40px; /*calc((100vh - 74px - 700px)/2);*/
 }
 
 .gamespace{
@@ -128,20 +128,26 @@ body{
 .navbar {
   /* display: flex; */
   position:fixed;
-  background-color: green;
+  background-color: #0533FF;
   padding: 15px 0px;
   /* flex-grow: 1; */
   /* flex-basis: 1060px; */
   height:40px;
   width:100%;
   z-index:10;
-  border-bottom: green solid 2px;
+  border-bottom: #0533FF solid 2px;
+  text-decoration: none;
+   font-family: "Balsamiq Sans", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 .logo {
-  font-size: 1.5em;
-  color: white;
+  font-size:40px;
+  color: yellow;
   float:left;
+  margin-left:30px;
+  text-decoration: none;
 }
 
 .menuElement{
