@@ -1,4 +1,5 @@
 import React from 'react';
+import Find4Animation from './Find4Animation';
 // import './Navbar.css';
 
 function Home() {
@@ -6,7 +7,9 @@ function Home() {
 		<div className="homeScreen">
 			<div style={{marginTop: 70}} className="homeScreenSection">
 				<div className="section">
-
+					<div className="animated_home">
+						<Find4Animation size={13} animated={true} />
+					</div>
 				</div>
 				<div className="section">
 					

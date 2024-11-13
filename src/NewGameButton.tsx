@@ -1,7 +1,8 @@
 import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx } from './sui_controller';
+import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, fetchProfile } from './sui_controller';
+import { ExtendedProfile } from './GameBoard';
  
  function NewGameButton(props: any) {
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -17,19 +18,24 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx } f
 	if (!currentAccount){
 		alert("Please connect a SUI wallet");
 	} else {
-		let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx();
-		console.log(transaction);
-		signAndExecuteTransaction({
-			transaction: transaction,
-			chain: `sui:${myNetwork}`,
-		}, {
-			onSuccess: (result) => {
-				console.log('executed transaction', result);
-			},
-			onError: (e) => {
-				console.log(e);
+		fetchProfile(currentAccount.address).then(async (profile) => {
+			if(profile){
+				// console.log(profile);
+				let transaction = props.gameType == "single" ? await newSinglePlayerGameTx(profile.pointsAddy!, profile.points!) : await newMultiPlayerGameTx(profile.pointsAddy!, profile.points!);
+				// console.log(transaction);
+				signAndExecuteTransaction({
+					transaction: transaction,
+					chain: `sui:${myNetwork}`,
+				}, {
+					onSuccess: (result) => {
+						console.log('executed transaction', result);
+					},
+					onError: (e) => {
+						console.log(e);
+					}
+				});	
 			}
-		});	
+		});
 	}				
 };
  

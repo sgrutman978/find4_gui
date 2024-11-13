@@ -1,6 +1,7 @@
 body{
   overflow-x:hidden;
-  /* background-color: blue; */
+  background-color: #0533FF; /*rgb(198, 222, 255);
+  /* background-image: url("../public/bricks.avif"); */
 }
 
 .App, .homeScreen {
@@ -63,10 +64,44 @@ body{
 #gameboard{
   height:700px;
   width: 811px;
-  background-color:blue;
-  margin:auto;
+  /* background-color:#0533FF; */
+  /* margin:auto; */
+  left: calc(50vw - 405.5px);
+  position: absolute;
+  bottom: 30px;
+  /*margin-top: 40px; calc((100vh - 74px - 700px)/2);*/
+}
+
+.animated_home{
   position: relative;
-  margin-top: 40px; /*calc((100vh - 74px - 700px)/2);*/
+  margin: auto;
+  /* background-color: green; */
+  width:941px;
+  height: 100px;
+  top:200px;
+}
+
+.logo_gameboard{
+  position:relative;
+  /* left:300px; */
+  margin:auto;
+  top:15px;
+  width:280px;
+  height:100px;
+  /* background-color:green; */
+}
+
+.logo_app_home{
+  position:relative;
+  /* left:300px; */
+  margin:auto;
+  top:190px;
+  width:200px;
+  height:100px;
+  color: yellow;
+  text-decoration: none;
+  font-family: "Balsamiq Sans", sans-serif;
+  /* background-color:yellow; */
 }
 
 .gamespace{
@@ -78,6 +113,15 @@ body{
   margin-top: 14px;
 }
 
+.gamespaceCover{
+  height:80px;
+  width:80px;
+  float:left;
+  margin-left: 10px;
+  border-radius:40px;
+  margin-top: 10px;
+}
+
 .spaceColor0 {
   background-color:white;
 }
@@ -86,8 +130,16 @@ body{
   background-color:yellow;
 }
 
+.spaceCover1 {
+  background-color:rgb(236, 236, 13);
+}
+
 .spaceColor2 {
   background-color:red;
+}
+
+.spaceCover2 {
+  background-color:rgb(235, 11, 11);
 }
 
 .selectColumn {
@@ -96,6 +148,7 @@ body{
   position: absolute;
   top: 0px;
   opacity: 0;
+  border: none;
 
 }
 
@@ -137,7 +190,7 @@ body{
   z-index:10;
   border-bottom: #0533FF solid 2px;
   text-decoration: none;
-   font-family: "Balsamiq Sans", sans-serif;
+  font-family: "Balsamiq Sans", sans-serif;
   font-weight: 500;
   font-style: normal;
 }
@@ -148,6 +201,7 @@ body{
   float:left;
   margin-left:30px;
   text-decoration: none;
+  font-family: "Balsamiq Sans", sans-serif;
 }
 
 .menuElement{
@@ -157,18 +211,18 @@ body{
   float:right;
   border-radius:25px;
   cursor: pointer;
-  font-size:18px;
+  font-size:21px;
   text-decoration: none;
   font-weight: 900;
   margin-right:20px;
-  line-height: 40px;
+  line-height: 44px;
   color:yellow;
 }
 
 .menuElement:hover{
   /* font-weight:10000; */
   color:red;
-  font-size:20px;
+  font-size:24px;
 }
 
 .newButtonsContainer{
@@ -205,13 +259,14 @@ body{
 
 .connectButtonWrapper{
   position: absolute;
+  /* background-color:pink; */
   top:20px;
   right:20px;
 }
 
 .homeScreenSection{
-  background-color: pink;
-  border: black 1px solid;
+  /* background-color: pink; */
+  /* border: black 1px solid; */
   position: relative;
   float:left;
   height:540px;
@@ -224,24 +279,24 @@ body{
   left:0px;
   width:100%;
   height: 100%;
-  background-color: blue;
+  background-color: 0533FF;
 }
 
 .launchAppButton {
   border: yellow 1px solid;
-  width:150px;
+  width:160px;
+  font-size:20px;
+  line-height: 41px;
 }
 
 .launchAppButton:hover{
   border: red 1px solid;
+  font-size:23px;
   /* padding:1px; */
 }
 
 .ball{
-  width:30px;
-  height: 30px;
   position: absolute;
-  border-radius: 15px;
   float:"left";
 }
 
@@ -251,6 +306,10 @@ body{
 
 .red{
   background-color: red;
+}
+
+.red_color{
+  color: red !important;
 }
 
 .find4AnimationContainer{
@@ -264,9 +323,154 @@ body{
 
 #gameboard-body{
   position:absolute;
-  background-color: white;
+  /* background-color: white; */
   width:100%;
   height:100%;
   top:0px;
   left:0px;
+}
+
+.profilePic {
+  width: 180px;
+  height: 180px;
+  /* background-color:green; */
+  position:absolute;
+  top:48px;
+  left:60px;
+  border-radius: 110px;
+  margin-top:8px;
+}
+
+.profileContainer {
+  /* background-color:pink; */
+  width:300px;
+  height:300px;
+  /* position:relative; */
+  top:200px;
+  margin:auto;
+  /* margin-left: 1000px; */
+  left: calc(50vw - 725px);
+  position: absolute;
+  /* bottom: 30px; */
+  color: yellow;
+  font-weight: 900;
+}
+
+.profileUsername {
+  /* margin:auto; */
+  /* float:center; */
+  position:relative;
+  top:200px;
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.profileAddy {
+  position:relative;
+  top:205px;
+  font-size: 21px;
+  margin-bottom: 20px;
+}
+
+.profilePoints {
+  font-size: 30px;
+  margin-bottom: 20px;
+  position:relative;
+  font-weight: 900;
+}
+
+.yellowHome {
+  color: yellow;
+  font-size: 30px;
+  position: absolute;
+  left: 25px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.yellowHome:hover {
+  color: red;
+}
+
+.profileButton {
+  color: yellow;
+  font-size: 33px;
+  position: relative;
+  margin-right: 10px;
+  top: 5px;
+  cursor: pointer;
+  background-color: rgba(1, 1, 1, 0);
+  border: none;
+  font-family: "Balsamiq Sans", sans-serif;
+  float:left;
+}
+
+.profilePicInButton {
+  position: relative;
+  margin-right: 10px;
+  float:left;
+  width:36px;
+  height:36px;
+  border-radius: 18px;
+}
+
+.profileButton:hover {
+  /* top:0px; */
+  color: red;
+  /* font-size: 42px; */
+}
+
+
+
+
+
+
+.popup {
+  /* display: none; */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+  border-radius: 10px;
+}
+
+.overlay {
+  /* display: none; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.popup h2 {
+  margin-top: 0;
+}
+
+.popup form {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup input {
+  margin: 10px 0;
+  padding: 5px;
+}
+
+.popup button {
+  padding: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.popup button:hover {
+  background-color: #0056b3;
 }
