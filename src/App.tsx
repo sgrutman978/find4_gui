@@ -50,8 +50,8 @@ function App() {
 			<BrowserRouter>
 				<Routes>
                     <Route path="/"  Component={Home} />
-					<Route path="/gameHomeScreen" Component={GameHomeScreen}/>
-                    <Route path="/game/:gameID" Component={GameBoard}/>
+					<Route path="/app" Component={GameHomeScreen}/>
+                    <Route path="/app/game/:gameID" Component={GameBoard}/>
 				</Routes>
             </BrowserRouter>
           </div>

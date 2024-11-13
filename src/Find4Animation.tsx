@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-function Find4Animation() {
+function Find4Animation(props: any) {
+	const size = props.size;
 
 	// [l,t,c]
 	const pairs = [[0,0,0], [0,1,0], [0,2,0], [0,3,0], [0,4,0], [1,0,0], [1,2,0], [2,0,0], //f
@@ -23,22 +24,24 @@ function Find4Animation() {
 		setItems([]);
 		pairs.forEach(([l,t,c]) => {
 			setTimeout(() => {
-				setItems(prev => [...prev, <div className={"ball " + (!c?"yellow":"red")} style={{left:(10+l*40), top:(10+t*40)}}></div>]); //key={`ball${l}${t}${c}${reset}${i}${Date.now()}`}
+				setItems(prev => [...prev, <div className={"ball " + (!c?"yellow":"red")} style={{left:((1*size)+l*(4*size)), top:((1*size)+t*(4*size)), width:(3*size), height:(3*size), borderRadius:(1.5*size)}}></div>]); //key={`ball${l}${t}${c}${reset}${i}${Date.now()}`}
 			}, (i+1)*100);
 			i = i + 1;
 		});
-		let x: JSX.Element[] = [];
+		if(props.animated){
+			let x: JSX.Element[] = [];
 			pairs.forEach(([l,t,c]) => {
-				x.push(<div className={"ball " + (!c?"yellow":"red")} style={{left:(10+l*40), top:(10+t*40)}}></div>); //key={`ball${l}${t}${c}${reset}${Date.now()}2`}
-		});
-		for(let q = 1; q < 11; q=q+1){
-			setTimeout(() => {
-				setItems((q%2?[]:x));
-			}, ((i+1)*100+q*200));
-			if(q == 10){
+				x.push(<div className={"ball " + (!c?"yellow":"red")} style={{left:((1*size)+l*(4*size)), top:((1*size)+t*(4*size)), width:(3*size), height:(3*size), borderRadius:(1.5*size)}}></div>); //key={`ball${l}${t}${c}${reset}${Date.now()}2`}
+			});
+			for(let q = 1; q < 11; q=q+1){
 				setTimeout(() => {
-					setReset(prev => prev + 1);
-				}, (i+1)*100+q*200+5000);
+					setItems((q%2?[]:x));
+				}, ((i+1)*100+q*200));
+				if(q == 10){
+					setTimeout(() => {
+						setReset(prev => prev + 1);
+					}, (i+1)*100+q*200+5000);
+				}
 			}
 		}
 
@@ -53,11 +56,11 @@ function Find4Animation() {
 	}, [reset])
 
   return (
-	<div className="find4AnimationContainer" key={"animationContainer"+Date.now()}>
+	<>
 		{
 		    items
 		}
-	</div>
+	</>
   );
 }
 

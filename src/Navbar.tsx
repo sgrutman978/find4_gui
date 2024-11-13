@@ -5,6 +5,7 @@ import { myNetwork, programAddress } from './sui_controller';
 // import Header from './Header';
 // import './Navbar.css';
 import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
+import Find4Animation from './Find4Animation';
 
 function Navbar(props: any) {
   return (
@@ -21,7 +22,8 @@ function Navbar(props: any) {
             {/* <a href="#play-now"><Play Now></a> */}
         {/* </li> */}
         {/* {window.location.pathname == "/" ?  */}
-        <a href="/gameHomeScreen" className='menuElement launchAppButton'>Launch App</a>
+        {/* <Find4Animation size={15} animated={true} /> */}
+        <a href="/app" className='menuElement launchAppButton'>Launch App</a>
           {/* : <ConnectButton></ConnectButton>} */}
         <a href={`https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code`} className="menuElement contract">Explorer</a>
         <a href="#tokenomics" className="menuElement">Tokenomics</a>
