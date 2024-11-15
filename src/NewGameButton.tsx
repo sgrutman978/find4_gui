@@ -21,7 +21,7 @@ import { ExtendedProfile } from './GameBoard';
 		fetchProfile(currentAccount.address).then(async (profile) => {
 			if(profile){
 				// console.log(profile);
-				let transaction = props.gameType == "single" ? await newSinglePlayerGameTx(profile.pointsAddy!, profile.points!) : await newMultiPlayerGameTx(profile.pointsAddy!, profile.points!);
+				let transaction = props.gameType == "single" ? await newSinglePlayerGameTx(profile.pointsAddy!, profile.points!) : await newMultiPlayerGameTx(currentAccount.address, profile);
 				// console.log(transaction);
 				signAndExecuteTransaction({
 					transaction: transaction,

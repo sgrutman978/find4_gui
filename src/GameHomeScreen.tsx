@@ -43,14 +43,19 @@ function GameHomeScreen() {
 			// console.log("888888")
 			// console.log(events);
 			events?.forEach((event) => {
-				let eventData = event.parsedJson as any;
-				let x = (Date.now() - Number(event.timestampMs)) < 2000;
-				// console.log(Number(event.timestampMs));
-				// console.log(x);
-				if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
-					//redirect to game page the event described
-					window.location.href = '/app/game/'+eventData.game;
-				}
+				if(event.type == process.env.REACT_APP_PROGRAM_ADDY+"::multi_player::AddToListEvent"){
+					console.log("banananananananananan");
+					console.log(event);
+				}else{
+					let eventData = event.parsedJson as any;
+					let x = (Date.now() - Number(event.timestampMs)) < 2000;
+					// console.log(Number(event.timestampMs));
+					// console.log(x);
+					if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
+						//redirect to game page the event described
+						window.location.href = '/app/game/'+eventData.game;
+					}
+			}
 			});
 		});
 	};

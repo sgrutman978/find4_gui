@@ -8,8 +8,9 @@ import { useEffect, useState } from 'react';
 import { ExtendedProfile } from './GameBoard';
 
 export const myNetwork = "testnet";
-export const programAddress = "0x6602fc2d11143f63254c851694f614ca5d6f066dc45c4f015f25fa7bcb5df81a";
-const waitlistAddy = "0x4405034aa9d4687dff505c9cb2ea173afb3f2420281288d1d0fa0d9f3b1bdb3b";
+export const programAddress = process.env.REACT_APP_PROGRAM_ADDY; //"0x6602fc2d11143f63254c851694f614ca5d6f066dc45c4f015f25fa7bcb5df81a";
+export const nonceAddy = process.env.REACT_APP_NONCE_ADDY; //"0x6602fc2d11143f63254c851694f614ca5d6f066dc45c4f015f25fa7bcb5df81a";
+// const waitlistAddy = "0x4405034aa9d4687dff505c9cb2ea173afb3f2420281288d1d0fa0d9f3b1bdb3b";
 // const wss = "wss://api.blockeden.xyz/sui/devnet/GLpcqkWTRXogPgJ3J8G5";
 export const suiClient = new SuiClient({ url: getFullnodeUrl(myNetwork) });
 export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
@@ -18,12 +19,12 @@ export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") }
 	try {
 	  // Define the query parameters for the events you want to track
 	  let queryParams: QueryEventsParams = {
-		query: {MoveEventModule: { package: programAddress, module: "single_player"}},
+		query: {MoveEventModule: { package: programAddress!, module: "single_player"}},
 		order: "descending",
 		limit: 10,
 	  }; 
 	  let queryParams2: QueryEventsParams = {
-		query: {MoveEventModule: { package: programAddress, module: "multi_player"}},
+		query: {MoveEventModule: { package: programAddress!, module: "multi_player"}},
 		order: "descending",
 		limit: 10,
 	  };
@@ -138,7 +139,7 @@ async function fetchNFTUrl(nftObjectId: string): Promise<string> {
 		}
 	}).then((obj) => {
 		console.log(obj);
-		imageUrl = (obj?.data?.content as any).fields.img_url;
+		imageUrl = (obj?.data?.content as any).fields.image_url;
 		// const displayObject = obj.data?.content?.fields?.display;
 
 		// if (displayObject && displayObject.type === 'sui::display::Display') {
@@ -163,18 +164,18 @@ export async function newSinglePlayerGameTx(pointsAddy: string, points:number): 
 	// });
 	return tx;
 }
-
-export async function newMultiPlayerGameTx(pointsAddy: string, points:number): Promise<Transaction>{
+// addy: address, profileAddy: address, points: u64, nonce: u64
+export async function newMultiPlayerGameTx(addy: string, profile: ExtendedProfile): Promise<Transaction>{
 	const tx = new Transaction();
-	await GetObjectContents(waitlistAddy).then(async (x) => {
+	await GetObjectContents(nonceAddy!).then(async (x) => {
 		// await GetObjectContents(pointsAddy).then((y) => {
-			// console.log(x);
-			tx.moveCall({ target: programAddress+"::multi_player::attempt_pairing", arguments: [
-				tx.sharedObjectRef({
-					objectId: waitlistAddy,
-					mutable: true,
-					initialSharedVersion: x["version"].Shared.initial_shared_version
-				}), tx.pure.address(pointsAddy), tx.pure.u64(points)] 
+			console.log(x);
+			console.log(addy);
+			console.log(profile.id!);
+			console.log(profile);
+			console.log(parseInt(x.data.nonce));
+			tx.moveCall({ target: programAddress+"::multi_player::add_to_list", arguments: [
+				tx.pure.address(addy), tx.pure.address(profile.id!), tx.pure.u64(profile.points!), tx.pure.u64(parseInt(x.data.nonce))] 
 			}); 
 		// });
 	});
