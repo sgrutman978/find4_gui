@@ -18,6 +18,7 @@ export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") }
   export const fetchEvents = async () => {
 	try {
 	  // Define the query parameters for the events you want to track
+	//   console.log("10000");
 	  let queryParams: QueryEventsParams = {
 		query: {MoveEventModule: { package: programAddress!, module: "single_player"}},
 		order: "descending",
@@ -28,12 +29,13 @@ export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") }
 		order: "descending",
 		limit: 10,
 	  };
-
+	//   console.log("10001");
 	  // Query events using suix_queryEvents method
 	  const response = await suiClient.queryEvents(queryParams);
+	//   console.log("10002");
 	  const response2 = await suiClient.queryEvents(queryParams2);
 	  const response3 = [...response.data, ...response2.data];
-
+	//   console.log("10003");
 	  // Update state with fetched events
 	  return response3 || [];
 	} catch (error) {
@@ -42,34 +44,40 @@ export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") }
   };
 
 	export const fetchProfile = async (address: string): Promise<ExtendedProfile | undefined> => {
+		if(address){
 		try{
-			console.log(address);
+			// console.log("10004");
+			// console.log(address);
 		const deets = await suiClient.getOwnedObjects({owner: address});
 		// let profile: Profile = {
 		// 	profilePicUrl: '',
 		// 	username: '',
 		// 	points: 0
 		// };
-		console.log(deets);
-		
+		// console.log(deets);
+		// console.log("10005");
 			return new Promise<ExtendedProfile>((resolve, reject) => {
+				// console.log("10006");
 				deets.data.map(async (object) => {
 					// console.log(object.data?.objectId);
+					// console.log("10007");
 					GetObject(object.data?.objectId!).then((profile) => {
 						// console.log(profile);
 						if (profile.data.content.type == programAddress+"::profile_and_rank::Profile"){
-							console.log(profile);
+							// console.log(profile);
+							// console.log("10008");
 							// console.log(profile.data.content.fields.pointsObj);
 							GetObject(profile.data.content.fields.pointsObj).then((points) => {
 								// console.log("oeoeoeoeoeoeoeo");
-								console.log(profile);
-								console.log(points);
+								// console.log(profile);
+								// console.log(points);
 								fetchNFTUrl(profile.data.content.fields.profilePicAddy).then((url) => {
-									console.log(url);
+									// console.log("10009");
+									// console.log(url);
 									resolve({username: profile.data.content.fields.username, pointsAddy: profile.data.content.fields.pointsObj, points: parseInt(points.data.content.fields.points), profilePicUrl: url, id: profile.data.objectId});
 								})
 								// console.log(profile.data.content.type);
-								console.log("ipipipipe");
+								// console.log("ipipipipe");
 							});
 						}
 					})
@@ -93,10 +101,12 @@ export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") }
 		console.error('Error fetching events:', error);
 		return undefined;
 	  }
+	}
 };
 
 export const GetObject = async (id: string): Promise<any> => {
 	let data: SuiObjectResponse = {};
+	// console.log("10010");
     await suiClient.getObject(
 		{
 			id: id,
@@ -107,12 +117,15 @@ export const GetObject = async (id: string): Promise<any> => {
 	).then((data2) => {
 		data = data2;
 	});
+	// console.log("10011");
 	return data;
 };
 
 export const GetObjectContents = async (id: string): Promise<any> => {
 	let data: SuiObjectResponse = {};
 	let dataSet = false;
+	if(id){
+		// console.log("10012");
     await suiClient.getObject(
 		{
 			id: id,
@@ -125,12 +138,15 @@ export const GetObjectContents = async (id: string): Promise<any> => {
 		// console.log(data2);
 		dataSet = true;
 	});
+	// console.log("10013");
 	return dataSet ? {data: (data?.data?.content as any)["fields"], version: data.data?.owner} : {data: [], version: ""};
+	}
 };
 
 async function fetchNFTUrl(nftObjectId: string): Promise<string> {
 	let imageUrl = "";
-	console.log(nftObjectId);
+	// console.log(nftObjectId);
+	// console.log("10014");
 	await suiClientMainnet.getObject({
 		id: nftObjectId,
 		options: {
@@ -138,7 +154,8 @@ async function fetchNFTUrl(nftObjectId: string): Promise<string> {
 			showOwner: true
 		}
 	}).then((obj) => {
-		console.log(obj);
+		// console.log(obj);
+		// console.log("10015");
 		imageUrl = (obj?.data?.content as any).fields.image_url;
 		// const displayObject = obj.data?.content?.fields?.display;
 
@@ -150,6 +167,7 @@ async function fetchNFTUrl(nftObjectId: string): Promise<string> {
 			// Use these values to display the NFT
 		// }
 	});
+	// console.log("10016");
 	return imageUrl;
 }
 
@@ -158,9 +176,9 @@ export async function newSinglePlayerGameTx(pointsAddy: string, points:number): 
 	const tx = new Transaction();
 	// await GetObjectContents(pointsAddy).then(async (x) => {
 		// console.log(x);
-		console.log("ueueueueueueu");
+		// console.log("ueueueueueueu");
 
-		tx.moveCall({ target: programAddress+"::single_player::start_single_player_game", arguments: [tx.pure.address(pointsAddy), tx.pure.u64(points)]});
+		tx.moveCall({ target: programAddress+"::single_player::start_single_player_game", arguments: [/*tx.pure.address(pointsAddy), tx.pure.u64(points)*/]});
 	// });
 	return tx;
 }
@@ -169,13 +187,17 @@ export async function newMultiPlayerGameTx(addy: string, profile: ExtendedProfil
 	const tx = new Transaction();
 	await GetObjectContents(nonceAddy!).then(async (x) => {
 		// await GetObjectContents(pointsAddy).then((y) => {
-			console.log(x);
-			console.log(addy);
-			console.log(profile.id!);
-			console.log(profile);
-			console.log(parseInt(x.data.nonce));
+			// console.log(x);
+			// console.log(addy);
+			// console.log(profile.id!);
+			// console.log(profile);
+			// console.log(parseInt(x.data.nonce));
 			tx.moveCall({ target: programAddress+"::multi_player::add_to_list", arguments: [
-				tx.pure.address(addy), tx.pure.address(profile.id!), tx.pure.u64(profile.points!), tx.pure.u64(parseInt(x.data.nonce))] 
+				tx.pure.address(addy), tx.pure.address(profile.id!), tx.pure.u64(profile.points!), tx.sharedObjectRef({
+					objectId: nonceAddy!,
+					mutable: true,
+					initialSharedVersion: (x.version as any).Shared.initial_shared_version
+				})] 
 			}); 
 		// });
 	});
@@ -191,7 +213,7 @@ export async function createProfile(username: string, nftAddy: string): Promise<
 export async function editProfile(username: string, nftAddy: string, profileId: string): Promise<Transaction>{
 	const tx = new Transaction();
 	await GetObjectContents(profileId).then(async (profile) => {
-		console.log(profile.data.version);
+		// console.log(profile.data.version);
 		tx.moveCall({ target: programAddress+"::profile_and_rank::edit_profile", arguments: [tx.object(profileId), tx.pure.string(username), tx.pure.address(nftAddy)]});
 	});
 	return tx;

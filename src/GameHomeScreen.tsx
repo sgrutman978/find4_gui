@@ -7,67 +7,21 @@ import { fetchEvents } from './sui_controller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import ProfileButtonAndPanel from './ProfileButtonAndPanel';
+import HandleMultiPlayerCreateGameEvents from './HandleMultiPlayerCreateGameEvents';
 
 
 function GameHomeScreen() {
-	const autoConnectionStatus = useAutoConnectWallet();
-	const currentAccount = useCurrentAccount();
-	const [currentAddy, setCurrentAddy] = useState("");
+	// const autoConnectionStatus = useAutoConnectWallet();
+	
+	let currentAccount = useCurrentAccount();
+	console.log("dsfsdgfsdg");
 
-	let interval = setInterval(() => {}, 50000);
-	// let [key, setKey] = useState(0);
-
-	// setInterval(() => {
-	// 	getGameCreationEvents();
-	// }, 1800);
-
-	useEffect(()=>{
-        getEvents();
-    },[]) 
-
-	useEffect(()=>{
-        console.log("inejfbhwbrfhjbwjh");
-		console.log(currentAccount?.address);
-			console.log(currentAddy);
-			if (currentAccount && currentAccount!.address != currentAddy){
-				console.log(currentAccount!.address);
-				setCurrentAddy(() => currentAccount!.address);
-			}
-			if(!currentAccount && currentAddy != ""){
-				setCurrentAddy("");
-			}
-    },[currentAccount]) 
-
-	const getGameCreationEvents = () => {
-		fetchEvents().then((events) => {
-			// console.log("888888")
-			// console.log(events);
-			events?.forEach((event) => {
-				if(event.type == process.env.REACT_APP_PROGRAM_ADDY+"::multi_player::AddToListEvent"){
-					console.log("banananananananananan");
-					console.log(event);
-				}else{
-					let eventData = event.parsedJson as any;
-					let x = (Date.now() - Number(event.timestampMs)) < 2000;
-					// console.log(Number(event.timestampMs));
-					// console.log(x);
-					if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
-						//redirect to game page the event described
-						window.location.href = '/app/game/'+eventData.game;
-					}
-			}
-			});
-		});
-	};
-
-    const getEvents = () => {
-        clearInterval(interval);
-        interval = setInterval(() => {
-			getGameCreationEvents();
-            // console.log("jjdjdjdjdjdjdjdjdjdjdjdjdjdjdj");
-            // setKey(prevKey => prevKey + 1);
-        }, 1000);
-    };
+	// const setCurr = (addy: string): string => {
+    //   Addy = addy;
+	//   console.log(Addy);
+	//   setCurrentAddy((prev) => addy);
+	//   return addy;
+    // };
 
   return (
 		<div className="gameHomeScreen">
@@ -80,7 +34,8 @@ function GameHomeScreen() {
 			</span>
      
 			<div className="connectButtonWrapper">
-				<ProfileButtonAndPanel currentAddy={currentAddy}></ProfileButtonAndPanel>
+				<ProfileButtonAndPanel currentAddy={currentAccount?.address!}></ProfileButtonAndPanel>
+				<HandleMultiPlayerCreateGameEvents currentAddy={currentAccount?.address!}></HandleMultiPlayerCreateGameEvents>
 				<ConnectButton></ConnectButton>
 			</div>
 			{/* <div className="find4AnimationContainer" key={"animationContainer"+Date.now()}>
