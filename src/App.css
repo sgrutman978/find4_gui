@@ -474,3 +474,16 @@ body{
 .popup button:hover {
   background-color: #0056b3;
 }
+
+
+.winnerLoserDiv{
+  height:400px;
+  width:600px;
+  border-radius: 20px;;
+  background-color:lightgrey;
+  position:relative;
+  top: 80px;
+  margin:auto;
+  border:black 3px solid;
+  /* box-shadow: 5px 5px 8px; */
+}

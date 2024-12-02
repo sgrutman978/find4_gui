@@ -9,7 +9,9 @@ import { ExtendedProfile } from './GameBoard';
 
 export const myNetwork = "testnet";
 export const programAddress = process.env.REACT_APP_PROGRAM_ADDY; //"0x6602fc2d11143f63254c851694f614ca5d6f066dc45c4f015f25fa7bcb5df81a";
-export const nonceAddy = process.env.REACT_APP_NONCE_ADDY; //"0x6602fc2d11143f63254c851694f614ca5d6f066dc45c4f015f25fa7bcb5df81a";
+export const nonceAddy = process.env.REACT_APP_NONCE_ADDY;
+export const rewardPoolAddy = process.env.REACT_APP_REWARD_POOL_ADDY;
+//"0x6602fc2d11143f63254c851694f614ca5d6f066dc45c4f015f25fa7bcb5df81a";
 // const waitlistAddy = "0x4405034aa9d4687dff505c9cb2ea173afb3f2420281288d1d0fa0d9f3b1bdb3b";
 // const wss = "wss://api.blockeden.xyz/sui/devnet/GLpcqkWTRXogPgJ3J8G5";
 export const suiClient = new SuiClient({ url: getFullnodeUrl(myNetwork) });
@@ -227,6 +229,88 @@ export function player_move(gameID: string, column: number, version: string, sin
 		initialSharedVersion: version
 	}), tx.pure.u64(column)]});
 	return tx;
+}
+
+export async function player_win(gameID: string, version: string, profile1Addy: string, pointsObj1: string, pointsObj2: string, singleOrMulti: string): Promise<Transaction>{
+	const tx = new Transaction();
+	if(singleOrMulti == "single"){
+		// await GetObjectContents(pointsObj1!).then(async (data1) => {
+			// await GetObjectContents(pointsObj2!).then(async (data2) => {
+				await GetObjectContents(rewardPoolAddy!).then((data3) => {
+					// let v1 = (data1.version as any).Shared.initial_shared_version as string;
+					// let v2 = (data2.version as any).Shared.initial_shared_version as string;
+					let v3 = (data3.version as any).Shared.initial_shared_version as string;
+					// console.log("prprprprprprpprprpr");
+					// console.log(v1);
+					// console.log(v2);
+					// console.log(v3);
+					// console.log(pointsObj1);
+					// console.log(pointsObj2);
+					tx.moveCall({ target: `${programAddress}::${singleOrMulti}_player::do_win_stuffs`, arguments: [tx.sharedObjectRef({
+						objectId: gameID,
+						mutable: true,
+						initialSharedVersion: version
+					}), 
+					tx.object(profile1Addy), 
+					// tx.sharedObjectRef({
+					// 	objectId: pointsObj1,
+					// 	mutable: true,
+					// 	initialSharedVersion: v1
+					// }), 
+					// tx.sharedObjectRef({
+					// 	objectId: pointsObj2,
+					// 	mutable: true,
+					// 	initialSharedVersion: v2
+					// }), 
+					tx.sharedObjectRef({
+						objectId: rewardPoolAddy!,
+						mutable: true,
+						initialSharedVersion: v3
+					})]});
+				});
+		// 	});
+		// });
+		return tx;
+	}else{
+		await GetObjectContents(pointsObj1!).then(async (data1) => {
+			await GetObjectContents(pointsObj2!).then(async (data2) => {
+				// await GetObjectContents(rewardPoolAddy!).then((data3) => {
+					let v1 = (data1.version as any).Shared.initial_shared_version as string;
+					let v2 = (data2.version as any).Shared.initial_shared_version as string;
+					// let v3 = (data3.version as any).Shared.initial_shared_version as string;
+					// console.log("prprprprprprpprprpr");
+					// console.log(v1);
+					// console.log(v2);
+					// console.log(v3);
+					// console.log(pointsObj1);
+					// console.log(pointsObj2);
+					tx.moveCall({ target: `${programAddress}::${singleOrMulti}_player::do_win_stuffs`, arguments: [tx.sharedObjectRef({
+						objectId: gameID,
+						mutable: true,
+						initialSharedVersion: version
+					}), 
+					// tx.object(profile1Addy), 
+					tx.sharedObjectRef({
+						objectId: pointsObj1,
+						mutable: true,
+						initialSharedVersion: v1
+					}), 
+					tx.sharedObjectRef({
+						objectId: pointsObj2,
+						mutable: true,
+						initialSharedVersion: v2
+					}), 
+					// tx.sharedObjectRef({
+					// 	objectId: rewardPoolAddy!,
+					// 	mutable: true,
+					// 	initialSharedVersion: v3
+					// })
+				]});
+				});
+			});
+		// });
+		return tx;
+	}
 }
 
 // export function claimIncreasedRank

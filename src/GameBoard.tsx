@@ -1,10 +1,11 @@
 import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { fetchEvents, fetchProfile, GetObjectContents, myNetwork, player_move } from './sui_controller';
+import { fetchEvents, fetchProfile, GetObjectContents, myNetwork, player_move, player_win } from './sui_controller';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { Transaction } from '@mysten/sui/dist/cjs/transactions';
 
 export interface ExtendedProfile {
     profilePicUrl?: string,
@@ -45,14 +46,21 @@ function GameBoard() {
     let version: string;
     let myTurn = false;
     version = gameStats.version && gameStats.version != "" ? (gameStats.version as any).Shared.initial_shared_version : "0";
-    const current_player = gameStats.version ? gameStats.data["current_player"]: -1;
-    const p1_addy = gameStats.version ? gameStats.data["p1"]: "";
+    const current_player = gameStats.version ? gameStats.data["current_player"] : -1;
+    const p1_addy = gameStats.version ? gameStats.data["p1"] : "";
     // console.log(p1_addy);
-    const p2_addy = gameStats.version ? gameStats.data["p2"]: "";
+    const p2_addy = gameStats.version ? gameStats.data["p2"] : "";
     const gameType = gameStats.version && gameStats.data["gameType"] == 1 ? "single" : "multi";
+    const gameOver = gameStats.version && gameStats.data["is_game_over"];
+    const winnerInt = gameStats.version && gameStats.data["winner"];
+    // console.log(gameStats.data["winner"]);
+    console.log(p1_addy);
+    console.log(currentAccount?.address);
+    const winner = gameStats.version && ((winnerInt == 1 && currentAccount?.address == p1_addy) || (winnerInt == 2 && currentAccount?.address == p2_addy));
     // let profile1: Profile = {username: "User", points: 69, profilePicUrl: "../../f-42.png"};
     // let profile2: Profile = {username: "AI", points: 69, profilePicUrl: "../../f-42.png"};
     // console.log(profile1);
+    console.log(winner);
     if (profile1 && profile1.username == "User") {
         fetchProfile(p1_addy).then((profile) => {
             // console.log("bfgasgfhesafkhaekjfhjase");
@@ -93,11 +101,22 @@ function GameBoard() {
     // };
                     
 
-    const sendTransaction = (column: number) => {
+    const sendPlayerMoveTransaction = (column: number) => {
         let transaction = player_move(gameID!, column, version, gameType);
         // transaction.setGasBudget(5000000000);
         // console.log(transaction);
-		signAndExecuteTransaction({
+		doTransaction(transaction);			
+    };
+
+    const sendWinTransaction = () => {
+        player_win(gameID!, version, profile1.id!, profile1.pointsAddy!, (gameType == "multi" ? profile2 : profile1).pointsAddy!, gameType).then((tx) => {
+            console.log(tx);
+            doTransaction(tx);	
+        });	
+    };
+
+    const doTransaction = (transaction: Transaction) => {
+        signAndExecuteTransaction({
 			transaction: transaction!,
 			chain: `sui:${myNetwork}`,
 		}, {
@@ -108,7 +127,7 @@ function GameBoard() {
             onError: (error) => {
                 console.log(error);
             }
-		});				
+		});	
     };
 
     const getUpdatedBoard = () => {
@@ -175,19 +194,25 @@ function GameBoard() {
                 <div id="gameboard">
                 {displayRows(key)}
                 {myTurn ? <>
-                    <button className="selectColumn" style={{left: "7px"}} onClick={() => {sendTransaction(0)}}></button>
-                    <button className="selectColumn" style={{left: "121px"}} onClick={() => {sendTransaction(1)}}></button>
-                    <button className="selectColumn" style={{left: "235px"}} onClick={() => {sendTransaction(2)}}></button>
-                    <button className="selectColumn" style={{left: "349px"}} onClick={() => {sendTransaction(3)}}></button>
-                    <button className="selectColumn" style={{left: "463px"}} onClick={() => {sendTransaction(4)}}></button>
-                    <button className="selectColumn" style={{left: "577px"}} onClick={() => {sendTransaction(5)}}></button>
-                    <button className="selectColumn" style={{left: "691px"}} onClick={() => {sendTransaction(6)}}></button>
+                    <button className="selectColumn" style={{left: "7px"}} onClick={() => {sendPlayerMoveTransaction(0)}}></button>
+                    <button className="selectColumn" style={{left: "121px"}} onClick={() => {sendPlayerMoveTransaction(1)}}></button>
+                    <button className="selectColumn" style={{left: "235px"}} onClick={() => {sendPlayerMoveTransaction(2)}}></button>
+                    <button className="selectColumn" style={{left: "349px"}} onClick={() => {sendPlayerMoveTransaction(3)}}></button>
+                    <button className="selectColumn" style={{left: "463px"}} onClick={() => {sendPlayerMoveTransaction(4)}}></button>
+                    <button className="selectColumn" style={{left: "577px"}} onClick={() => {sendPlayerMoveTransaction(5)}}></button>
+                    <button className="selectColumn" style={{left: "691px"}} onClick={() => {sendPlayerMoveTransaction(6)}}></button>
                 </> : <></>}
                 </div>
+                {currentAccount && gameOver ? <div className="winnerLoserDiv">
+                    {winner ? <>
+                    Winner
+                    <button onClick={() => sendWinTransaction()}>Win Tx</button>
+                    </>: <>Loser</>}
+                </div> : <></>}
             </div>
         );
 
-  return (<></>);
+//   return (<></>);
 }
 
 export default GameBoard;
