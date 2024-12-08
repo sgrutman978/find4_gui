@@ -4,10 +4,83 @@ body{
   /* background-image: url("../public/bricks.avif"); */
 }
 
-.App, .homeScreen {
+.App {
   text-align: center;
   width:100%;
-  height:100%;
+  /* height:100%; */
+}
+
+.homeScreen{
+  width: calc(100% - 36px);
+  padding: 18px;
+  position:relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 27px;
+  flex-direction: row;
+  justify-content:space-around;
+}
+
+.hs5{
+  flex-basis: 500px;
+  align-self: center;
+  /* background-color: green; */
+  /* height:300px; */
+  display:flex;
+  flex-grow: 1;
+  position:relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.hs7{
+  flex-basis: 600px;
+  align-self: center;
+  /* background-color: green; */
+  /* height:300px; */
+  display:flex;
+  flex-grow: 1;
+  position:relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.hs1{
+  /* flex-basis: 500px; */
+  align-self: center;
+  /* background-color: green; */
+  /* height:300px; */
+  display:flex;
+  flex-grow: 1;
+  flex-basis: 100%;
+  position:relative;
+  justify-content: center;
+}
+
+#section1{
+  color: yellow;
+  font-size: 63px;
+  font-family: "Balsamiq Sans", sans-serif;
+}
+
+.tokenomics{
+  /* flex-basis: 300px; */
+  align-self: center;
+  /* background-color: green; */
+  /* height:300px; */
+  display:flex;
+  flex-grow: 1;
+  position:relative;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 25px;
+  width:100%;
+}
+
+.App{
+  position:absolute;
 }
 
 .App-logo {
@@ -486,4 +559,115 @@ body{
   margin:auto;
   border:black 3px solid;
   /* box-shadow: 5px 5px 8px; */
+}
+
+.presale-page-body{
+  /* height:100vh;
+  width:100%; */
+  display: flex;
+  /* align-items: center; */
+  /* width:100%; */
+   justify-content: center;
+  /* flex-wrap: wrap; */
+  /* gap: 16px; */
+  /* width:90%;
+  margin:auto;
+  top:0px;
+  left:0px; */
+}
+
+.presale-container{
+  /* margin:auto; */
+  background-color: rgb(255, 255, 157);
+  border-radius: 20px;
+  border: solid black 2px;
+  display: flex;
+  flex-direction: row;
+  flex-basis: 600px;
+  /* margin-top: 100px; */
+  overflow: hidden;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap:8px;
+  padding:9px;
+  /* margin: 9px; */
+  /* margin-top:100px; */
+  font-family: "Balsamiq Sans", sans-serif;
+}
+
+.tokenInput{
+  display: flex;
+  flex-grow: 1;
+  flex-basis: 200px;
+}
+
+.presale-title{
+  font-size:42px;
+  /* color:navy; */
+  /* background-color: pink; */
+  width:100%;
+  float: center;
+  text-align: center;
+}
+
+.buyTokensButton{
+  /* width:90%; */
+  display: flex;
+  flex-grow: 1;
+  flex-basis: 100%;
+  height:50px;
+  border-radius: 15px !important;
+  background-color: red !important;
+  /* flex-direction: row; */
+  /* justify-content: center; */
+}
+
+.progressBar{
+  height:18px !important;
+  border-radius: 9px;
+}
+
+.connectButtonWrapper2{
+  /* display: flex; */
+  /* justify-content: end; */
+  /* padding:8px; */
+  /* flex-grow: 1; */
+  width: 100%;
+  /* background-color: green; */
+}
+
+.presalePanel{
+  display: flex;
+  /* flex-grow:1; */
+  /* background-color: pink; */
+  flex-direction: column;
+  width:100%;
+  padding:18px;
+  gap: 10px;
+  font-size: 18px;
+}
+
+.right{
+  float:right;
+}
+
+.left{
+  float:left;
+}
+
+.orange{
+  background-color: orange;
+}
+
+.presalePanelsContainer{
+  display: flex;
+  /* flex-grow:1; */
+  flex-direction: row;
+}
+
+.topRight{
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

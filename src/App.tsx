@@ -12,6 +12,8 @@ import GameBoard from './GameBoard';
 import Navbar from './Navbar';
 import GameHomeScreen from './GameHomeScreen';
 import { myNetwork } from './sui_controller';
+import Presale from './Presale';
+import Staking from './Staking';
 // import { useLocation } from 'react-router-dom';
 
 // Config options for the networks you want to connect to
@@ -42,9 +44,10 @@ function App() {
 <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       
       <QueryClientProvider client={queryClient}>
-        <WalletProvider>
+        <WalletProvider autoConnect>
           <div className="App">
-		  {window.location.pathname == "/" ? <Navbar /> : ""}
+		  {/* {window.location.pathname == "/" ? <Navbar /> : ""} */}
+		  <Navbar />
 
 			{/* </Header> */}
 			<BrowserRouter>
@@ -52,6 +55,8 @@ function App() {
                     <Route path="/"  Component={Home} />
 					<Route path="/app" Component={GameHomeScreen}/>
                     <Route path="/app/game/:gameID" Component={GameBoard}/>
+					<Route path="/presale" Component={Presale}/>
+					<Route path="/staking" Component={Staking}/>
 				</Routes>
             </BrowserRouter>
           </div>
