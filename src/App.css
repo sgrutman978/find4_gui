@@ -12,13 +12,16 @@ body{
 
 .homeScreen{
   width: calc(100% - 36px);
+flex-basis: 1200px;
   padding: 18px;
+  /* background-color: green; */
   position:relative;
   display: flex;
   flex-wrap: wrap;
   gap: 27px;
   flex-direction: row;
   justify-content:space-around;
+  align-self: center;
 }
 
 .hs5{
@@ -31,6 +34,7 @@ body{
   position:relative;
   border-radius: 20px;
   overflow: hidden;
+  padding:20;
 }
 
 .hs7{

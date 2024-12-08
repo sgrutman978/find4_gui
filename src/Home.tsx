@@ -5,14 +5,15 @@ import Presale from './Presale';
 
 function Home() {
   return (
+	<div style={{width: "100%", display: 'flex', justifyContent: 'center'}}>
 		<div className="homeScreen" style={{marginTop: 70}}>
 
 			{/* <div  className="hs1" id="section1" style={{margin:20}}>
 				Join the presale before it's too late!
 			</div> */}
 
-			<div  className="hs5" id="section1">
-				The best game on the SUI blockchain! Join the Presale!
+			<div className="hs1" id="section1">
+				The best game on the SUI blockchain! <br />Join the Presale!
 				{/* Get in early!<br />Help redefine web3 gaming on SUI! */}
 				{/* <div className="hs5"> */}
 					{/* <div className="animated_home"> */}
@@ -20,7 +21,7 @@ function Home() {
 
 					{/* </div> */}
 			</div>
-				<Presale></Presale>
+				<div style={{display: 'flex', justifyContent: 'center'}}><Presale></Presale></div>
 
 			<div className='hs5' style={{}}><img style={{width:"100%"}} src="playing2.jpeg" /></div>
 			<div  className="hs5" id="section1">
@@ -51,7 +52,7 @@ function Home() {
 					
 				{/* </div> */}
 			{/* </div> */}
-		</div>
+		</div></div>
   );
 }
 
