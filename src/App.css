@@ -61,7 +61,7 @@ flex-basis: 1200px;
   justify-content: center;
 }
 
-#section1{
+.section1{
   color: yellow;
   font-size: 63px;
   font-family: "Balsamiq Sans", sans-serif;
@@ -83,9 +83,9 @@ flex-basis: 1200px;
   width:100%;
 }
 
-.App{
+/* .App{
   position:absolute;
-}
+} */
 
 .App-logo {
   height: 40vmin;
@@ -283,7 +283,7 @@ flex-basis: 1200px;
 
 .menuElement{
   /* background-color: yellow; */
-  width:140px;
+  /* width:140px; */
   height:40px;
   float:right;
   border-radius:25px;
@@ -356,7 +356,7 @@ flex-basis: 1200px;
   left:0px;
   width:100%;
   height: 100%;
-  background-color: 0533FF;
+  /* background-color: #0533FF; */
 }
 
 .launchAppButton {
@@ -674,4 +674,96 @@ flex-basis: 1200px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+
+
+
+
+
+.main-nav {
+  width: 100%;
+  background-color: #0533FF;
+  position: fixed;
+  z-index: 500;
+}
+
+.menu-toggle {
+  display: none;
+  padding: 15px;
+  cursor: pointer;
+  float: right;
+}
+
+.bar1, .bar2, .bar3 {
+  width: 35px;
+  height: 5px;
+  background-color: #fff;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+.change .bar1 {
+  transform: translate(0, 11px) rotate(-45deg);
+}
+
+.change .bar2 {
+  opacity: 0;
+}
+
+.change .bar3 {
+  transform: translate(0, -11px) rotate(45deg);
+}
+
+/* Menu popup styles */
+.menu-popup {
+  display: none;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background-color: lightblue;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.menu-popup.open {
+  display: block;
+}
+
+.menu-popup ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-popup li {
+  padding: 12px 16px;
+  border-bottom: 1px solid #444;
+}
+
+.menu-popup li:last-child {
+  border-bottom: none;
+}
+
+.menu-popup a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+.menu-popup li:hover {
+  background-color: yellow;
+}
+
+.logoMobile {
+  top:12px;
+  position:relative;
+}
+
+/* Show the menu icon at a specific screen width */
+@media screen and (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
 }

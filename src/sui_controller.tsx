@@ -15,6 +15,8 @@ export const rewardPoolAddy = process.env.REACT_APP_REWARD_POOL_ADDY;
 // const waitlistAddy = "0x4405034aa9d4687dff505c9cb2ea173afb3f2420281288d1d0fa0d9f3b1bdb3b";
 // const wss = "wss://api.blockeden.xyz/sui/devnet/GLpcqkWTRXogPgJ3J8G5";
 export const suiClient = new SuiClient({ url: getFullnodeUrl(myNetwork) });
+// export const suiClient = new SuiClient({ url: "https://sui-testnet.blockvision.org/v1/2q0KQSQxISsyOkl0sqvrvu0RDPk" });
+
 export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
   export const fetchEvents = async () => {
@@ -49,7 +51,7 @@ export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") }
 		if(address){
 		try{
 			// console.log("10004");
-			// console.log(address);
+			console.log(address);
 		const deets = await suiClient.getOwnedObjects({owner: address});
 		// let profile: Profile = {
 		// 	profilePicUrl: '',
@@ -57,29 +59,29 @@ export const suiClientMainnet = new SuiClient({ url: getFullnodeUrl("mainnet") }
 		// 	points: 0
 		// };
 		// console.log(deets);
-		// console.log("10005");
+		console.log("10005");
 			return new Promise<ExtendedProfile>((resolve, reject) => {
-				// console.log("10006");
+				console.log("10006");
 				deets.data.map(async (object) => {
 					// console.log(object.data?.objectId);
-					// console.log("10007");
+					console.log("10007");
 					GetObject(object.data?.objectId!).then((profile) => {
 						// console.log(profile);
 						if (profile.data.content.type == programAddress+"::profile_and_rank::Profile"){
 							// console.log(profile);
-							// console.log("10008");
+							console.log("10008");
 							// console.log(profile.data.content.fields.pointsObj);
 							GetObject(profile.data.content.fields.pointsObj).then((points) => {
-								// console.log("oeoeoeoeoeoeoeo");
+								console.log("oeoeoeoeoeoeoeo");
 								// console.log(profile);
 								// console.log(points);
 								fetchNFTUrl(profile.data.content.fields.profilePicAddy).then((url) => {
-									// console.log("10009");
+									console.log("10009");
 									// console.log(url);
 									resolve({username: profile.data.content.fields.username, pointsAddy: profile.data.content.fields.pointsObj, points: parseInt(points.data.content.fields.points), profilePicUrl: url, id: profile.data.objectId});
 								})
 								// console.log(profile.data.content.type);
-								// console.log("ipipipipe");
+								console.log("ipipipipe");
 							});
 						}
 					})
@@ -127,7 +129,7 @@ export const GetObjectContents = async (id: string): Promise<any> => {
 	let data: SuiObjectResponse = {};
 	let dataSet = false;
 	if(id){
-		// console.log("10012");
+		console.log("10012");
     await suiClient.getObject(
 		{
 			id: id,

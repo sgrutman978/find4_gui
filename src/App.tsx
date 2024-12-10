@@ -46,8 +46,8 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <WalletProvider autoConnect>
           <div className="App">
-		  {/* {window.location.pathname == "/" ? <Navbar /> : ""} */}
-		  <Navbar />
+		  {window.location.pathname == "/" ? <Navbar /> : ""}
+		  {/* <Navbar /> */}
 
 			{/* </Header> */}
 			<BrowserRouter>

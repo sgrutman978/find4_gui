@@ -21,7 +21,7 @@ function GameBoard() {
     let [key, setKey] = useState(0);
     let [timer, setTimer] = useState(20);
     const [profile1, setProfile1] = useState<ExtendedProfile>({username: "User", points: 69, profilePicUrl: "../../f4-42.png"});
-    const [profile2, setProfile2] = useState<ExtendedProfile>({username: "AI", points: 69, profilePicUrl: "https://www.shutterstock.com/image-vector/robot-icon-chatbot-cute-smiling-600nw-715418284.jpg"});
+    const [profile2, setProfile2] = useState<ExtendedProfile>({username: "AI", points: 69, profilePicUrl: "../../ai.webp"});
     
     useEffect(() => {
         GetObjectContents(gameID!).then((data) => {
@@ -55,6 +55,7 @@ function GameBoard() {
     const winnerInt = gameStats.version && gameStats.data["winner"];
     // console.log(gameStats.data["winner"]);
     console.log(p1_addy);
+    console.log(gameStats);
     console.log(currentAccount?.address);
     const winner = gameStats.version && ((winnerInt == 1 && currentAccount?.address == p1_addy) || (winnerInt == 2 && currentAccount?.address == p2_addy));
     // let profile1: Profile = {username: "User", points: 69, profilePicUrl: "../../f-42.png"};

@@ -12,8 +12,9 @@ function Home() {
 				Join the presale before it's too late!
 			</div> */}
 
-			<div className="hs1" id="section1">
-				The best game on the SUI blockchain! <br />Join the Presale!
+			<div className="hs1 section1" style={{marginTop: 11}}>
+				The best game on the SUI blockchain! 
+				{/* <br /> */}
 				{/* Get in early!<br />Help redefine web3 gaming on SUI! */}
 				{/* <div className="hs5"> */}
 					{/* <div className="animated_home"> */}
@@ -21,29 +22,48 @@ function Home() {
 
 					{/* </div> */}
 			</div>
+			
+			<img style={{width:"100%", alignSelf: 'center', borderRadius: 50, marginTop: -15}} src="gameplay.png" />
+
+			<div className='hs1 section1'>
+			Join the Presale!
+			</div>
 				<div style={{display: 'flex', justifyContent: 'center'}}><Presale></Presale></div>
 
 			<div className='hs5' style={{}}><img style={{width:"100%"}} src="playing2.jpeg" /></div>
-			<div  className="hs5" id="section1">
-				Play others online to earn trophies and prestige!
+			<div  className="hs5 section1">
+				Play others online to earn trophies!
 			</div>
 
-			<div  className="hs5" id="section1">
-				Stake tokens! The more trophies, the more you can stake!
+			<div  className="hs5 section1">
+				Stake tokens to increase earnings!
 			</div>
 			<div className='hs5' style={{}}><img style={{width:"100%"}} src="trophy5.jpeg" /></div>
 
-			<div className='hs5' style={{}}><img style={{width:"100%"}} src="ai.jpeg" /></div>
-			<div  className="hs5" id="section1">
+			<div className='hs5' style={{}}><img style={{width:"100%", borderRadius: "50%"}} src="ai.webp" /></div>
+			<div  className="hs5 section1">
 				Beat the AI to earn tokens!
 			</div>
-
 			
-			<div  className="hs7 tokenomics" id="section1">
-				<span>Tokenomics</span>
-				<img style={{width:"60%", alignSelf: 'center', marginTop: 20}} src="chart2.png" />
+			<div style={{borderRadius: 50}} className="hs7 tokenomics section1" id="tokenomics">
+				{/* <span>Tokenomics</span> */}
+				<img style={{width:"100%", alignSelf: 'center'}} src="chart4.png" />
 				{/* <img style={{width:"60%", display: 'flex', marginLeft: -519, marginTop: -49, borderRadius: 120}} src="f4-42.png" /> */}
 			</div>
+
+			<div  className="hs7 tokenomics section1" id="tokenomics">
+				<span>Rewards Calculations</span>
+				<span style={{fontSize: 25, padding: 30}}>
+				<span style={{fontWeight: "bold", fontSize: 30}}>Max Staking Limit</span> = 
+				<span> # of Trophies * 1,000</span><br />
+				<span style={{fontWeight: "bold", fontSize: 30}}>Reward for Beating the AI</span> = 
+				<span> 1 + log2(StakedTokens) + log10(StakedToken)</span>
+				</span>
+				{/* <img style={{width:"70%", alignSelf: 'center', marginTop: 20}} src="chart2.png" /> */}
+				{/* <img style={{width:"60%", display: 'flex', marginLeft: -519, marginTop: -49, borderRadius: 120}} src="f4-42.png" /> */}
+			</div>
+
+			<img style={{width:"100%", alignSelf: 'center', borderRadius: 50, marginTop: 20}} src="timeline.png" />
 
 				{/* <div  className="hs5" id="section1">
 				Get in early!<br />Help redefine web3 gaming on SUI!
