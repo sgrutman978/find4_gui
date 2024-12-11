@@ -1,8 +1,8 @@
 import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, fetchProfile } from './sui_controller';
-import { ExtendedProfile } from './GameBoard';
+import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile*/ } from './sui_controller';
+// import { ExtendedProfile } from './GameBoard';
  
  function NewGameButton(props: any) {
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -18,30 +18,24 @@ import { ExtendedProfile } from './GameBoard';
 	if (!currentAccount){
 		alert("Please connect a SUI wallet");
 	} else {
-		fetchProfile(currentAccount.address).then(async (profile) => {
-			if(profile){
-				// console.log(profile);
-				let transaction = props.gameType == "single" ? await newSinglePlayerGameTx(profile.pointsAddy!, profile.points!) : await newMultiPlayerGameTx(currentAccount.address, profile);
-				// console.log(transaction);
-				signAndExecuteTransaction({
-					transaction: transaction,
-					chain: `sui:${myNetwork}`,
-				}, {
-					onSuccess: (result) => {
-						console.log('executed transaction', result);
-					},
-					onError: (e) => {
-						console.log(e);
-					}
-				});	
+		let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx(currentAccount.address, props.trophies);
+		signAndExecuteTransaction({
+			transaction: transaction,
+			chain: `sui:${myNetwork}`,
+		}, {
+			onSuccess: (result) => {
+				console.log('executed transaction', result);
+			},
+			onError: (e) => {
+				console.log(e);
 			}
-		});
-	}				
-};
- 
+		});	
+	}
+  }				
+
 	return (
 	<>
-		<button className="newGameButton" onClick={() => sendTransaction()} disabled={false}>{props.label}</button>
+		<button className="newGameButton" onClick={() => sendTransaction()} disabled={props.disabled}>{props.label}</button>
 	</>
 	);
 }

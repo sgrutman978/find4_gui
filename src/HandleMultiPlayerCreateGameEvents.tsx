@@ -1,8 +1,8 @@
 import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { useEffect, useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, fetchProfile, createProfile, editProfile } from './sui_controller';
-import { ExtendedProfile } from './GameBoard';
+import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile,*/ create_or_edit_profile } from './sui_controller';
+// import { ExtendedProfile } from './GameBoard';
  
  function HandleMultiPlayerCreateGameEvents(props: any) {
 
@@ -36,7 +36,7 @@ import { ExtendedProfile } from './GameBoard';
 		// console.log(currentAccount);
 		fetchEvents().then((events) => {
 			events?.forEach((event) => {
-				if(event.type == process.env.REACT_APP_PROGRAM_ADDY+"::multi_player::PairingEvent" || event.type == process.env.REACT_APP_PROGRAM_ADDY+"::single_player::SinglePlayerGameStartedEvent"){
+				if(event.type == process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE+"::multi_player::PairingEvent" || event.type == process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE+"::single_player::SinglePlayerGameStartedEvent"){
 					let eventData = event.parsedJson as any;
 					let x = (Date.now() - Number(event.timestampMs)) < 20000;
 					// console.log(currentAccount);

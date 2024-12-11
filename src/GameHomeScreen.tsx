@@ -3,18 +3,39 @@ import NewGameButton from './NewGameButton';
 // import './Navbar.css';
 import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
 import Find4Animation from './Find4Animation';
-import { fetchEvents } from './sui_controller';
+import { fetchEvents, GetProfile } from './sui_controller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import ProfileButtonAndPanel from './ProfileButtonAndPanel';
 import HandleMultiPlayerCreateGameEvents from './HandleMultiPlayerCreateGameEvents';
+import { Profile } from './GameBoard';
 
 
 function GameHomeScreen() {
 	// const autoConnectionStatus = useAutoConnectWallet();
 	
 	let currentAccount = useCurrentAccount();
-	console.log("dsfsdgfsdg");
+	const [myProfile, setMyProfile] = useState<Profile>();
+
+	// console.log("dsfsdgfsdg");
+
+	useEffect(() => { 
+        if(currentAccount){
+            GetProfile(currentAccount.address).then((profile) => {
+                setMyProfile(profile);
+            });
+        };
+        // fetchProfile(props.currentAddy).then(async (profile) => {
+        //     console.log(profile);
+		// 	if(profile?.points){
+		// 		setMyProfile(profile);
+		// 	}else{
+        //         setMyProfile(undefined);
+        //     }
+		// }).catch((error) => {
+        //     setMyProfile(undefined);
+        // });
+    }, [currentAccount]);
 
 	// const setCurr = (addy: string): string => {
     //   Addy = addy;
@@ -34,7 +55,7 @@ function GameHomeScreen() {
 			</span>
      
 			<div className="connectButtonWrapper">
-				<ProfileButtonAndPanel currentAddy={currentAccount?.address!}></ProfileButtonAndPanel>
+				<ProfileButtonAndPanel currentAddy={currentAccount?.address!} profile={myProfile}></ProfileButtonAndPanel>
 				<HandleMultiPlayerCreateGameEvents currentAddy={currentAccount?.address!}></HandleMultiPlayerCreateGameEvents>
 				<ConnectButton></ConnectButton>
 			</div>
@@ -45,8 +66,8 @@ function GameHomeScreen() {
 			{/* {currentAccount ? <div>Auto-connection status: {autoConnectionStatus}</div> : ""} */}
 			{/* <br /> My address {currentAccount?.address} */}
 			<div className="newButtonsContainer">
-				<NewGameButton gameType="single" label="Single Player"></NewGameButton>
-				<NewGameButton gameType="multi" label="Multiplayer"></NewGameButton>
+				<NewGameButton gameType="single" label="Single Player" disabled={true}></NewGameButton>
+				<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
 			</div>
 		</div>
   );

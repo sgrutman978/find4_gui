@@ -112,7 +112,6 @@ function Presale() {
           tx.pure.u64(amount),
         ],
       });
-      // tx.setGasBudget(2*(OneCoinNineDecimals/100));
       
       signAndExecuteTransaction({
         transaction: tx,
