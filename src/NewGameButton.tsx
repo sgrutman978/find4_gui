@@ -14,6 +14,8 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*
     setPlayer2Addy(val.target.value);
   };
 
+  let intervalId: string | number | NodeJS.Timeout | undefined = undefined;
+
   const sendTransaction = async () => {
 	if (!currentAccount){
 		alert("Please connect a SUI wallet");
@@ -25,6 +27,14 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*
 		}, {
 			onSuccess: (result) => {
 				console.log('executed transaction', result);
+				if(intervalId){
+					clearInterval(intervalId);
+				}
+				intervalId = setInterval(() => {
+					getGameCreationEvents();
+					console.log('Interval running...'+props.currentAddy);
+				  }, 1000);
+				
 			},
 			onError: (e) => {
 				console.log(e);
@@ -32,6 +42,22 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*
 		});	
 	}
   }				
+
+	// return () => clearInterval(intervalId); // Cleanup on state change or unmount
+  const getGameCreationEvents = () => {
+	  fetchEvents().then((events) => {
+		  events?.forEach((event) => {
+			  if(event.type == process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE+"::multi_player::PairingEvent" || event.type == process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE+"::single_player::SinglePlayerGameStartedEvent"){
+				  let eventData = event.parsedJson as any;
+				  let x = (Date.now() - Number(event.timestampMs)) < 20000;
+				  if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
+					  //redirect to game page the event described
+					  window.location.href = '/app/game/'+eventData.game;
+				  }
+		  }
+		  });
+	  });
+  };
 
 	return (
 	<>
