@@ -14,7 +14,7 @@ function GameHomeScreen() {
 	// const autoConnectionStatus = useAutoConnectWallet();
 	
 	let currentAccount = useCurrentAccount();
-	const [myProfile, setMyProfile] = useState<Profile>();
+	const [myProfile, setMyProfile] = useState<Profile>(); 
 
 	useEffect(() => { 
         if(currentAccount){
