@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CoinStruct, SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromB64 } from '@mysten/bcs';
-import { GetObjectContents, myNetwork, OGAddyForEventObjType, programAddress } from './sui_controller';
-import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { GetObjectContents_Mainnet, OGAddyForEventObjType_Mainnet, programAddress_Mainnet, suiClient_Mainnet } from './sui_controller';
+import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
 import TextField from '@mui/material/TextField';
 
@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEquals, faExchange } from '@fortawesome/free-solid-svg-icons';
 
 const suiClient = new SuiClient({
-  url: getFullnodeUrl('testnet'), // Use 'mainnet' for production
+  url: getFullnodeUrl('mainnet'), // Use 'mainnet' for production
 });
 
 const OneCoinNineDecimals = 1000000000;
@@ -25,6 +25,7 @@ function Presale() {
   const [error, setError] = useState("");
   const [suiBalance, setSuiBalance] = useState("");
   const [ffioBalance, setFfioBalance] = useState("");
+  const meh = useSuiClient();
 
   const currentAccount = useCurrentAccount();
   const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -53,7 +54,7 @@ function Presale() {
   }, [currentAccount]);
 
   async function fetchPresaleState() {
-    GetObjectContents(process.env.REACT_APP_PRESALE_STATE_ADDY!).then((obj) => {
+    GetObjectContents_Mainnet(process.env.REACT_APP_PRESALE_STATE_ADDY_MAINNET!).then((obj) => {
       setPresaleState(obj.data);
       setProgress((obj.data.tokens_sold / obj.data.cap)*100)
     });
@@ -61,13 +62,13 @@ function Presale() {
 
   async function getBalances(){
     if(currentAccount){
-      suiClient.getBalance({ owner: currentAccount?.address! }).then((res) => {
+      suiClient_Mainnet.getBalance({ owner: currentAccount?.address! }).then((res) => {
         console.log(res.totalBalance);
         const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
         setSuiBalance(b+"");
         console.log(suiBalance);
       });
-      suiClient.getBalance({ owner: currentAccount?.address!, coinType: `${OGAddyForEventObjType}::FFIO::FFIO` }).then((res) => {
+      suiClient_Mainnet.getBalance({ owner: currentAccount?.address!, coinType: `${OGAddyForEventObjType_Mainnet}::FFIO::FFIO` }).then((res) => {
         console.log(res.totalBalance);
         const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
         setFfioBalance(b+"");
@@ -79,7 +80,7 @@ function Presale() {
   async function buyTokens() {
     try {
       const tx = new Transaction();
-      const userCoins = await suiClient.getCoins({ owner: currentAccount?.address!, coinType: '0x2::sui::SUI' });
+      // const userCoins = await suiClient_Mainnet.getCoins({ owner: currentAccount?.address!, coinType: '0x2::sui::SUI' });
 
       // if(userCoins.data.length > 0){
         // const coinToUse: CoinStruct = userCoins.data[0];
@@ -89,11 +90,11 @@ function Presale() {
         //     tx.mergeCoins()
         //   }
         // });
-        const destinationCoin = userCoins.data[0].coinObjectId;
+        // const destinationCoin = userCoins.data[0].coinObjectId;
     
         // Merge the rest of the coins into the destination coin
-        const coinsToMerge = userCoins.data.slice(1).map(coin => coin.coinObjectId);
-        console.log(coinsToMerge);
+        // const coinsToMerge = userCoins.data.slice(1).map(coin => coin.coinObjectId);
+        // console.log(coinsToMerge);
         // const [coin] = tx.mergeCoins(tx.object(destinationCoin), [tx.object(userCoins.data[1].coinObjectId)]);
         // console.log(y);
       // }
@@ -105,9 +106,9 @@ function Presale() {
       tx.setSender(currentAccount?.address!);
       // Assuming you have the address of the package where your Move module is published
       tx.moveCall({
-        target: `${programAddress}::FFIO::buy_token`,
+        target: `${programAddress_Mainnet}::FFIO::buy_token`,
         arguments: [
-          tx.object(process.env.REACT_APP_PRESALE_STATE_ADDY!), // Replace with actual object ID
+          tx.object(process.env.REACT_APP_PRESALE_STATE_ADDY_MAINNET!), // Replace with actual object ID
           coinWithBalance({balance: amount*presaleState.price}), // Using gas as the payment, this is just for example. Adjust accordingly.
           tx.pure.u64(amount),
         ],
@@ -115,7 +116,7 @@ function Presale() {
       
       signAndExecuteTransaction({
         transaction: tx,
-        chain: `sui:${myNetwork}`,
+        chain: `sui:mainnet`,
       }, {
         onSuccess: (result) => {
           console.log('executed transaction', result);
@@ -168,7 +169,7 @@ function Presale() {
             <LinearProgress variant="determinate" className="progressBar" value={progress} />
             <span>
             <span className="left">FFIO Sold: {presaleState.tokens_sold / OneCoinNineDecimals}</span>
-            <span className="right">Presale Supply: 500M FFIO</span>
+            <span className="right">Presale Supply: 2B FFIO</span>
             </span>
 
             <div style={{marginBottom: -3, marginTop: 24}}>

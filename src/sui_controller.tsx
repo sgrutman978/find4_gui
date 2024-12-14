@@ -18,7 +18,11 @@ export const innerProfilesTableAddy = process.env.REACT_APP_INNER_PROFILES_TABLE
 export const initVersion = process.env.REACT_APP_INIT_VERSION;
 export const OGAddyForEventObjType = process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE;
 export const suiClient = new SuiClient({ url: getFullnodeUrl(myNetwork) });
+export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
 // export const suiClient = new SuiClient({ url: "https://sui-testnet.blockvision.org/v1/2q0KQSQxISsyOkl0sqvrvu0RDPk" });
+
+export const programAddress_Mainnet = process.env.REACT_APP_PROGRAM_ADDY_MAINNET;
+export const OGAddyForEventObjType_Mainnet = process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE_MAINNET;
 
   export const fetchEvents = async () => {
 	try {
@@ -79,6 +83,25 @@ export const GetObjectContents = async (id: string): Promise<any> => {
 	let dataSet = false;
 	if(id){
     await suiClient.getObject(
+		{
+			id: id,
+			options: {
+				showContent: true,
+				showOwner: true
+			}}
+	).then((data2) => {
+		data = data2;
+		dataSet = true;
+	});
+	return dataSet ? {data: (data?.data?.content as any)["fields"], version: data.data?.owner} : {data: [], version: ""};
+	}
+};
+
+export const GetObjectContents_Mainnet = async (id: string): Promise<any> => {
+	let data: SuiObjectResponse = {};
+	let dataSet = false;
+	if(id){
+    await suiClient_Mainnet.getObject(
 		{
 			id: id,
 			options: {
