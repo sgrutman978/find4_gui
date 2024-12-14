@@ -28,7 +28,7 @@ function Home() {
 			<div className='hs1 section1'>
 			Join the Presale!
 			</div>
-				<div style={{display: 'flex', justifyContent: 'center'}}><Presale></Presale></div>
+			<div style={{display: 'flex', justifyContent: 'center'}} id="presale"><Presale></Presale></div>
 
 			<div className='hs5' style={{}}><img style={{width:"100%"}} src="playing2.jpeg" /></div>
 			<div  className="hs5 section1">
@@ -51,7 +51,7 @@ function Home() {
 				{/* <img style={{width:"60%", display: 'flex', marginLeft: -519, marginTop: -49, borderRadius: 120}} src="f4-42.png" /> */}
 			</div>
 
-			<div  className="hs7 tokenomics section1" id="tokenomics">
+			<div  className="hs7 tokenomics section1">
 				<span>Rewards Calculations</span>
 				<span style={{fontSize: 25, padding: 30}}>
 				<span style={{fontWeight: "bold", fontSize: 30}}>Max Staking Limit</span> = 

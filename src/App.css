@@ -171,14 +171,29 @@ flex-basis: 1200px;
 .logo_app_home{
   position:relative;
   /* left:300px; */
-  margin:auto;
-  top:190px;
-  width:200px;
-  height:100px;
+  display: flex;
+  flex-direction: column;
+  /* margin:auto; */
+  /* top:190px; */
+  flex-basis:1000px;
+  /* height:300px; */
   color: yellow;
   text-decoration: none;
   font-family: "Balsamiq Sans", sans-serif;
   /* background-color:yellow; */
+  justify-content: center;
+}
+
+.gameHomeLogoDiv {
+  display: flex;
+  flex-direction: row;
+  /* flex-basis: 50px; */
+  overflow: hidden;
+  justify-content: center;
+}
+
+.gameHomeLogo {
+  width:81%;
 }
 
 .gamespace{
@@ -305,9 +320,9 @@ flex-basis: 1200px;
 .newButtonsContainer{
   position:absolute;
   top:390px;
-  left: calc(50% - 250px);
-  width:500px;
-  height: 500px;
+  left: 0px;
+  width:100%;
+  /* height: 500px; */
   /* background-color: green; */
 }
 
@@ -315,12 +330,12 @@ flex-basis: 1200px;
   background-color: rgba(1, 1, 1, 0);
   border: none;
   color: yellow;
-  font-size: 69px;
+  font-size: 10vw; /*69px;*/
   font-weight: 900;
   float:left;
-  margin-top: 40px;
-  height:100px;
-  width:500px;
+  margin-top: 20px;
+  /* height:100px; */
+  /* width:500px; */
   /* background-color: pink; */
   position:relative;
   /* position:absolute; */
@@ -329,9 +344,18 @@ flex-basis: 1200px;
   cursor:pointer;
 }
 
+@media screen and (min-width: 850px) {
+  .newGameButton {
+     font-size: 81px;
+  }
+  .newGameButton:hover{
+    font-size: 90px;
+  }
+}
+
 .newGameButton:hover{
   color: red;
-  font-size: 75px;
+  /* font-size: 11vw; */
 }
 
 .connectButtonWrapper{
@@ -356,6 +380,9 @@ flex-basis: 1200px;
   left:0px;
   width:100%;
   height: 100%;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
   /* background-color: #0533FF; */
 }
 

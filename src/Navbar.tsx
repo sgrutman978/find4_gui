@@ -30,9 +30,10 @@ function Navbar(props: any) {
 
     // Menu items for demonstration
     const menuItems = [
-      { name: 'Home', link: '#' },
-      { name: 'About', link: '#' },
-      { name: 'Contact', link: '#' }
+      { name: 'Presale', link: "#presale" },
+      { name: 'Tokenomics', link: "#tokenomics"},
+      { name: 'Explorer', link: `https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code` },
+      { name: 'Launch App', link: '/app' }
     ];
 
   return isMobile ? 

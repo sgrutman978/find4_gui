@@ -21,25 +21,27 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*
 		alert("Please connect a SUI wallet");
 	} else {
 		let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx(currentAccount.address, props.trophies);
-		signAndExecuteTransaction({
-			transaction: transaction,
-			chain: `sui:${myNetwork}`,
-		}, {
-			onSuccess: (result) => {
-				console.log('executed transaction', result);
-				if(intervalId){
-					clearInterval(intervalId);
+		if(transaction){
+			signAndExecuteTransaction({
+				transaction: transaction,
+				chain: `sui:${myNetwork}`,
+			}, {
+				onSuccess: (result) => {
+					console.log('executed transaction', result);
+					if(intervalId){
+						clearInterval(intervalId);
+					}
+					intervalId = setInterval(() => {
+						getGameCreationEvents();
+						console.log('Interval running...'+props.currentAddy);
+					}, 1000);
+					
+				},
+				onError: (e) => {
+					console.log(e);
 				}
-				intervalId = setInterval(() => {
-					getGameCreationEvents();
-					console.log('Interval running...'+props.currentAddy);
-				  }, 1000);
-				
-			},
-			onError: (e) => {
-				console.log(e);
-			}
-		});	
+			});	
+		}
 	}
   }				
 

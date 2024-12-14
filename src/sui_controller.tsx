@@ -99,21 +99,26 @@ export async function newSinglePlayerGameTx(): Promise<Transaction>{
 	return tx;
 }
 
-export async function newMultiPlayerGameTx(addy: string, points: number): Promise<Transaction>{
-	const tx = new Transaction();
-	await GetObjectContents(nonceAddy!).then(async (x) => {
-		tx.moveCall({ target: programAddress+"::multi_player::add_to_list2", arguments: [
-			tx.pure.address(addy), 
-			// tx.pure.address(profile.id!), 
-			tx.pure.u64(points), 
-			tx.sharedObjectRef({
-				objectId: nonceAddy!,
-				mutable: true,
-				initialSharedVersion: initVersion!
-			})] 
-		}); 
-	});
-	return tx;
+export async function newMultiPlayerGameTx(addy: string, points: number): Promise<Transaction | undefined>{
+	if(points){
+		const tx = new Transaction();
+		await GetObjectContents(nonceAddy!).then(async (x) => {
+			tx.moveCall({ target: programAddress+"::multi_player::add_to_list2", arguments: [
+				tx.pure.address(addy), 
+				// tx.pure.address(profile.id!), 
+				tx.pure.u64(points), 
+				tx.sharedObjectRef({
+					objectId: nonceAddy!,
+					mutable: true,
+					initialSharedVersion: initVersion!
+				})] 
+			}); 
+		});
+		return tx;
+	}else{
+		alert("Create profile to begin playing matches!");
+	}
+	return undefined;
 }
 
 export async function create_or_edit_profile(username: string, image_url: string): Promise<Transaction>{

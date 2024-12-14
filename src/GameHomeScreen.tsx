@@ -29,17 +29,19 @@ function GameHomeScreen() {
 			<a href="/">
 				<FontAwesomeIcon icon={faHome} className="yellowHome" />
 			</a>
-			<span className="logo_app_home">
-				<span style={{position: "relative", bottom: 34, fontSize: 200}}>Find</span><img src="../f4-42.png" style={{width: 210, height: 210, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 33, fontSize: 200}}>.io</span>
-			</span>
+			<div className="logo_app_home">
+				{/* <span style={{position: "relative", bottom: 34, fontSize: 200}}>Find</span><img src="../f4-42.png" style={{width: 210, height: 210, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 33, fontSize: 200}}>.io</span> */}
+				<div className="gameHomeLogoDiv"><img src="../logo.png" className="gameHomeLogo" /></div>
+				<NewGameButton gameType="single" label="Singleplayer" disabled={true}></NewGameButton>
+				<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
+			</div>
 			<div className="connectButtonWrapper">
 				<ProfileButtonAndPanel currentAddy={currentAccount?.address!} profile={myProfile}></ProfileButtonAndPanel>
 				<ConnectButton></ConnectButton>
 			</div>
-			<div className="newButtonsContainer">
-				<NewGameButton gameType="single" label="Single Player" disabled={true}></NewGameButton>
-				<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
-			</div>
+			{/* <div className="newButtonsContainer">
+
+			</div> */}
 		</div>
   );
 }
