@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CoinStruct, SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromB64 } from '@mysten/bcs';
-import { GetObjectContents, myNetwork, programAddress } from './sui_controller';
+import { GetObjectContents, myNetwork, OGAddyForEventObjType, programAddress } from './sui_controller';
 import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 
 import TextField from '@mui/material/TextField';
@@ -67,7 +67,7 @@ function Presale() {
         setSuiBalance(b+"");
         console.log(suiBalance);
       });
-      suiClient.getBalance({ owner: currentAccount?.address!, coinType: `${programAddress}::FFIO::FFIO` }).then((res) => {
+      suiClient.getBalance({ owner: currentAccount?.address!, coinType: `${OGAddyForEventObjType}::FFIO::FFIO` }).then((res) => {
         console.log(res.totalBalance);
         const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
         setFfioBalance(b+"");
@@ -157,7 +157,7 @@ function Presale() {
           </div>
           {/* {autoConnectionStatus} */}
         </div>
-        <div className="presale-title" style={{marginTop: 18, marginBottom: 15}}><img src="./f4-42.png" style={{width: 42, position: "relative", top:5, borderRadius: 21, marginRight: 5}} />FFIO Presale</div>
+        <div className="presale-title" style={{marginTop: 18, marginBottom: 15}}><img src="./f4-42.png" style={{width: 42, position: "relative", top:5, borderRadius: 21, marginRight: 5}} />FFIO Presale (Mainnet)</div>
         {/* <div className="presalePanelsContainer"> */}
 
 

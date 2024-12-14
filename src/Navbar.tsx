@@ -6,6 +6,9 @@ import { myNetwork, programAddress } from './sui_controller';
 // import './Navbar.css';
 import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
 import Find4Animation from './Find4Animation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiscord, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar(props: any) {
 
@@ -33,6 +36,8 @@ function Navbar(props: any) {
       { name: 'Presale', link: "#presale" },
       { name: 'Tokenomics', link: "#tokenomics"},
       { name: 'Explorer', link: `https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code` },
+      { name: 'Follow on X', link: 'https://x.com/Find4_io'},
+      { name: 'Join Discord', link: 'https://discord.com/invite/pYsHzwZ82S'},
       { name: 'Launch App', link: '/app' }
     ];
 
@@ -74,9 +79,15 @@ function Navbar(props: any) {
         {/* <Find4Animation size={15} animated={true} /> */}
         <a href="/app" className='menuElement launchAppButton'>Launch App</a>
           {/* : <ConnectButton></ConnectButton>} */}
-        <a href={`https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code`} className="menuElement contract">Explorer</a>
+          <a href="https://x.com/Find4_io" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
+          <a href="https://discord.com/invite/pYsHzwZ82S" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faDiscord} /></a>
+        <a href={`https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code`} className="menuElement contract"><FontAwesomeIcon icon={faGlobe} /></a>
+        {/* <div className="gameHomeFooter"> */}
+				{/* </div> */}
         <a href="#tokenomics" className="menuElement">Tokenomics</a>
         <a href="#presale" className="menuElement">Presale</a>
+
+			
        
 
         {/* <ConnectButton></ConnectButton> */}
