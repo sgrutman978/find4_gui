@@ -35,9 +35,6 @@ function Navbar(props: any) {
     const menuItems = [
       { name: 'Presale', link: "#presale" },
       { name: 'Tokenomics', link: "#tokenomics"},
-      { name: 'Explorer', link: `https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code` },
-      { name: 'Follow on X', link: 'https://x.com/Find4_io'},
-      { name: 'Join Discord', link: 'https://discord.com/invite/pYsHzwZ82S'},
       { name: 'Launch App', link: '/app' }
     ];
 
@@ -58,6 +55,13 @@ function Navbar(props: any) {
                   <a href={item.link}>{item.name}</a>
                 </li>
               ))}
+              <li>
+                <div className="socialsMobileContainer">
+                  <a href="https://x.com/Find4_io" target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
+                  <a href="https://discord.com/invite/pYsHzwZ82S" target="_blank"><FontAwesomeIcon icon={faDiscord} /></a>
+                  <a href={`https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code`} target="_blank"><FontAwesomeIcon icon={faGlobe} /></a>
+                </div>
+              </li>
             </ul>
           </div>
   </nav>

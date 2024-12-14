@@ -215,6 +215,13 @@ flex-basis: 1200px;
   /* color:yellow; */
 }
 
+.socialsMobileContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
 .noDecs {
   text-decoration: none;
   color: yellow;
@@ -790,6 +797,7 @@ a {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  text-align: center;
 }
 
 .menu-popup li {
