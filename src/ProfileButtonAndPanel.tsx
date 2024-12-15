@@ -13,10 +13,15 @@ import { Profile } from './GameBoard';
 
     const [formUsername, setFormUsername] = useState("");
     const [formNftAddy, setFormNftAddy] = useState("");
+    let currentAccount = useCurrentAccount();
 
-    useEffect(() => { 
-        console.log(props.profile);
-        setMyProfile(props.profile);
+	useEffect(() => { 
+        getProfile();
+    }, [currentAccount]);
+
+    // useEffect(() => { 
+    //     console.log(props.profile);
+    //     setMyProfile(props.profile);
         // fetchProfile(props.currentAddy).then(async (profile) => {
         //     console.log(profile);
 		// 	if(profile?.points){
@@ -27,7 +32,21 @@ import { Profile } from './GameBoard';
 		// }).catch((error) => {
         //     setMyProfile(undefined);
         // });
-    }, [props.profile]);
+    // }, [props.profile]);
+
+    function getProfile(){
+        console.log("mehhhhhh1");
+        if(currentAccount){
+            console.log("mehhhhhh2");
+            GetProfile(currentAccount.address).then((profile) => {
+                console.log("mehhhhhhhhh3");
+                console.log(profile);
+                setMyProfile(profile);
+            });
+        }else{
+            setMyProfile(undefined);
+        }
+    }
 
     function openPanel(){
         setShowPanel(true);
@@ -56,6 +75,11 @@ import { Profile } from './GameBoard';
 		}, {
 			onSuccess: (result) => {
 				console.log('executed transaction', result);
+                closePanel();
+                setTimeout(() => {
+                    getProfile();
+                }, 2500);
+                
 			},
 			onError: (e) => {
 				console.log(e);
@@ -65,7 +89,7 @@ import { Profile } from './GameBoard';
  
 	return (
 	<>
-		{props.currentAddy != "" ? 
+		{myProfile ? 
             <button className="profileButton" onClick={() => openPanel()}>
                 <img className="profilePicInButton" src={myProfile?.username ? myProfile?.profilePicUrl : "../../default-avatar.png"} />
                 {myProfile?.username ? myProfile?.username : "Create"}

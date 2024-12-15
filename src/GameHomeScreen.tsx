@@ -30,13 +30,13 @@ function GameHomeScreen() {
 			<div className="logo_app_home">
 				{/* <span style={{position: "relative", bottom: 34, fontSize: 200}}>Find</span><img src="../f4-42.png" style={{width: 210, height: 210, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 33, fontSize: 200}}>.io</span> */}
 				<div className="gameHomeLogoDiv" onClick={() => window.location.href = '/'}><img src="../logo.png" className="gameHomeLogo" /></div>
-				<NewGameButton gameType="single" label="Singleplayer" disabled={true}></NewGameButton>
-				(Singleplayer Coming Soon)
+				<NewGameButton gameType="single" label="Singleplayer" disabled={false}></NewGameButton>
+				{/* (Singleplayer Coming Soon) */}
 				<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
-				(Coming to mainnet soon! Earn trophies on testnet for mainnet airdrop!)
+				{/* (Coming to mainnet soon! Earn trophies on testnet for mainnet airdrop!) */}
 			</div>
 			<div className="connectButtonWrapper">
-				<ProfileButtonAndPanel currentAddy={currentAccount?.address!} profile={myProfile}></ProfileButtonAndPanel>
+				<ProfileButtonAndPanel></ProfileButtonAndPanel>
 				<ConnectButton></ConnectButton>
 			</div>
 			{/* <div className="newButtonsContainer">
