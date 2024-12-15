@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { CoinStruct, SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { CoinStruct, SuiClient, SuiClientOptions, getFullnodeUrl } from '@mysten/sui/client';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromB64 } from '@mysten/bcs';
 import { GetObjectContents_Mainnet, OGAddyForEventObjType_Mainnet, programAddress_Mainnet, suiClient_Mainnet } from './sui_controller';
-import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
+import { ConnectButton, SuiClientProvider, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
 import TextField from '@mui/material/TextField';
 
@@ -12,10 +12,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEquals, faExchange } from '@fortawesome/free-solid-svg-icons';
-
-const suiClient = new SuiClient({
-  url: getFullnodeUrl('mainnet'), // Use 'mainnet' for production
-});
 
 const OneCoinNineDecimals = 1000000000;
 
@@ -30,7 +26,6 @@ function Presale() {
   const currentAccount = useCurrentAccount();
   const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
   const autoConnectionStatus = useAutoConnectWallet();
-
 
   const [progress, setProgress] = React.useState(0);
 
@@ -141,7 +136,6 @@ function Presale() {
   console.log(presaleState);
 
   return (
-   
       <div className="presale-container">
         <div className="connectButtonWrapper2">
           <div className="right topRight"> 

@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Find4Animation from './Find4Animation';
 import Presale from './Presale';
+import { SuiClientProvider } from '@mysten/dapp-kit';
 // import './Navbar.css';
+import { getFullnodeUrl, SuiClient, SuiClientOptions, SuiHTTPTransport } from '@mysten/sui/client';
+
+const suiClient = new SuiClient({
+	url: getFullnodeUrl('mainnet'), // Use 'mainnet' for production
+  });
+  
+  const networks = {
+	testnet: { url: getFullnodeUrl('testnet') },
+	mainnet: { url: getFullnodeUrl('mainnet') },
+  } satisfies Record<string, SuiClientOptions>;
 
 function Home() {
+	const [activeNetwork, setActiveNetwork] = useState("mainnet" as keyof typeof networks);
   return (
+	<SuiClientProvider
+    networks={networks}
+    network={activeNetwork}
+    onNetworkChange={(network) => {
+      setActiveNetwork(network as keyof typeof networks);
+    }}
+    // defaultNetwork="devnet"
+    createClient={(network, config) => {
+      return new SuiClient({ url: getFullnodeUrl(network) });
+    }}
+  >
 	<div style={{width: "100%", display: 'flex', justifyContent: 'center'}}>
 		<div className="homeScreen" style={{marginTop: 70}}>
 
@@ -73,6 +96,7 @@ function Home() {
 				{/* </div> */}
 			{/* </div> */}
 		</div></div>
+		</SuiClientProvider>
   );
 }
 

@@ -2,6 +2,9 @@ import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-ki
 import { useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
 import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile*/ } from './sui_controller';
+import { CircularProgress } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 // import { ExtendedProfile } from './GameBoard';
  
  function NewGameButton(props: any) {
@@ -9,6 +12,7 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*
 	const [digest, setDigest] = useState('');
 	const currentAccount = useCurrentAccount();
   	const [player2Addy, setPlayer2Addy] = useState('');
+	const [loading, setLoading] = useState(false);
 
   const handleChange = (val: React.ChangeEvent<HTMLInputElement>) => {
     setPlayer2Addy(val.target.value);
@@ -28,12 +32,13 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*
 			}, {
 				onSuccess: (result) => {
 					console.log('executed transaction', result);
+					setLoading(() => true);
 					if(intervalId){
 						clearInterval(intervalId);
 					}
 					intervalId = setInterval(() => {
 						getGameCreationEvents();
-						console.log('Interval running...'+props.currentAddy);
+						console.log('Interval running...'+currentAccount.address);
 					}, 1000);
 					
 				},
@@ -60,10 +65,20 @@ import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*
 		  });
 	  });
   };
-
+  console.log(loading);
 	return (
 	<>
 		<button className="newGameButton" onClick={() => sendTransaction()} disabled={props.disabled}>{props.label}</button>
+		{loading ? <div className="loadingScreen">
+			<a href="/app">
+				<FontAwesomeIcon icon={faHome} className="yellowHome" />
+			</a>
+			{/* <div style={{backgroundColor: "pink"}}></div> */}
+			(During testing, there may not be another player online)
+			<div style={{fontSize: 42, color: "yellow", fontFamily: '"Balsamiq Sans", sans-serif'}}>Finding opponent...<br /><br />
+			<CircularProgress style={{margin: "auto"}} />
+			</div>
+		</div> : <></>}
 	</>
 	);
 }

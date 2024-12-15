@@ -830,3 +830,16 @@ a {
     display: block;
   }
 }
+
+.loadingScreen{
+  position:fixed;
+  left:0px;
+  top:0px;
+  width:100vw;
+  height: 100vh;
+  background-color: #0533FF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 100;
+}

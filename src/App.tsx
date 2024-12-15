@@ -18,13 +18,13 @@ import Staking from './Staking';
 
 // Config options for the networks you want to connect to
 const networks = {
-	devnet: { url: getFullnodeUrl('devnet') },
+	testnet: { url: getFullnodeUrl('testnet') },
 	mainnet: { url: getFullnodeUrl('mainnet') },
 } satisfies Record<string, SuiClientOptions>;
 const queryClient = new QueryClient();
  
 function App() {
-	const [activeNetwork, setActiveNetwork] = useState("mainnet" as keyof typeof networks);
+	const [activeNetwork, setActiveNetwork] = useState("testnet" as keyof typeof networks);
 	// const location = useLocation();
 	return (
 		<SuiClientProvider

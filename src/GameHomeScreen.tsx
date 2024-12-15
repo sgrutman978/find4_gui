@@ -27,9 +27,6 @@ function GameHomeScreen() {
 
   return (
 		<div className="gameHomeScreen">
-			{/* <a href="/">
-				<FontAwesomeIcon icon={faHome} className="yellowHome" />
-			</a> */}
 			<div className="logo_app_home">
 				{/* <span style={{position: "relative", bottom: 34, fontSize: 200}}>Find</span><img src="../f4-42.png" style={{width: 210, height: 210, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 33, fontSize: 200}}>.io</span> */}
 				<div className="gameHomeLogoDiv" onClick={() => window.location.href = '/'}><img src="../logo.png" className="gameHomeLogo" /></div>
