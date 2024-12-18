@@ -256,11 +256,11 @@ function GameBoard() {
                 </div>
 
                 <div className="profileSmaller">
-                        <span className="profilePointsSmall"><FontAwesomeIcon icon={faTrophy} /> {profile1.points}</span>
-                            <img className="profilePicSmall redBorder" src={profile1.profilePicUrl} />
+                        <span className="profilePointsSmall"><FontAwesomeIcon icon={faTrophy} /> {profile2.points}</span>
+                            <img className="profilePicSmall redBorder" src={profile2.profilePicUrl} />
                             <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
-                                <span className="profileUsernameSmall">{profile1.username}</span>
-                                <span className="profileAddySmall">{shorten_addy(gameStats.p1_addy)}</span>
+                                <span className="profileUsernameSmall">{profile2.username}</span>
+                                <span className="profileAddySmall">{shorten_addy(gameStats.p2_addy)}</span>
                             </div>
                             {/* <div className="profileGamespaceSmall" style={{backgroundColor: "yellow"}}>
                                 <div className="gamespaceCover spaceCover1"></div>
