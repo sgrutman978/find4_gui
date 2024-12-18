@@ -182,7 +182,7 @@ flex-basis: 1200px;
   margin-bottom: 5px;
   /* height: 8vh; */
   height: 75px;
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   text-align: center;
   justify-content: center;
