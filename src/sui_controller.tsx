@@ -1,8 +1,8 @@
 import { getFullnodeUrl, QueryEventsParams, SuiClient, SuiEvent, SuiEventFilter } from '@mysten/sui/client';
 import { getFaucetHost, requestSuiFromFaucetV1 } from '@mysten/sui/faucet';
 import { MIST_PER_SUI } from '@mysten/sui/utils';
-import { Transaction } from '@mysten/sui/transactions';
-import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit';
+import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
+import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
 import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 import { useEffect, useState } from 'react';
 import { Profile } from './GameBoard';

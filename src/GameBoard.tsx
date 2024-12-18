@@ -48,11 +48,12 @@ function GameBoard() {
                 const winnerInt = data.version && data.data["winner"];
                 const myTurn = ((currentAccount?.address == p1_addy && current_player == 1) || (currentAccount?.address == p2_addy && current_player == 2));
                 const board = data.data["board"];
+                const gameType = data.version && data.data["gameType"] == 1 ? "single" : "multi";
                 setGameStats({
                     current_player: current_player,
                     p1_addy: p1_addy,
                     p2_addy: p2_addy,
-                    gameType: data.version && data.data["gameType"] == 1 ? "single" : "multi",
+                    gameType: gameType,
                     gameOver: data.version && data.data["is_game_over"],
                     winnerInt: winnerInt,
                     version: data.version && data.version != "" ? (data.version as any).Shared.initial_shared_version : "0",
@@ -87,9 +88,11 @@ function GameBoard() {
                     GetProfile(data.data["p1"]).then((profile) => {
                         setProfile1(profile);
                     });
-                    GetProfile(data.data["p2"]).then((profile) => {
-                        setProfile2(profile);
-                    });
+                    if(gameType == "multi"){
+                        GetProfile(data.data["p2"]).then((profile) => {
+                            setProfile2(profile);
+                        });
+                    }
                 }
             });
         }
@@ -170,6 +173,7 @@ function GameBoard() {
                         <div className={"gamespaceCover spaceCover"+color} key={`${c*c}${r*r}`}></div>
                     </div>);
                 }
+                // board.push(<br />)
                 board.push(row);
             }
             return board;
@@ -184,47 +188,85 @@ function GameBoard() {
     }
 
     // If its my turn based who went first and the status, determine which type of transaction based on status
-        return (
-            <div id="gameboard-body">
-                <div className="connectButtonWrapper">
+        return (<>
+        <div className="connectButtonWrapper">
                     <ConnectButton></ConnectButton>
 			    </div>
+
                 <div className="logo_gameboard">
                         {/* <Find4Animation size={3} animated={false} /> */}
-                        <a href="/" className="logo" style={{marginLeft:0,marginTop:0, fontSize:60}}><span style={{position: "relative", bottom: 14}}>Find</span><img src="../../f4-42.png" style={{width: 70, height: 70, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 13}}>.io</span></a>
+                        <a href="/" className="logo" style={{marginLeft:0,marginTop:0, fontSize:60}}>
+                        <img src="../../logo.png" style={{height: "100%"}} />
+                        </a>
      
                 </div>
                 
-                <div className="profileContainer" style={{marginRight:0}}>
-                    <span className="profilePoints"><FontAwesomeIcon icon={faTrophy} /> {profile1.points}</span><br></br>
-                    <img style={{top:(timer >= 0 ? 48-timer : 48), left: (timer >= 0 ? 60-timer : 60), border: `green ${gameStats.current_player == 1 ? timer : 0}px solid`}} className="profilePic" src={profile1.profilePicUrl} /><br></br>
-                    <span className="profileUsername">{profile1.username}</span><br></br>
-                    <span className="profileAddy">{shorten_addy(gameStats.p1_addy)}</span><br></br>
-                    <div style={{backgroundColor: "yellow", width: 100, height: 100, margin:"auto", marginTop: 225, borderRadius:50, position:"relative"}}>
-                        <div className="gamespaceCover spaceCover1"></div>
-                    </div>
+                <div id="gbbc">
+                {/* <div className="profileContainer"> */}
+                        <div className="profileSmaller">
+                        <span className="profilePointsSmall"><FontAwesomeIcon icon={faTrophy} /> {profile1.points}</span>
+                            <img className="profilePicSmall yellowBorder" src={profile1.profilePicUrl} />
+                            <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
+                                <span className="profileUsernameSmall">{profile1.username}</span>
+                                <span className="profileAddySmall">{shorten_addy(gameStats.p1_addy)}</span>
+                            </div>
+                            {/* <div className="profileGamespaceSmall" style={{backgroundColor: "yellow"}}>
+                                <div className="gamespaceCover spaceCover1"></div>
+                            </div> */}
+                        </div>
+                {/* </div> */}
+            <div id="gameboard-body">
+                <div className="profileContainer">
+                        <div className="anotherOne">
+                            <span className="profilePoints"><FontAwesomeIcon icon={faTrophy} /> {profile1.points}</span>
+                            <img className="profilePic" src={profile1.profilePicUrl} />
+                            <span className="profileUsername">{profile1.username}</span>
+                            <span className="profileAddy">{shorten_addy(gameStats.p1_addy)}</span>
+                            <div className="profileGamespace" style={{backgroundColor: "yellow"}}>
+                                <div className="gamespaceCover spaceCover1"></div>
+                            </div>
+                        </div>
                 </div>
-                <div className="profileContainer" style={{marginLeft:"calc(50vw + 400px)"}}>
-                    <span className="profilePoints"><FontAwesomeIcon icon={faTrophy} /> {profile2.points}</span><br></br>
-                    <img style={{border: `green ${gameStats.current_player == 2 ? timer : 0}px solid`, borderRadius: 110}} className="profilePic" src={profile2.profilePicUrl} /><br></br>
-                    <span className="profileUsername">{profile2.username}</span><br></br>
-                    <span className="profileAddy">{shorten_addy(gameStats.p2_addy)}</span><br></br>
-                    <div style={{backgroundColor: "red", position:"relative", width: 100, height: 100, margin:"auto", marginTop: 225, borderRadius:50}}>
-                        <div className="gamespaceCover spaceCover2"></div>
-                    </div>
-                </div>
+                
                 <div id="gameboard">
                 {displayRows(key)}
-                {gameStats.myTurn ? <>
-                    <button className="selectColumn" style={{left: "7px"}} onClick={() => {sendPlayerMoveTransaction(0)}}></button>
-                    <button className="selectColumn" style={{left: "121px"}} onClick={() => {sendPlayerMoveTransaction(1)}}></button>
-                    <button className="selectColumn" style={{left: "235px"}} onClick={() => {sendPlayerMoveTransaction(2)}}></button>
-                    <button className="selectColumn" style={{left: "349px"}} onClick={() => {sendPlayerMoveTransaction(3)}}></button>
-                    <button className="selectColumn" style={{left: "463px"}} onClick={() => {sendPlayerMoveTransaction(4)}}></button>
-                    <button className="selectColumn" style={{left: "577px"}} onClick={() => {sendPlayerMoveTransaction(5)}}></button>
-                    <button className="selectColumn" style={{left: "691px"}} onClick={() => {sendPlayerMoveTransaction(6)}}></button>
-                </> : <></>}
+                {gameStats.myTurn ? <div className="selectColumnContainer">
+                    <button className="selectColumn" style={{marginLeft: 0}} onClick={() => {sendPlayerMoveTransaction(0)}}></button>
+                    <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(1)}}></button>
+                    <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(2)}}></button>
+                    <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(3)}}></button>
+                    <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(4)}}></button>
+                    <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(5)}}></button>
+                    <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(6)}}></button>
+                </div> : <></>}
                 </div>
+
+                <div className="profileContainer">
+                        <div className="anotherOne">
+                            <span className="profilePoints"><FontAwesomeIcon icon={faTrophy} /> {profile2.points}</span>
+                            <img className="profilePic" src={profile2.profilePicUrl} />
+                            <span className="profileUsername">{profile2.username}</span>
+                            <span className="profileAddy">{shorten_addy(gameStats.p2_addy)}</span>
+                            <div className="profileGamespace" style={{backgroundColor: "red"}}>
+                                <div className="gamespaceCover spaceCover2"></div>
+                            </div>
+                        </div>
+                </div>
+
+                </div>
+
+                <div className="profileSmaller">
+                        <span className="profilePointsSmall"><FontAwesomeIcon icon={faTrophy} /> {profile1.points}</span>
+                            <img className="profilePicSmall redBorder" src={profile1.profilePicUrl} />
+                            <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
+                                <span className="profileUsernameSmall">{profile1.username}</span>
+                                <span className="profileAddySmall">{shorten_addy(gameStats.p1_addy)}</span>
+                            </div>
+                            {/* <div className="profileGamespaceSmall" style={{backgroundColor: "yellow"}}>
+                                <div className="gamespaceCover spaceCover1"></div>
+                            </div> */}
+                        </div>
+
                 {currentAccount && gameStats.gameOver ? <div className="winnerLoserDiv">
                     {amIWinner ? <>
                     Winner
@@ -232,6 +274,7 @@ function GameBoard() {
                     </>: <>Loser</>}
                 </div> : <></>}
             </div>
+            </>
         );
 
 //   return (<></>);

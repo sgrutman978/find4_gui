@@ -4,6 +4,7 @@ import Presale from './Presale';
 import { SuiClientProvider } from '@mysten/dapp-kit';
 // import './Navbar.css';
 import { getFullnodeUrl, SuiClient, SuiClientOptions, SuiHTTPTransport } from '@mysten/sui/client';
+import Staking from './Staking';
 
 const suiClient = new SuiClient({
 	url: getFullnodeUrl('mainnet'), // Use 'mainnet' for production
@@ -51,7 +52,9 @@ function Home() {
 			<div className='hs1 section1'>
 			Join the Presale!
 			</div>
-			<div style={{display: 'flex', justifyContent: 'center'}} id="presale"><Presale></Presale></div>
+			<div style={{display: 'flex', justifyContent: 'center'}} id="presale"><Presale></Presale>
+				{/* <Staking></Staking> */}
+			</div>
 
 			<div className='hs5' style={{}}><img style={{width:"100%"}} src="playing2.jpeg" /></div>
 			<div  className="hs5 section1">
