@@ -7,22 +7,25 @@ import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 import { useEffect, useState } from 'react';
 import { Profile } from './GameBoard';
 
-export const myNetwork = "testnet";
-export const programAddress = process.env.REACT_APP_PROGRAM_ADDY;
+export let myNetwork = "mainnet";
 
-export const nonceAddy = process.env.REACT_APP_NONCE_ADDY;
-export const treasuryAddy = process.env.REACT_APP_TREASURY_ADDY;
-export const profileTableAddy = process.env.REACT_APP_PROFILE_TABLE_ADDY;
-export const innerProfilesTableAddy = process.env.REACT_APP_INNER_PROFILES_TABLE_ADDY;
+export const programAddress = myNetwork == "mainnet" ? process.env.REACT_APP_PROGRAM_ADDY_MAINNET : process.env.REACT_APP_PROGRAM_ADDY;
+export const nonceAddy = myNetwork == "mainnet" ? process.env.REACT_APP_NONCE_ADDY_MAINNET : process.env.REACT_APP_NONCE_ADDY;
+export const treasuryAddy = myNetwork == "mainnet" ? process.env.REACT_APP_TREASURY_ADDY_MAINNET : process.env.REACT_APP_TREASURY_ADDY;
+export const profileTableAddy = myNetwork == "mainnet" ? process.env.REACT_APP_PROFILE_TABLE_ADDY_MAINNET : process.env.REACT_APP_PROFILE_TABLE_ADDY;
+export const innerProfilesTableAddy = myNetwork == "mainnet" ? process.env.REACT_APP_INNER_PROFILES_TABLE_ADDY_MAINNET : process.env.REACT_APP_INNER_PROFILES_TABLE_ADDY;
+export const stakingPoolAddy = myNetwork == "mainnet" ? process.env.REACT_APP_STAKING_POOL_ADDY_MAINNET : process.env.REACT_APP_STAKING_POOL_ADDY;
+export const stakingPoolVersion = myNetwork == "mainnet" ? process.env.REACT_APP_INIT_VERSION_STAKING_POOL_MAINNET : process.env.REACT_APP_INIT_VERSION_STAKING_POOL;
+export const initVersion = myNetwork == "mainnet" ? process.env.REACT_APP_INIT_VERSION : process.env.REACT_APP_INIT_VERSION;
+export const OGAddyForEventObjType = myNetwork == "mainnet" ? process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE_MAINNET : process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE;
 
-export const initVersion = process.env.REACT_APP_INIT_VERSION;
-export const OGAddyForEventObjType = process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE;
-export const suiClient = new SuiClient({ url: getFullnodeUrl(myNetwork) });
-export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
+export const suiClient = new SuiClient({ url: getFullnodeUrl("testnet") });
+export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("testnet") });
 // export const suiClient = new SuiClient({ url: "https://sui-testnet.blockvision.org/v1/2q0KQSQxISsyOkl0sqvrvu0RDPk" });
 
-export const programAddress_Mainnet = process.env.REACT_APP_PROGRAM_ADDY_MAINNET;
-export const OGAddyForEventObjType_Mainnet = process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE_MAINNET;
+// export const programAddress_Mainnet = myNetwork == "mainnet" ? process.env.REACT_APP_PROGRAM_ADDY_MAINNET;
+// export const OGAddyForEventObjType_Mainnet = myNetwork == "mainnet" ? process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE_MAINNET;
+export const presaleStateMainnet = myNetwork == "mainnet" ? process.env.REACT_APP_PRESALE_STATE_ADDY_MAINNET : process.env.REACT_APP_PRESALE_STATE_ADDY;
 
   export const fetchEvents = async () => {
 	try {

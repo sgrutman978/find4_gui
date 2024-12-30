@@ -6,29 +6,29 @@ import { SuiClientProvider } from '@mysten/dapp-kit';
 import { getFullnodeUrl, SuiClient, SuiClientOptions, SuiHTTPTransport } from '@mysten/sui/client';
 import Staking from './Staking';
 
-const suiClient = new SuiClient({
-	url: getFullnodeUrl('mainnet'), // Use 'mainnet' for production
-  });
+// const suiClient = new SuiClient({
+// 	url: getFullnodeUrl('mainnet'), // Use 'mainnet' for production
+//   });
   
-  const networks = {
-	testnet: { url: getFullnodeUrl('testnet') },
-	mainnet: { url: getFullnodeUrl('mainnet') },
-  } satisfies Record<string, SuiClientOptions>;
+//   const networks = {
+// 	testnet: { url: getFullnodeUrl('testnet') },
+// 	mainnet: { url: getFullnodeUrl('mainnet') },
+//   } satisfies Record<string, SuiClientOptions>;
 
 function Home() {
-	const [activeNetwork, setActiveNetwork] = useState("mainnet" as keyof typeof networks);
+	// const [activeNetwork, setActiveNetwork] = useState("mainnet" as keyof typeof networks);
   return (
-	<SuiClientProvider
-    networks={networks}
-    network={activeNetwork}
-    onNetworkChange={(network) => {
-      setActiveNetwork(network as keyof typeof networks);
-    }}
-    // defaultNetwork="devnet"
-    createClient={(network, config) => {
-      return new SuiClient({ url: getFullnodeUrl(network) });
-    }}
-  >
+// 	<SuiClientProvider
+//     networks={networks}
+//     network={activeNetwork}
+//     onNetworkChange={(network) => {
+//       setActiveNetwork(network as keyof typeof networks);
+//     }}
+//     // defaultNetwork="devnet"
+//     createClient={(network, config) => {
+//       return new SuiClient({ url: getFullnodeUrl(network) });
+//     }}
+//   >
 	<div style={{width: "100%", display: 'flex', justifyContent: 'center'}}>
 		<div className="homeScreen" style={{marginTop: 70}}>
 
@@ -52,7 +52,8 @@ function Home() {
 			<div className='hs1 section1'>
 			Join the Presale!
 			</div>
-			<div style={{display: 'flex', justifyContent: 'center'}} id="presale"><Presale></Presale>
+			<div style={{display: 'flex', justifyContent: 'center'}} id="presale">
+				<Presale></Presale>
 				{/* <Staking></Staking> */}
 			</div>
 
@@ -99,7 +100,7 @@ function Home() {
 				{/* </div> */}
 			{/* </div> */}
 		</div></div>
-		</SuiClientProvider>
+		// </SuiClientProvider>
   );
 }
 

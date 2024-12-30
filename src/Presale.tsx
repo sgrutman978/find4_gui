@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CoinStruct, SuiClient, SuiClientOptions, getFullnodeUrl } from '@mysten/sui/client';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromB64 } from '@mysten/bcs';
-import { GetObjectContents_Mainnet, OGAddyForEventObjType_Mainnet, programAddress_Mainnet, suiClient_Mainnet } from './sui_controller';
+import { GetObjectContents_Mainnet, OGAddyForEventObjType, presaleStateMainnet, programAddress, suiClient_Mainnet } from './sui_controller';
 import { ConnectButton, SuiClientProvider, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
 import TextField from '@mui/material/TextField';
@@ -49,7 +49,7 @@ function Presale() {
   }, [currentAccount]);
 
   async function fetchPresaleState() {
-    GetObjectContents_Mainnet(process.env.REACT_APP_PRESALE_STATE_ADDY_MAINNET!).then((obj) => {
+    GetObjectContents_Mainnet(presaleStateMainnet!).then((obj) => {
       setPresaleState(obj.data);
       setProgress((obj.data.tokens_sold / obj.data.cap)*100)
     });
@@ -63,7 +63,7 @@ function Presale() {
         setSuiBalance(b+"");
         console.log(suiBalance);
       });
-      suiClient_Mainnet.getBalance({ owner: currentAccount?.address!, coinType: `${OGAddyForEventObjType_Mainnet}::FFIO::FFIO` }).then((res) => {
+      suiClient_Mainnet.getBalance({ owner: currentAccount?.address!, coinType: `${OGAddyForEventObjType}::FFIO::FFIO` }).then((res) => {
         console.log(res.totalBalance);
         const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
         setFfioBalance(b+"");
@@ -101,9 +101,9 @@ function Presale() {
       tx.setSender(currentAccount?.address!);
       // Assuming you have the address of the package where your Move module is published
       tx.moveCall({
-        target: `${programAddress_Mainnet}::FFIO::buy_token`,
+        target: `${programAddress}::FFIO::buy_token`,
         arguments: [
-          tx.object(process.env.REACT_APP_PRESALE_STATE_ADDY_MAINNET!), // Replace with actual object ID
+          tx.object(presaleStateMainnet!), // Replace with actual object ID
           coinWithBalance({balance: amount*presaleState.price}), // Using gas as the payment, this is just for example. Adjust accordingly.
           tx.pure.u64(amount),
         ],

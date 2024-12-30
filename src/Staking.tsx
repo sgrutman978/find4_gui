@@ -3,7 +3,9 @@ import { getFullnodeUrl, SuiClient, SuiClientOptions } from '@mysten/sui/client'
 // import { useWalletKit } from '@mysten/wallet-kit';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { ConnectButton, SuiClientProvider, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { myNetwork } from './sui_controller';
+import { initVersion, myNetwork, OGAddyForEventObjType, programAddress, treasuryAddy, stakingPoolAddy, stakingPoolVersion } from './sui_controller';
+import { LinearProgress, TextField } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const networks = {
 	testnet: { url: getFullnodeUrl('testnet') },
@@ -36,11 +38,24 @@ function Staking() {
       return;
     }
     const tx = new Transaction();
-    const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(Number(stakeAmount) * 1e9)]); // Convert to MIST
-    
+    // const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(Number(stakeAmount) * 1e9)]); // Convert to MIST
+    tx.setSender(currentAccount.address);
     tx.moveCall({
-      target: 'your_contract_package::module_name::stake',
-      arguments: [coin],
+      target: `${programAddress}::FFIO::stake_new_ffio`,
+      arguments: [
+        tx.sharedObjectRef({
+          objectId: stakingPoolAddy!,
+          mutable: true,
+          initialSharedVersion: stakingPoolVersion!
+        }),
+        coinWithBalance({type: `${OGAddyForEventObjType}::FFIO::FFIO`, balance: (Number(stakeAmount) * 1e9)}),
+        tx.sharedObjectRef({
+          objectId: treasuryAddy!,
+          mutable: true,
+          initialSharedVersion: initVersion!
+        }),
+        tx.object("0x6")
+      ],
     });
 
     doTransaction(tx);
@@ -54,8 +69,21 @@ function Staking() {
     const tx = new Transaction();
     
     tx.moveCall({
-      target: 'your_contract_package::module_name::unstake',
-      arguments: [tx.pure.u64(Number(unstakeAmount) * 1e9)], // Convert to MIST
+      target: `${programAddress}::FFIO::unstake_ffio`,
+      arguments: [
+        tx.sharedObjectRef({
+          objectId: stakingPoolAddy!,
+          mutable: true,
+          initialSharedVersion: stakingPoolVersion!
+        }),
+        tx.sharedObjectRef({
+          objectId: treasuryAddy!,
+          mutable: true,
+          initialSharedVersion: initVersion!
+        }),
+        tx.object("0xd11c802a99901bf931eb5cc3fde4b25f7d4bcb7634651d2144c4fee0000de715"),
+        tx.object("0x6")
+      ], 
     });
 
     doTransaction(tx);
@@ -90,8 +118,9 @@ function Staking() {
       arguments: [
       coinWithBalance({type: "0xd9fc80a30c89489764bc07f557dc17162a477d34a9b44e65aae48af8ead006e7::FFIO::FFIO", balance: 19*1000*1000000000}), // Using gas as the payment, this is just for example. Adjust accordingly.
       tx.makeMoveVec({type: "address", elements: [
-        tx.pure.address("0xb8e8342b6015593951dbde508fb6ad58f3ef9f1a4f556c35c9baaac2fded5b28"),
-        tx.pure.address("0x2ba3e6b9debcc3a906dc390ae1eb2de1e477c7e40793cf9431b86e69bc1413d1"),
+        tx.pure.address("0xc57b21031d881ffa75ac39e6e92e2cc19505f30068c408e96c8717d2c0c08685"),
+        tx.pure.address("0xc57b21031d881ffa75ac39e6e92e2cc19505f30068c408e96c8717d2c0c08685"),
+        // tx.pure.address(""),
       ]}),
       tx.pure.u64(1000*1000000000),
       ],
@@ -124,15 +153,46 @@ function Staking() {
   //     return new SuiClient({ url: getFullnodeUrl(network) });
   //   }}
   // >
-    <div className="presale-page-body">
-        <div className="presale-container">
-        {/* <div className="connectButtonWrapper"> */}
-            <ConnectButton></ConnectButton>
-		{/* </div> */}
-      <h1>Sui Staking Frontend</h1>
+  <div className="presale-container">
+  <div className="connectButtonWrapper2">
+    <div className="right topRight"> 
+    {currentAccount ? <>Wallet: <span style={{marginRight: 7, marginLeft: 5}}>
+        <img style={{width: 18, marginRight: 2, top: 2, position: "relative"}} src="./sui-logo.png" />
+        {/* <span style={{fontSize: 18}}>{suiBalance}</span> */}
+      </span> 
+      <span style={{marginRight: 12}}>
+        <img style={{width: 18, marginRight: 3, top: 3, position: "relative", borderRadius: 9}} src="./f4-42.png" />
+        {/* <span style={{fontSize: 18}}>{ffioBalance}</span> */}
+      </span></> 
+      : <></>}
+      <ConnectButton></ConnectButton>
+    </div>
+    {/* {autoConnectionStatus} */}
+  </div>
+  <div className="presale-title" style={{marginTop: 18, marginBottom: 15}}><img src="./f4-42.png" style={{width: 42, position: "relative", top:5, borderRadius: 21, marginRight: 5}} />FFIO Staking (Mainnet)</div>
+  {/* <div className="presalePanelsContainer"> */}
+
+
+
+
+    <div className="presalePanel">
+      {/* <span><span className="left">Progress</span><span className="right">{presaleState.tokens_sold * 100 / presaleState.cap}%</span></span> */}
+      {/* <LinearProgress variant="determinate" className="progressBar" value={progress} /> */}
+      <span>
+      <span className="left">FFIO Staked: xyz</span>
+      {/* <span className="right">Presale Supply: 2B FFIO</span> */}
+      </span>
+
+      {/* <TextField 
+        type="number" 
+        value={amount} 
+        onChange={(e) => setAmount(parseInt(e.target.value, 10))} 
+        label="FFIO to buy"
+        className="tokenInput"
+      /> */}
+
       <p>{message}</p>
 
-      
           <input 
             type="number" 
             value={stakeAmount} 
@@ -140,14 +200,7 @@ function Staking() {
             placeholder="Stake amount in SUI" 
           />
           <button onClick={stake}>Stake</button>
-
-          <input 
-            type="number" 
-            value={unstakeAmount} 
-            onChange={(e) => setUnstakeAmount(e.target.value)} 
-            placeholder="Unstake amount in SUI" 
-          />
-          <button onClick={unstake}>Unstake</button>
+          <button onClick={unstake}>Unstake All</button>
         </div>
 
       {
@@ -163,6 +216,7 @@ function Staking() {
       {/* <button id="connectBtn" style={{ display: 'none' }}></button> */}
        <button onClick={() => massDistributeHelper()}>Distribute</button>
     </div>
+    // </div>
     // </SuiClientProvider>
   );
 }

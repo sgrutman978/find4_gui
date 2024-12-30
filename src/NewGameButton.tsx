@@ -1,7 +1,7 @@
 import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile*/ } from './sui_controller';
+import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, OGAddyForEventObjType, /*fetchProfile*/ } from './sui_controller';
 import { CircularProgress } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
@@ -54,7 +54,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
   const getGameCreationEvents = () => {
 	  fetchEvents().then((events) => {
 		  events?.forEach((event) => {
-			  if(event.type == process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE+"::multi_player::PairingEvent" || event.type == process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE+"::single_player::SinglePlayerGameStartedEvent"){
+			  if(event.type == OGAddyForEventObjType+"::multi_player::PairingEvent" || event.type == OGAddyForEventObjType+"::single_player::SinglePlayerGameStartedEvent"){
 				  let eventData = event.parsedJson as any;
 				  let x = (Date.now() - Number(event.timestampMs)) < 20000;
 				  if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){

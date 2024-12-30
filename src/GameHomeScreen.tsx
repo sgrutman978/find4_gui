@@ -9,6 +9,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import ProfileButtonAndPanel from './ProfileButtonAndPanel';
 import { Profile } from './GameBoard';
 import { faDiscord, faTwitter, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import Staking from './Staking';
 
 
 function GameHomeScreen() {
@@ -38,6 +39,7 @@ function GameHomeScreen() {
 			<div className="connectButtonWrapper">
 				<ProfileButtonAndPanel></ProfileButtonAndPanel>
 				<ConnectButton></ConnectButton>
+				<Staking></Staking>
 			</div>
 			{/* <div className="newButtonsContainer">
 

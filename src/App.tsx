@@ -24,7 +24,7 @@ const networks = {
 const queryClient = new QueryClient();
  
 function App() {
-	const [activeNetwork, setActiveNetwork] = useState("testnet" as keyof typeof networks);
+	const [activeNetwork, setActiveNetwork] = useState(myNetwork as keyof typeof networks);
 	// const location = useLocation();
 	return (
 		<SuiClientProvider
