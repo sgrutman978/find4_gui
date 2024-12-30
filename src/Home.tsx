@@ -46,13 +46,16 @@ function Home() {
 
 					{/* </div> */}
 			</div>
-			
+			<div className='hs1 section1'>
+			<a style={{color: "yellow"}} href="https://www.pinksale.finance/sui/launchpad/0x4b7d998555d653880111e60321c66e4a7a63c65d615d90cffdd27fce9ff583c8">
+				Join the Pinksale Presale!
+			</a>
+			</div>
 			<img style={{width:"100%", alignSelf: 'center', borderRadius: 50, marginTop: -15}} src="gameplay.png" />
 
-			<div className='hs1 section1'>
-			Join the Presale!
-			</div>
-			<div style={{display: 'flex', justifyContent: 'center'}} id="presale"><Presale></Presale>
+			
+			<div style={{display: 'flex', justifyContent: 'center'}} id="presale">
+				{/* <Presale></Presale> */}
 				{/* <Staking></Staking> */}
 			</div>
 
