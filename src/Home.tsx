@@ -53,7 +53,7 @@ function Home() {
 			Join the Presale!
 			</div>
 			<div style={{display: 'flex', justifyContent: 'center'}} id="presale">
-				<Presale></Presale>
+				{/* <Presale></Presale> */}
 				{/* <Staking></Staking> */}
 			</div>
 

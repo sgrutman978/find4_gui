@@ -214,7 +214,7 @@ flex-basis: 1200px;
 }
 
 .gameHomeLogo {
-  width:81%;
+  width:69%;
 }
 
 .gameHomeFooter{
@@ -406,10 +406,10 @@ flex-basis: 1200px;
   background-color: rgba(1, 1, 1, 0);
   border: none;
   color: yellow;
-  font-size: 9.5vw; /*69px;*/
+  font-size: 8.5vw; /*69px;*/
   font-weight: 900;
   float:left;
-  margin-top: 20px;
+  margin-top: 1vw;
   /* height:100px; */
   /* width:500px; */
   /* background-color: pink; */
@@ -426,10 +426,10 @@ a {
 
 @media screen and (min-width: 850px) {
   .newGameButton {
-     font-size: 81px;
+     font-size: 70px;
   }
   .newGameButton:hover{
-    font-size: 90px;
+    font-size: 80px;
   }
 }
 
@@ -1012,4 +1012,24 @@ a {
   flex-direction: column;
   justify-content: center;
   z-index: 100;
+}
+
+.existingGame {
+  height:100px;
+  width:180px;
+  background-color: green;
+  /* float: left; */
+}
+
+.existingGamesContainer{
+  margin-top: 2vw;
+  display:flex;
+  position:relative;
+  background-color:pink;
+  overflow-y:scroll;
+  overflow-x: hidden;
+  gap: 25px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }

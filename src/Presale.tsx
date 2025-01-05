@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CoinStruct, SuiClient, SuiClientOptions, getFullnodeUrl } from '@mysten/sui/client';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromB64 } from '@mysten/bcs';
-import { GetObjectContents_Mainnet, OGAddyForEventObjType, presaleStateMainnet, programAddress, suiClient_Mainnet } from './sui_controller';
+import { GetObjectContents, OGAddyForEventObjType, presaleStateMainnet, programAddress, suiClient_Mainnet } from './sui_controller';
 import { ConnectButton, SuiClientProvider, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
 import TextField from '@mui/material/TextField';
@@ -49,7 +49,7 @@ function Presale() {
   }, [currentAccount]);
 
   async function fetchPresaleState() {
-    GetObjectContents_Mainnet(presaleStateMainnet!).then((obj) => {
+    GetObjectContents(presaleStateMainnet!).then((obj) => {
       setPresaleState(obj.data);
       setProgress((obj.data.tokens_sold / obj.data.cap)*100)
     });
