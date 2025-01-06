@@ -1,20 +1,14 @@
 import { getFullnodeUrl, QueryEventsParams, SuiClient, SuiEvent, SuiEventFilter } from '@mysten/sui/client';
-import { getFaucetHost, requestSuiFromFaucetV1 } from '@mysten/sui/faucet';
-import { MIST_PER_SUI } from '@mysten/sui/utils';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
 import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
-import { useEffect, useState } from 'react';
 import { Profile } from './GameBoard';
-import http from 'http';
-import axios from 'axios';
 
-export const suiClient = new SuiClient({ url: getFullnodeUrl("testnet") });
-										export let myNetwork = "testnet";
-export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("testnet") });
+export const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
+										export let myNetwork = "mainnet";
+export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
 export const port = myNetwork == "mainnet" ? 3000 : 3001;
-export const baseUrl = "http://localhost";//"http://157.230.185.221";
+export const baseUrl = "http://157.230.185.221"; // "http://localhost";//"http://157.230.185.221";
 export const programAddress = myNetwork == "mainnet" ? process.env.REACT_APP_PROGRAM_ADDY_MAINNET : process.env.REACT_APP_PROGRAM_ADDY;
 export const nonceAddy = myNetwork == "mainnet" ? process.env.REACT_APP_NONCE_ADDY_MAINNET : process.env.REACT_APP_NONCE_ADDY;
 export const treasuryAddy = myNetwork == "mainnet" ? process.env.REACT_APP_TREASURY_ADDY_MAINNET : process.env.REACT_APP_TREASURY_ADDY;
@@ -25,28 +19,10 @@ export const stakingPoolVersion = myNetwork == "mainnet" ? process.env.REACT_APP
 export const initVersion = myNetwork == "mainnet" ? process.env.REACT_APP_INIT_VERSION_MAINNET : process.env.REACT_APP_INIT_VERSION;
 export const OGAddyForEventObjType = myNetwork == "mainnet" ? process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE_MAINNET : process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE;
 export const gamesTrackerAddy = myNetwork == "mainnet" ? process.env.REACT_APP_GAMES_TRACKER_ADDY_MAINNET : process.env.REACT_APP_GAMES_TRACKER_ADDY;
+export const innergamesTrackerAddy = myNetwork == "mainnet" ? process.env.REACT_APP_GAMES_TRACKER_INNER_ADDY_MAINNET : process.env.REACT_APP_GAMES_TRACKER_INNER_ADDY;
 export const gamesTrackerVersion = myNetwork == "mainnet" ? process.env.REACT_APP_INIT_VERSION_GAMES_TRACKER_MAINNET : process.env.REACT_APP_INIT_VERSION_GAMES_TRACKER;
 export const presaleStateMainnet = myNetwork == "mainnet" ? process.env.REACT_APP_PRESALE_STATE_ADDY_MAINNET : process.env.REACT_APP_PRESALE_STATE_ADDY;
 
-
-export const sendOnlineStatus = async (addy: string) => {
-	console.log("send online status "+addy);
-	axios.post(`${baseUrl}:${port}/imonline`, {
-	  addy: addy,
-	}, {
-	  headers: {
-		'Content-Type': 'application/json' // Adjust if needed
-	  }
-	})
-	.then(response => {
-	  // Handle the response data
-	  console.log(response.data);
-	})
-	.catch(error => {
-	  // Handle errors
-	  console.error('Error:', error);
-	});
-};
 
 // export const suiClient = new SuiClient({ url: "https://sui-testnet.blockvision.org/v1/2q0KQSQxISsyOkl0sqvrvu0RDPk" });
 
@@ -65,9 +41,15 @@ export const sendOnlineStatus = async (addy: string) => {
 		order: "descending",
 		limit: 10,
 	  };
+	  let queryParams3: QueryEventsParams = {
+		query: {MoveEventModule: { package: programAddress!, module: "multi_player"}},
+		order: "descending",
+		limit: 10,
+	  };
 	  const response = await suiClient.queryEvents(queryParams);
 	  const response2 = await suiClient.queryEvents(queryParams2);
-	  const response3 = [...response.data, ...response2.data];
+	  const response4 = await suiClient.queryEvents(queryParams3);
+	  const response3 = [...response.data, ...response2.data, ...response4.data];
 	  return response3 || [];
 	} catch (error) {
 	  console.error('Error fetching events:', error);
@@ -172,15 +154,24 @@ export async function newMultiPlayerGameTx(addy: string, points: number): Promis
 	if(points){
 		const tx = new Transaction();
 		await GetObjectContents(nonceAddy!).then(async (x) => {
-			tx.moveCall({ target: programAddress+"::multi_player::start_multi_player_game", arguments: [
+			tx.moveCall({ target: programAddress+"::multi_player::start_multi_player_game2", arguments: [
 				tx.pure.address(addy), 
-				// tx.pure.address(profile.id!), 
-				tx.pure.u64(points), 
+				tx.object("0x6"),
+				tx.sharedObjectRef({
+					objectId: gamesTrackerAddy!,
+					mutable: true,
+					initialSharedVersion: gamesTrackerVersion!
+				}),
 				tx.sharedObjectRef({
 					objectId: nonceAddy!,
 					mutable: true,
 					initialSharedVersion: initVersion!
-				})] 
+				})
+				
+				// tx.pure.address(profile.id!), 
+				// tx.pure.u64(points), 
+				
+			] 
 			}); 
 		});
 		return tx;

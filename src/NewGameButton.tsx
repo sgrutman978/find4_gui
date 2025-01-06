@@ -1,10 +1,11 @@
 import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, OGAddyForEventObjType, /*fetchProfile*/ } from './sui_controller';
+import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, OGAddyForEventObjType, programAddress, /*fetchProfile*/ } from './sui_controller';
 import { CircularProgress } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
+import { getP2 } from './ServerConn';
 // import { ExtendedProfile } from './GameBoard';
  
  function NewGameButton(props: any) {
@@ -24,29 +25,32 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 	if (!currentAccount){
 		alert("Please connect a SUI wallet");
 	} else {
-		let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx(currentAccount.address, props.trophies);
-		if(transaction){
-			signAndExecuteTransaction({
-				transaction: transaction,
-				chain: `sui:${myNetwork}`,
-			}, {
-				onSuccess: (result) => {
-					console.log('executed transaction', result);
-					setLoading(() => true);
-					if(intervalId){
-						clearInterval(intervalId);
+		// console.log("lslslslsl");
+		getP2(currentAccount.address).then(async (p2) => {
+		let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx(p2, props.trophies);
+			if(transaction){
+				signAndExecuteTransaction({
+					transaction: transaction,
+					chain: `sui:${myNetwork}`,
+				}, {
+					onSuccess: (result) => {
+						console.log('executed transaction', result);
+						setLoading(() => true);
+						if(intervalId){
+							clearInterval(intervalId);
+						}
+						intervalId = setInterval(() => {
+							getGameCreationEvents();
+							// console.log('Interval running...'+currentAccount.address);
+						}, 1000);
+						
+					},
+					onError: (e) => {
+						console.log(e);
 					}
-					intervalId = setInterval(() => {
-						getGameCreationEvents();
-						console.log('Interval running...'+currentAccount.address);
-					}, 1000);
-					
-				},
-				onError: (e) => {
-					console.log(e);
-				}
-			});	
-		}
+				});	
+			}
+		});
 	}
   }				
 
@@ -54,7 +58,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
   const getGameCreationEvents = () => {
 	  fetchEvents().then((events) => {
 		  events?.forEach((event) => {
-			  if(event.type == OGAddyForEventObjType+"::multi_player::PairingEvent" || event.type == OGAddyForEventObjType+"::single_player::SinglePlayerGameStartedEvent"){
+			  if(event.type == programAddress+"::multi_player::MultiPlayerGameStartedEvent2" || event.type == OGAddyForEventObjType+"::single_player::SinglePlayerGameStartedEvent"){
 				  let eventData = event.parsedJson as any;
 				  let x = (Date.now() - Number(event.timestampMs)) < 20000;
 				  if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
@@ -65,17 +69,22 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 		  });
 	  });
   };
-  console.log(loading);
+//   console.log(loading);
 	return (
 	<>
-		<button className="newGameButton" onClick={() => sendTransaction()} disabled={props.disabled}>{props.label}</button>
+		<button className="newGameButton" onClick={() => sendTransaction()} disabled={props.disabled} style={{marginLeft: (props.label == "Multiplayer" ? "-1.5vw" : "1.5vw")}}>
+		{props.label == "Multiplayer" ? <FontAwesomeIcon icon={faUser} style={{margin: "auto", marginBottom: 6}} /> : <FontAwesomeIcon icon={faRobot} style={{margin: "auto", marginBottom: 6}} />}
+			{/* <img src={
+			props.label == "Multiplayer" ? "../../ai.webp" : "../../ai.webp"
+			} className="newGameImage" /> */}
+			<span style={{width: "100%", fontSize: "2.5vw"}}>{props.label == "Multiplayer" ? "Random" : "AI"}</span></button>
 		{loading ? <div className="loadingScreen">
 			<a href="/app">
 				<FontAwesomeIcon icon={faHome} className="yellowHome" />
 			</a>
 			{/* <div style={{backgroundColor: "pink"}}></div> */}
-			(During testing, there may not be another player online)
-			<div style={{fontSize: 42, color: "yellow", fontFamily: '"Balsamiq Sans", sans-serif'}}>Finding opponent...<br /><br />
+			{/* (During testing, there may not be another player online) */}
+			<div style={{fontSize: 42, color: "yellow", fontFamily: '"Balsamiq Sans", sans-serif'}}>Loading Game...<br /><br />
 			<CircularProgress style={{margin: "auto"}} />
 			</div>
 		</div> : <></>}

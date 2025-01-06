@@ -36,11 +36,11 @@ function GameBoard() {
     const [oldCounter, setOldCounter] = useState(0);
     
     useEffect(() => {
-        console.log(gameStats.myTurn);
-        console.log(pingGame);
-        console.log(key);
+        // console.log(gameStats.myTurn);
+        // console.log(pingGame);
+        // console.log(key);
         if((!pingGame || key == 0) && !gameStats.gameOver){
-            console.log("grab game");
+            // console.log("grab game");
             GetObjectContents(gameID!).then((data) => {
                 const current_player = data.version ? data.data["current_player"] : -1;
                 const p1_addy = data.version ? data.data["p1"] : "";
@@ -71,13 +71,13 @@ function GameBoard() {
                             }
                         }
                     }
-                    console.log(counter);
-                    console.log(oldCounter);
+                    // console.log(counter);
+                    // console.log(oldCounter);
                     if(counter > oldCounter && currentAccount?.address){
-                        console.log("pppppppppppppppppp");
-                        console.log(myTurn);
-                        console.log(p1_addy);
-                        console.log(currentAccount?.address);
+                        // console.log("pppppppppppppppppp");
+                        // console.log(myTurn);
+                        // console.log(p1_addy);
+                        // console.log(currentAccount?.address);
                         setOldCounter(counter);
                         setPingGame(myTurn);
                     }
@@ -195,7 +195,7 @@ function GameBoard() {
 
                 <div className="logo_gameboard">
                         {/* <Find4Animation size={3} animated={false} /> */}
-                        <a href="/" className="logo" style={{marginLeft:0,marginTop:0, fontSize:60}}>
+                        <a href="/app" className="logo" style={{marginLeft:0,marginTop:0, fontSize:60}}>
                         <img src="../../logo.png" style={{height: "100%"}} />
                         </a>
      

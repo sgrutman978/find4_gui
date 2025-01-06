@@ -195,7 +195,7 @@ flex-basis: 1200px;
   flex-direction: column;
   /* margin:auto; */
   /* top:190px; */
-  flex-basis:1000px;
+  flex-basis:1010px;
   /* height:300px; */
   color: yellow;
   text-decoration: none;
@@ -214,7 +214,7 @@ flex-basis: 1200px;
 }
 
 .gameHomeLogo {
-  width:69%;
+  width:60%;
 }
 
 .gameHomeFooter{
@@ -406,7 +406,7 @@ flex-basis: 1200px;
   background-color: rgba(1, 1, 1, 0);
   border: none;
   color: yellow;
-  font-size: 8.5vw; /*69px;*/
+  font-size: 8vw;
   font-weight: 900;
   float:left;
   margin-top: 1vw;
@@ -418,6 +418,10 @@ flex-basis: 1200px;
   /* top:300px; */
   /* left: calc(50% - 250px); */
   cursor:pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 a {
@@ -426,10 +430,10 @@ a {
 
 @media screen and (min-width: 850px) {
   .newGameButton {
-     font-size: 70px;
+     font-size: 63px;
   }
-  .newGameButton:hover{
-    font-size: 80px;
+  .newGameImage:hover{
+    width:100px;
   }
 }
 
@@ -541,7 +545,19 @@ a {
     /* margin-top: 30px; */
     gap: 3vh;
    }
-}
+  }
+
+  @media screen and (max-width: 589px) {
+   .existingGamesContainer{
+    max-height:40vh;
+   }
+  }
+
+  @media screen and (min-width: 590px) {
+    .existingGamesContainer{
+     max-height:36vh;
+    }
+  }
 
 @media screen and (min-width: 900px) {
   .profileSmaller{
@@ -1017,7 +1033,10 @@ a {
 .existingGame {
   height:100px;
   width:180px;
-  background-color: green;
+  background-color: rgb(255, 255, 138);
+  border-radius: 20px;
+  border: solid black 1px;
+  color: black;
   /* float: left; */
 }
 
@@ -1025,11 +1044,28 @@ a {
   margin-top: 2vw;
   display:flex;
   position:relative;
-  background-color:pink;
+  /* background-color:pink; */
   overflow-y:scroll;
   overflow-x: hidden;
   gap: 25px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.newGameImage{
+  border-radius: 50%;
+  width:90px;
+  aspect-ratio: 1;
+}
+
+.newButtonsHolder{
+  display: flex;
+  gap: 1.5vw;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.existingGame:hover{
+  cursor:pointer;
 }

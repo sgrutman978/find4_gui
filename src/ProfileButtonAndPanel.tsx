@@ -77,7 +77,7 @@ import { Profile } from './GameBoard';
 				console.log('executed transaction', result);
                 closePanel();
                 setTimeout(() => {
-                    getProfile();
+                    window.location.reload();
                 }, 2500);
                 
 			},
