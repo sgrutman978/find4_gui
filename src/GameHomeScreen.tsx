@@ -48,7 +48,7 @@ function GameHomeScreen() {
 		// console.log("init");
 		// playInterval();
 		setInterval(() => {
-			// console.log("REFRESH");
+			// console.log("REFRESH"); 
 			setRefresh(prev => prev + 1);
 		}, 10000);
 	}, []);
