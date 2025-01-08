@@ -25,9 +25,11 @@ import { getP2 } from './ServerConn';
 	if (!currentAccount){
 		alert("Please connect a SUI wallet");
 	} else {
-		// console.log("lslslslsl");
+		console.log("lslslslsl");
 		getP2(currentAccount.address).then(async (p2) => {
+			console.log(p2);
 		let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx(p2, props.trophies);
+			transaction!.setSender(currentAccount?.address!);
 			if(transaction){
 				signAndExecuteTransaction({
 					transaction: transaction,

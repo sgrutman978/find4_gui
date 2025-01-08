@@ -132,12 +132,13 @@ export const GetObjectContents = async (id: string): Promise<any> => {
 
 export async function newSinglePlayerGameTx(): Promise<Transaction>{
 	const tx = new Transaction();
-	tx.moveCall({ target: programAddress+"::single_player::start_single_player_game2", arguments: [
+	tx.moveCall({ target: programAddress+"::single_player::start_single_player_game3", arguments: [
 		tx.sharedObjectRef({
 			objectId: gamesTrackerAddy!,
 			mutable: true,
 			initialSharedVersion: gamesTrackerVersion!
-		})
+		}),
+		coinWithBalance({balance: 20000000})
 	]});
 	return tx;
 }
@@ -153,6 +154,7 @@ export async function newSinglePlayerGameTx(): Promise<Transaction>{
 export async function newMultiPlayerGameTx(addy: string, points: number): Promise<Transaction | undefined>{
 	if(points){
 		const tx = new Transaction();
+		console.log(addy);
 		await GetObjectContents(nonceAddy!).then(async (x) => {
 			tx.moveCall({ target: programAddress+"::multi_player::start_multi_player_game2", arguments: [
 				tx.pure.address(addy), 
@@ -207,7 +209,7 @@ export function player_move(gameID: string, column: number, version: string, sin
 export async function player_win(gameID: string, version: string, singleOrMulti: string): Promise<Transaction>{
 	const tx = new Transaction();
 	if(singleOrMulti == "single"){
-		tx.moveCall({ target: `${programAddress}::${singleOrMulti}_player::do_win_stuffs`, arguments: [
+		tx.moveCall({ target: `${programAddress}::${singleOrMulti}_player::do_win_stuffs2`, arguments: [
 			tx.sharedObjectRef({
 				objectId: gameID,
 				mutable: true,
@@ -215,6 +217,11 @@ export async function player_win(gameID: string, version: string, singleOrMulti:
 			}), 
 			tx.sharedObjectRef({
 				objectId: treasuryAddy!,
+				mutable: true,
+				initialSharedVersion: initVersion!
+			}), 
+			tx.sharedObjectRef({
+				objectId: profileTableAddy!,
 				mutable: true,
 				initialSharedVersion: initVersion!
 			})]
