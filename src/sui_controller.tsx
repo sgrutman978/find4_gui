@@ -125,7 +125,7 @@ export const GetObjectContents = async (id: string): Promise<any> => {
 // 		dataSet = true;
 // 	});
 // 	return dataSet ? {data: (data?.data?.content as any)["fields"], version: data.data?.owner} : {data: [], version: ""};
-// 	}
+// 	} 
 // };
 
 
