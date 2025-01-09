@@ -811,14 +811,21 @@ a {
 
 
 .winnerLoserDiv{
-  height:400px;
-  width:600px;
-  border-radius: 20px;;
+  /* height:400px; */
+  width:62%;
+  left:15%;
+  gap:2vw;
+  padding:3vw;
+  border-radius: 20px;
   background-color:lightgrey;
-  position:relative;
-  top: 80px;
+  position:absolute;
+  top: 40%;
   margin:auto;
-  border:black 3px solid;
+  border:black 2px solid;
+  display:flex;
+  flex-direction: column;
+  flex-basis:6000px;
+  flex-grow: 1;
   /* box-shadow: 5px 5px 8px; */
 }
 
@@ -1031,7 +1038,8 @@ a {
 }
 
 .existingGame {
-  height:100px;
+  /* height:100px; */
+  overflow:hidden;
   width:180px;
   background-color: rgb(255, 255, 138);
   border-radius: 20px;

@@ -159,7 +159,7 @@ function GameBoard() {
         clearInterval(interval);
         interval = setInterval(() => {
             setKey(prevKey => prevKey + 1);
-        }, 1000);
+        }, 5000);
     };
 
     const displayRows = (key: number) => {
@@ -267,11 +267,17 @@ function GameBoard() {
                             </div> */}
                         </div>
 
-                {currentAccount && gameStats.gameOver ? <div className="winnerLoserDiv">
+                {currentAccount && gameStats.gameOver ? 
+                <div className="winnerLoserDiv">
                     {amIWinner ? <>
                     Winner
-                    <button onClick={() => sendWinTransaction()}>Win Tx</button>
-                    </>: <>Loser</>}
+                    <div style={{flexGrow: 1, display: 'flex', flexDirection: 'row', gap: '2vw'}}>
+                        <button className="winButton" style={{flexGrow: 2}} onClick={() => sendWinTransaction()}>Collect Reward</button>
+                        <button className="winButton lightRed" style={{flexGrow: 1}} onClick={() => window.location.href = '/app'}>Return Home</button>
+                    </div></>: <>
+                    Loser
+                    <button className="winButton lightRed" onClick={() => window.location.href = '/app'}>Return Home</button>
+                    </>}
                 </div> : <></>}
             </div>
             </>
