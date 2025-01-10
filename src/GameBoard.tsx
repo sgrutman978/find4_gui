@@ -159,7 +159,7 @@ function GameBoard() {
         clearInterval(interval);
         interval = setInterval(() => {
             setKey(prevKey => prevKey + 1);
-        }, 5000);
+        }, 1800);
     };
 
     const displayRows = (key: number) => {
