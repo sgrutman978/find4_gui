@@ -40,3 +40,14 @@ export const getP2 = async (addy: string) : Promise<string> => {
         return "";
 	}
 };
+
+export const getWhoTurn = async (gameId: string) : Promise<string> => {
+	try {
+		const response = await axios.get(`${baseUrl}:${port}/whoTurn?gameId=${gameId}`);
+		// console.log(response.data.p2);
+        return response.data.turn;
+	} catch (error) {
+		console.log(error);
+        return "";
+	}
+};
