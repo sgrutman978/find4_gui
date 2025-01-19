@@ -35,18 +35,21 @@ function GameBoard() {
     const [profile2, setProfile2] = useState<Profile>({username: "AI", points: 69, profilePicUrl: "../../ai.webp"});
     // const [pingGame, setPingGame] = useState(false);
     const [oldCounter, setOldCounter] = useState(0);
+    const [previousTurn, setPreviousTurn] = useState(0);
     
-    useEffect(() => {
-        // console.log(gameStats.myTurn);
-        // console.log(pingGame);
-        // console.log(key);
-        if(key == 0 || !gameStats.gameOver){
-        // if((!pingGame || key == 0) && !gameStats.gameOver){
-            // console.log("grab game");
-            getWhoTurn(gameID!);
-            setKey(prev => prev + 1);
-        }
-    }, [key]);
+    // useEffect(() => {
+    //     // console.log(gameStats.myTurn);
+    //     // console.log(pingGame);
+    //     // console.log(key);
+    //     if(key == 0 || !gameStats.gameOver){
+    //     // if(key == 0 || !gameStats.gameOver){
+    //     // if((!pingGame || key == 0) && !gameStats.gameOver){
+    //         // console.log("grab game");
+    //         console.log(gameID!);
+            
+            
+    //     }
+    // }, [key]);
 
     // useEffect(() => {
     //     setInterval(() => {
@@ -55,6 +58,7 @@ function GameBoard() {
     // }, []);
 
     const pullGameStatsFromChain = () => {
+        console.log("gettingGame");
         GetObjectContents(gameID!).then((data) => {
             const current_player = data.version ? data.data["current_player"] : -1;
             const p1_addy = data.version ? data.data["p1"] : "";
@@ -107,11 +111,10 @@ function GameBoard() {
                         setProfile2(profile);
                     });
                 }
+                setKey(prev => 555);
             }
         });
     };
-
-    let interval = setInterval(() => {}, 50000);
 
     
     const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -121,11 +124,39 @@ function GameBoard() {
 
     // console.log(winner);
 
+    function useInterval(callback: () => void, delay: number | null) {
+        useEffect(() => {
+          if (delay !== null) {
+            const intervalId = setInterval(callback, delay);
+            return () => clearInterval(intervalId);
+          }
+        }, [callback, delay]);
+      }
 
-    useEffect(()=>{
+    // useEffect(()=>{
         // runUpdateBoardInterval();
+        // setInterval(() => {
+            
+        // }, 2000);
+        
+    // },[])   
 
-    },[])   
+    const intervalCallback = () => {
+        getWhoTurn(gameID!).then((newTurn) => {
+            console.log(newTurn);
+            console.log(previousTurn);
+            if (newTurn != previousTurn){
+                pullGameStatsFromChain();
+                setPreviousTurn(newTurn);
+                console.log("hahahahha");
+                console.log(previousTurn);
+            }
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
+    useInterval(intervalCallback, 1000);
     
     // useEffect(()=>{
     //     setPingGame(gameStats.myTurn);
@@ -154,6 +185,8 @@ function GameBoard() {
                 if(isMove){
                     console.log("setttttttttt");
                     // setPingGame(false);
+                    // pullGameStatsFromChain();
+                    setPreviousTurn(0);
                 }
                 // getUpdatedBoard();
 			},
