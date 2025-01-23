@@ -1,4 +1,4 @@
-import { getFullnodeUrl, QueryEventsParams, SuiClient, SuiEvent, SuiEventFilter } from '@mysten/sui/client';
+import { getFullnodeUrl, PaginatedObjectsResponse, QueryEventsParams, SuiClient, SuiEvent, SuiEventFilter, SuiObjectData } from '@mysten/sui/client';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 import { Profile } from './GameBoard';
@@ -69,6 +69,63 @@ export const GetObject = async (id: string): Promise<any> => {
 	});
 	return data;
 };
+
+// export async function getSpecificSuiObject(walletAddress: string, objectType: string): Promise<SuiObjectData | undefined> {
+//     const objects = await suiClient.getOwnedObjects({
+//         owner: walletAddress,
+//         options: {
+//             showType: true
+//         }
+//     });
+// console.log(objects);
+//     // Filter objects by type
+//     const matchingObject = objects.data.find((obj) => obj.data?.type === objectType);
+
+//     if (!matchingObject) {
+//         console.log('No object of that type found');
+//         return undefined;
+//     }
+
+//     // Fetch detailed information of the object if needed
+//     const objectDetails = await suiClient.getObject({
+//         id: matchingObject.data?.objectId!,
+//         options: { showContent: true }
+//     });
+
+//     return objectDetails.data!;
+// }
+
+export async function getSpecificSuiObject(walletAddress: string, objectType: string): Promise<SuiObjectData[]> {
+    let cursor: string | null = null;
+    let allObjects: SuiObjectData[] = [];
+    const QUERY_MAX_RESULT_LIMIT = 50; // Assuming this limit, adjust based on actual Sui API limits
+
+    while (true) {
+        const objects: PaginatedObjectsResponse = await suiClient.getOwnedObjects({
+            owner: walletAddress,
+            cursor: cursor,
+            options: {
+                showType: true,
+                showContent: true // This fetches content details directly, reducing additional calls
+            },
+            limit: QUERY_MAX_RESULT_LIMIT
+        });
+		console.log(objects);
+
+        // Filter objects by type
+        const matchingObjects = objects.data.filter((obj) => obj.data?.type === objectType && obj.data.objectId != "0x0c63ba3317ce765e234fc28cbb0306f09a5a1972b4621653ea18c45abfb693ee" && obj.data.objectId != "0x28ab9c0876a250fe94dbaa37385ccacd6890fd5f25bbb83c8a7d203ce08c8856");
+        allObjects = allObjects.concat((matchingObjects as unknown as SuiObjectData));
+		console.log(matchingObjects);
+
+        if (!objects.hasNextPage) {
+            break; // No more pages, we're done
+        }
+
+        cursor = objects.nextCursor || null;
+    }
+
+    return allObjects;
+}
 
 export const GetProfile = async (addy: String): Promise<Profile> => {
 	let data: Profile = {};
