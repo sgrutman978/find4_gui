@@ -56,7 +56,7 @@ function Home() {
 			{/* <div className='hs1 section1'>
 			Join the Presale!
 			</div> */}
-			<div style={{display: 'flex', justifyContent: 'center'}} id="presale">
+			<div style={{display: 'flex', justifyContent: 'center', width:"100%"}} id="presale">
 				{/* <Presale></Presale> */}
 				<Staking></Staking>
 			</div>
