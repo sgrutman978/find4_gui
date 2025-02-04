@@ -46,10 +46,16 @@ export const presaleStateMainnet = myNetwork == "mainnet" ? process.env.REACT_AP
 		order: "descending",
 		limit: 10,
 	  };
+	  let queryParams4: QueryEventsParams = {
+		query: {MoveEventModule: { package: "0xb31882ffecd729c1dcd7e1884ba9bee60ca4756a87795b46c498de85b0cdfd06", module: "multi_player"}},
+		order: "descending",
+		limit: 10,
+	  };
 	  const response = await suiClient.queryEvents(queryParams);
 	  const response2 = await suiClient.queryEvents(queryParams2);
 	  const response4 = await suiClient.queryEvents(queryParams3);
-	  const response3 = [...response.data, ...response2.data, ...response4.data];
+	  const response5 = await suiClient.queryEvents(queryParams4);
+	  const response3 = [...response.data, ...response2.data, ...response4.data, ...response5.data];
 	  return response3 || [];
 	} catch (error) {
 	  console.error('Error fetching events:', error);

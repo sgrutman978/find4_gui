@@ -59,13 +59,23 @@ import { getP2 } from './ServerConn';
 	// return () => clearInterval(intervalId); // Cleanup on state change or unmount
   const getGameCreationEvents = () => {
 	  fetchEvents().then((events) => {
-		  events?.forEach((event) => {
-			  if(event.type == programAddress+"::multi_player::MultiPlayerGameStartedEvent2" || event.type == OGAddyForEventObjType+"::single_player::SinglePlayerGameStartedEvent"){
-				  let eventData = event.parsedJson as any;
-				  let x = (Date.now() - Number(event.timestampMs)) < 20000;
+		console.log("\n\n\n\n\n\n\ngwsgsfgsdfgsdfgd");
+		console.log(events![0]);
+		  events?.reverse().forEach((event) => {
+			console.log(event);
+			  if(event.type == "0xb31882ffecd729c1dcd7e1884ba9bee60ca4756a87795b46c498de85b0cdfd06::multi_player::MultiPlayerGameStartedEvent2" || event.type == OGAddyForEventObjType+"::single_player::SinglePlayerGameStartedEvent"){
+				console.log("ppppppppp");  
+				let eventData = event.parsedJson as any;
+				  let x = (Date.now() - Number(event.timestampMs)) < 15000;
+				  console.log(Date.now());
+				  console.log(Number(event.timestampMs));
+				  console.log((Date.now() - Number(event.timestampMs)));
+				  console.log(x);
+				  console.log(currentAccount?.address);
+				  console.log(eventData.p1);
 				  if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
 					  //redirect to game page the event described
-					  window.location.href = '/app/game/'+eventData.game;
+					//   window.location.href = '/app/game/'+eventData.game;
 				  }
 		  }
 		  });
