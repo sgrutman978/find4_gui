@@ -221,13 +221,17 @@ function Staking() {
     tx.moveCall({
       target: `0xf81b0ecbb102682888971828b4cab3512aca54d1623e8586d0376547e4c9c66c::FFIO::distribute_tokens4`,
       arguments: [
-      coinWithBalance({type: "0xd9fc80a30c89489764bc07f557dc17162a477d34a9b44e65aae48af8ead006e7::FFIO::FFIO", balance: 19*1000*OneCoinNineDecimals}), // Using gas as the payment, this is just for example. Adjust accordingly.
+      coinWithBalance({type: "0xd9fc80a30c89489764bc07f557dc17162a477d34a9b44e65aae48af8ead006e7::FFIO::FFIO", balance: 39*10000*OneCoinNineDecimals}), // Using gas as the payment, this is just for example. Adjust accordingly.
       tx.makeMoveVec({type: "address", elements: [
-        tx.pure.address("0xc57b21031d881ffa75ac39e6e92e2cc19505f30068c408e96c8717d2c0c08685"),
-        tx.pure.address("0xc57b21031d881ffa75ac39e6e92e2cc19505f30068c408e96c8717d2c0c08685"),
+        tx.pure.address("0x128e1fe059f387d5d2a1d0757baa9e6c86b4c5351e60774be65bd188dcb71845"),
+        tx.pure.address("0xcc03ece66e2f3a1f3ca9c92e5268d53508d8c4d997b0d221cab3525fd8077ff6"),
+        tx.pure.address("0xdaede247a15d880806d03bce90f4d6ad121cabeb1148e504218033c0e1789e8d"),
+        tx.pure.address("0xac259ac799d26dd54572c03f4d0376e8465a827d87d63afda2eb515052d73778"),
+        tx.pure.address("0x4f27629642f7cfe2c7645bc11a4458139f0687743ef082802a37fd0d8edaa9c3"),
+        tx.pure.address("0x3fab24a565575a4c1b3f47e7d6998d92df6b1c4fa28b0ff6aa32142ec494e446"),
         // tx.pure.address(""),
       ]}),
-      tx.pure.u64(1000*OneCoinNineDecimals),
+      tx.pure.u64(10000*OneCoinNineDecimals),
       ],
     });
     signAndExecuteTransaction({
@@ -279,7 +283,7 @@ function Staking() {
   //     return new SuiClient({ url: getFullnodeUrl(network) });
   //   }}
   // >
-  <div className="presale-container">
+  <div className="presale-container" style={{width:700, margin: "auto", top: 120}} id="presale">
   <div className="connectButtonWrapper2">
     <div className="right topRight"> 
     {currentAccount ? <>Wallet: <span style={{marginRight: 7, marginLeft: 5}}>
@@ -343,7 +347,7 @@ function Staking() {
       {/* Wallet connect button hidden but clickable */}
       {/* <button id="connectBtn" style={{ display: 'none' }}></button> */}
 
-       {/* <button onClick={() => massDistributeHelper()}>Distribute</button> */}
+       <button onClick={() => massDistributeHelper()}>Distribute</button>
 
     </div>
     // </div>

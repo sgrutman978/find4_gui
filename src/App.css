@@ -213,6 +213,37 @@ flex-basis: 1200px;
   cursor: pointer;
 }
 
+.onlineDiv {
+  display: flex;
+  flex-direction: row;
+  /* flex-basis: 50px; */
+  overflow: hidden;
+  justify-content: center;
+}
+
+.onlineBlack{
+  background-color: black; 
+  color: white; 
+  position: relative; 
+  /* z-index: 1001;  */
+  left: 20vw;
+  width: 16vw;
+  height: 2.5vw;
+  font-size: 2vw;
+  border-radius: 3vw;
+  /*marginRight: 180, marginTop: -10*/
+}
+
+.onlineGreen{
+  background-color: green;
+  width: 1.7vw;
+  height: 1.7vw;
+  border-radius: 12px;
+  position: absolute;
+  top: .4vw;
+  left: .5vw;
+}
+
 .gameHomeLogo {
   width:60%;
 }
@@ -437,6 +468,26 @@ a {
   }
 }
 
+@media screen and (min-width: 1000px) {
+  .onlineBlack{
+    left: 200px;
+    width: 160px; 
+    height: 25px; 
+    font-size: 20px; 
+    border-radius: 18px; 
+  }
+
+  .onlineGreen{
+    background-color: green;
+    width: 18px;
+    height: 18px;
+    border-radius: 12px;
+    position: absolute;
+    top: 3.5px;
+    left: 6px;
+  }
+}
+
 .newGameButton:hover{
   color: red;
   /* font-size: 11vw; */
@@ -549,13 +600,13 @@ a {
 
   @media screen and (max-width: 589px) {
    .existingGamesContainer{
-    max-height:40vh;
+    max-height:30vh;
    }
   }
 
   @media screen and (min-width: 590px) {
     .existingGamesContainer{
-     max-height:36vh;
+     max-height:26vh;
     }
   }
 

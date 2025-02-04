@@ -56,10 +56,10 @@ function Home() {
 			{/* <div className='hs1 section1'>
 			Join the Presale!
 			</div> */}
-			<div style={{display: 'flex', justifyContent: 'center', width:"100%"}} id="presale">
+			{/* <div style={{display: 'flex', justifyContent: 'center', width:"100%"}} id="presale"> */}
 				{/* <Presale></Presale> */}
-				<Staking></Staking>
-			</div>
+				{/* <Staking></Staking>
+			</div> */}
 
 			<div className='hs5' style={{}}><img style={{width:"100%"}} src="playing2.jpeg" /></div>
 			<div  className="hs5 section1">

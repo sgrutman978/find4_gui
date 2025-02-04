@@ -46,7 +46,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <WalletProvider autoConnect>
           <div className="App">
-		  {window.location.pathname == "/" ? <Navbar /> : ""}
+		  {window.location.pathname == "/" || window.location.pathname == "/staking" ? <Navbar /> : ""}
 		  {/* <Navbar /> */}
 
 			{/* </Header> */}
@@ -55,7 +55,7 @@ function App() {
                     <Route path="/"  Component={Home} />
 					<Route path="/app" Component={GameHomeScreen}/>
                     <Route path="/app/game/:gameID" Component={GameBoard}/>
-					<Route path="/presale" Component={Presale}/>
+					{/* <Route path="/presale" Component={Presale}/> */}
 					<Route path="/staking" Component={Staking}/>
 				</Routes>
             </BrowserRouter>

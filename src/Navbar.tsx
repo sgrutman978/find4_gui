@@ -85,11 +85,11 @@ function Navbar(props: any) {
           {/* : <ConnectButton></ConnectButton>} */}
           <a href="https://x.com/Find4_io" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
           <a href="https://discord.com/invite/pYsHzwZ82S" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faDiscord} /></a>
-        <a href={`https://${myNetwork}.suivision.xyz/package/${programAddress}?tab=Code`} className="menuElement contract"><FontAwesomeIcon icon={faGlobe} /></a>
+        <a href={`https://suivision.xyz/coin/0xd9fc80a30c89489764bc07f557dc17162a477d34a9b44e65aae48af8ead006e7::FFIO::FFIO?tab=Trades`} className="menuElement contract"><FontAwesomeIcon icon={faGlobe} /></a>
         {/* <div className="gameHomeFooter"> */}
 				{/* </div> */}
-        <a href="#tokenomics" className="menuElement">Tokenomics</a>
-        <a href="#presale" className="menuElement">Presale</a>
+        <a href="/staking" className="menuElement">Staking</a>
+        {/* <a href="#presale" className="menuElement">Presale</a> */}
 
 			
        

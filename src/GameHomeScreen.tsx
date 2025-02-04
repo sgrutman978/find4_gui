@@ -11,19 +11,21 @@ import { Profile } from './GameBoard';
 import { faDiscord, faTwitter, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import Staking from './Staking';
 import axios from 'axios';
-import { sendOnlineStatus } from './ServerConn';
+import { getHowManyOnline, sendOnlineStatus } from './ServerConn';
+import { Switch } from '@mui/material';
 
 
 function GameHomeScreen() {
 	// const autoConnectionStatus = useAutoConnectWallet();
 	
 	let currentAccount = useCurrentAccount();
-	let onlineCount = 0;
 	const [myProfile, setMyProfile] = useState<Profile>(); 
 	let intervalId: string | number | NodeJS.Timeout | undefined = undefined;
 	const [myGames, setMyGames] = useState<any[]>([]);
 	const [profileSwitch, setProfileSwitch] = useState(0);
 	const [refresh, setRefresh] = useState(0);
+	const [checked, setChecked] = useState(false);
+	const [online, setOnline] = useState(3);
 
 	useEffect(() => { 
         if(currentAccount){
@@ -31,8 +33,8 @@ function GameHomeScreen() {
                 setMyProfile(profile);
             });
 			sendOnlineStatus(currentAccount?.address!);
-			getOnlineCount();
 			getMyGames(currentAccount?.address!);
+			getOnlineNumber();
         };
 		// setProfileSwitch(prev => prev + 1);
 		// playInterval(profileSwitch);
@@ -40,8 +42,8 @@ function GameHomeScreen() {
 
 	useEffect(() => {
 		sendOnlineStatus(currentAccount?.address!);
-		getOnlineCount();
 		getMyGames(currentAccount?.address!);
+		getOnlineNumber();
 	}, [refresh]);
 
 	useEffect(() => {
@@ -52,6 +54,13 @@ function GameHomeScreen() {
 			setRefresh(prev => prev + 1);
 		}, 10000);
 	}, []);
+
+	const getOnlineNumber = () => {
+		getHowManyOnline().then((n) => {
+			console.log(n);
+			setOnline(3+n);
+		});
+	}
 
 	// const playInterval = (mySwitch: number) => {
 	// 	console.log("SWITCHES");
@@ -68,17 +77,6 @@ function GameHomeScreen() {
 	// 		}, 10000);
 	// 	}
 	// }
-
-	const getOnlineCount = async () => {
-		try {
-			// console.log("get onlie count");
-			const response = await axios.get(`${baseUrl}:${port}/howmanyonline`);
-			// console.log(response.data.size);
-			onlineCount = response.data.size;
-		} catch (error) {
-			console.log(error);
-		}
-	};
 
 	const getMyGames = async (addy: string) => {
 		try {
@@ -148,20 +146,32 @@ function GameHomeScreen() {
 		return `${first}...${lastFive}`;
 	}
 
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setChecked(event.target.checked);
+	}
+
   return (
 		<div className="gameHomeScreen">
 			<div className="logo_app_home">
 				{/* <span style={{position: "relative", bottom: 34, fontSize: 200}}>Find</span><img src="../f4-42.png" style={{width: 210, height: 210, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 33, fontSize: 200}}>.io</span> */}
-				<div className="gameHomeLogoDiv" onClick={() => window.location.href = '/'}><img src="../logo.png" className="gameHomeLogo" /></div>
+				<div className="gameHomeLogoDiv" onClick={() => window.location.href = '/'}>
+					<img src="../logo.png" className="gameHomeLogo" />
+				</div>
+				<div className="onlineDiv" style={{justifyContent: "center", overflow: "visible", height: 0}}>
+					<div className="onlineBlack">
+						<div className="onlineGreen"></div>{online} Online
+					</div>
+				</div>
 				<div className="newButtonsHolder">
-					<span style={{fontSize: "5vw", display: "flex", flexDirection: "column", justifyContent: "center"}}>New:</span>
+					{/* <span style={{fontSize: "5vw", display: "flex", flexDirection: "column", justifyContent: "center"}}>New:</span> */}
 					<NewGameButton gameType="single" label="Singleplayer" disabled={false}></NewGameButton>
 					{/* (Singleplayer Coming Soon) */}
 					<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
 					{/* (Coming to mainnet soon! Earn trophies on testnet for mainnet airdrop!) */}
 				</div>
-				<span style={{marginTop: 36, fontSize: "27px"}}>My Games</span>
-				{getMyGamesObjects()}
+				<span style={{marginTop: 36, fontSize: "27px"}}>Show My Games<Switch color="default" onChange={handleChange} /></span>
+
+				{checked ? getMyGamesObjects() : ""}
 			</div>
 			<div className="connectButtonWrapper">
 				<ProfileButtonAndPanel></ProfileButtonAndPanel>

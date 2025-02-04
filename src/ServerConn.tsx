@@ -51,3 +51,15 @@ export const getWhoTurn = async (gameId: string) : Promise<number> => {
         return 0;
 	}
 };
+
+export const getHowManyOnline = async () : Promise<number> => {
+	try {
+		const response = await axios.get(`${baseUrl}:${port}/howmanyonline`);
+		console.log(response.data.size);
+        return response.data.size;
+	} catch (error) {
+		console.log(error);
+        return 0;
+	}
+};
+
