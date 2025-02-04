@@ -347,7 +347,7 @@ function Staking() {
       {/* Wallet connect button hidden but clickable */}
       {/* <button id="connectBtn" style={{ display: 'none' }}></button> */}
 
-       <button onClick={() => massDistributeHelper()}>Distribute</button>
+       {/* <button onClick={() => massDistributeHelper()}>Distribute</button> */}
 
     </div>
     // </div>
