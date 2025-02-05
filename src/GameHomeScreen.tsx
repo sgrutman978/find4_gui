@@ -13,6 +13,7 @@ import Staking from './Staking';
 import axios from 'axios';
 import { getHowManyOnline, sendOnlineStatus } from './ServerConn';
 import { Switch } from '@mui/material';
+import { shortenAddy } from './Utility';
 
 
 function GameHomeScreen() {
@@ -138,12 +139,6 @@ function GameHomeScreen() {
 			if (a.winner === false && b.winner === true) return 1;
 			return 0; // Both winners are the same
 		});
-	}
-
-	const shortenAddy = (addy: string) => {
-		const first = addy.slice(0, 7);
-		let lastFive = addy.slice(-5);
-		return `${first}...${lastFive}`;
 	}
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -14,6 +14,7 @@ import GameHomeScreen from './GameHomeScreen';
 import { myNetwork } from './sui_controller';
 import Presale from './Presale';
 import Staking from './Staking';
+import Leaderboard from './Leaderboard';
 // import { useLocation } from 'react-router-dom';
 
 // Config options for the networks you want to connect to
@@ -57,6 +58,7 @@ function App() {
                     <Route path="/app/game/:gameID" Component={GameBoard}/>
 					{/* <Route path="/presale" Component={Presale}/> */}
 					<Route path="/staking" Component={Staking}/>
+					<Route path="/leaderboard" Component={Leaderboard}/>
 				</Routes>
             </BrowserRouter>
           </div>

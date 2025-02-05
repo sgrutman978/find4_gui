@@ -52,6 +52,17 @@ export const getWhoTurn = async (gameId: string) : Promise<number> => {
 	}
 };
 
+export const getLeaderboard = async () : Promise<[{}]> => {
+	try {
+		const response = await axios.get(`${baseUrl}:${port}/leaderboard`);
+		console.log(response.data.profiles);
+        return response.data.profiles;
+	} catch (error) {
+		console.log(error);
+        return [{}];
+	}
+};
+
 export const getHowManyOnline = async () : Promise<number> => {
 	try {
 		const response = await axios.get(`${baseUrl}:${port}/howmanyonline`);

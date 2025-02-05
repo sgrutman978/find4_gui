@@ -75,7 +75,7 @@ import { getP2 } from './ServerConn';
 				  console.log(eventData.p1);
 				  if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
 					  //redirect to game page the event described
-					//   window.location.href = '/app/game/'+eventData.game;
+					  window.location.href = '/app/game/'+eventData.game;
 				  }
 		  }
 		  });

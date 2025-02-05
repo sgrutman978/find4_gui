@@ -915,6 +915,45 @@ a {
   font-family: "Balsamiq Sans", sans-serif;
 }
 
+.leaderboard-container{
+  /* margin:auto; */
+  /* background-color: rgb(255, 255, 157); */
+  color: yellow;
+  border-radius: 20px;
+  /* border: solid black 2px; */
+  display: flex;
+  flex-direction: column;
+  /* flex-basis: 600px; */
+  font-weight: 500;
+  font-size: 30px;
+  /* margin-top: 100px; */
+  /* overflow: hidden; */
+  align-items: center;
+  /* flex-wrap: wrap; */
+  /* gap:18px; */
+
+  padding:9px;
+  /* margin: 9px; */
+  /* margin-top:100px; */
+  position:relative;
+  font-family: "Balsamiq Sans", sans-serif;
+  td{
+    padding: 10px 20px;
+    /* border-bottom: 1px solid red; */
+  }
+  tr{
+    border-bottom: 1px solid black;
+  }
+}
+
+.leaderboardUsernamePic{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+}
+
 .connectButtonWrapper2{
   position:absolute;
   right:10px;
