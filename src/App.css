@@ -453,6 +453,7 @@ flex-basis: 1200px;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  font-family: "Balsamiq Sans", sans-serif;
 }
 
 a {

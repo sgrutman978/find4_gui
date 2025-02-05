@@ -89,7 +89,7 @@ import { getP2 } from './ServerConn';
 			{/* <img src={
 			props.label == "Multiplayer" ? "../../ai.webp" : "../../ai.webp"
 			} className="newGameImage" /> */}
-			<span style={{width: "100%", fontSize: "2.5vw"}}>{props.label == "Multiplayer" ? "Random" : "Bot"}</span></button>
+			<span style={{width: "100%", fontSize: "2.5vw"}}>{props.label == "Multiplayer" ? "Vs." : "Bot"}</span></button>
 		{loading ? <div className="loadingScreen">
 			<a href="/app">
 				<FontAwesomeIcon icon={faHome} className="yellowHome" />
