@@ -5,7 +5,7 @@ import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecu
 import Find4Animation from './Find4Animation';
 import { baseUrl, fetchEvents, GetProfile, port } from './sui_controller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDice, faHome, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faDice, faHome, faRankingStar, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
 import ProfileButtonAndPanel from './ProfileButtonAndPanel';
 import { Profile } from './GameBoard';
 import { faDiscord, faTwitter, faXTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -147,6 +147,9 @@ function GameHomeScreen() {
 
   return (
 		<div className="gameHomeScreen">
+			<a href="/leaderboard" style={{zIndex: 1000}}>
+				<FontAwesomeIcon icon={faRankingStar} className="yellowHome" />
+			</a>
 			<div className="logo_app_home">
 				{/* <span style={{position: "relative", bottom: 34, fontSize: 200}}>Find</span><img src="../f4-42.png" style={{width: 210, height: 210, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 33, fontSize: 200}}>.io</span> */}
 				<div className="gameHomeLogoDiv" onClick={() => window.location.href = '/'}>

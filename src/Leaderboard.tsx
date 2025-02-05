@@ -8,7 +8,7 @@ import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecu
 import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faXTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe, faHome, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { getLeaderboard } from './ServerConn';
 import { shortenAddy } from './Utility';
 
@@ -19,7 +19,7 @@ function Leaderboard() {
     useEffect(() => {
         getLeaderboard().then((profiles) => {
             setProfiles([]);
-            profiles.forEach(prof => {
+            profiles.reverse().forEach(prof => {
                 console.log(prof);
                 setProfiles(prev => [...prev, prof]);
             });
@@ -40,6 +40,7 @@ function Leaderboard() {
             <tbody>
               {profiles.map((item: any, index: number) => (
                 <tr key={index}>
+                    <td><FontAwesomeIcon icon={faTrophy} /> {item.points}</td>
                   <td className="leaderboardUsernamePic">
                     <img 
                       src={item.profilePicUrl} 
@@ -48,11 +49,13 @@ function Leaderboard() {
                     />
                     @{item.username}
                   </td>
-                  <td>{item.points}</td>
                   <td>{item.addy ? shortenAddy(item.addy) : ""}</td>
                 </tr>
               ))}
             </tbody>
+            <a href="/app">
+                <FontAwesomeIcon icon={faHome} className="yellowHome" />
+            </a>
           </table>
         );
       };
