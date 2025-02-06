@@ -54,8 +54,8 @@ function GameHomeScreen() {
 		if(myGames.length > 1){
 			getMyGamesObjects().then((elss) => {
 				setEls(elss);
-				console.log(myGames);
-				console.log(els.length);
+				// console.log(myGames);
+				// console.log(els.length);
 			});
 		}
 	}, [myGames]);

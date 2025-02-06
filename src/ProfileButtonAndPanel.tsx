@@ -43,6 +43,8 @@ import { getProfileFromServer, updateProfileServer } from './ServerConn';
                 console.log("mehhhhhhhhh3");
                 console.log(profile);
                 setMyProfile(profile);
+                setFormUsername(profile?.username!);
+                setFormNftAddy(profile?.profilePicUrl!)
             });
         }else{
             setMyProfile(undefined);
@@ -67,7 +69,8 @@ import { getProfileFromServer, updateProfileServer } from './ServerConn';
 
     async function handleSubmit(){ //create: boolean){
         // console.log(create);
-        console.log(myProfile);
+        // console.log(myProfile);
+        // console.log(formUsername);
         let tx = await create_or_edit_profile(formUsername, formNftAddy); //create ? await create_or_edit_profile(formUsername, formNftAddy) : await editProfile(formUsername, formNftAddy, myProfile?.id!);
 		// console.log(transaction);
 		signAndExecuteTransaction({
@@ -91,7 +94,7 @@ import { getProfileFromServer, updateProfileServer } from './ServerConn';
  
 	return (
 	<>
-		{myProfile ? 
+		{currentAccount ? 
             <button className="profileButton" onClick={() => openPanel()}>
                 <img className="profilePicInButton" src={myProfile?.username ? myProfile?.profilePicUrl : "../../default-avatar.png"} />
                 {myProfile?.username ? myProfile?.username : "Create"}
@@ -103,10 +106,10 @@ import { getProfileFromServer, updateProfileServer } from './ServerConn';
             <h2>{myProfile ? "Edit Profile" : "Create Profile"}</h2>
             {/* <form id="nftForm"> */}
                 <label>Username:</label><br></br>
-                <input type="text" id="username" name="username" onChange={handleUsernameChange} required />
+                <input type="text" id="username" name="username" onChange={handleUsernameChange} value={formUsername} required />
                 <br></br>
                 <label>Image Url:</label><br></br>
-                <input type="text" id="nftAddress" name="nftAddress" onChange={handleNftAddyChange} required />
+                <input type="text" id="nftAddress" name="nftAddress" onChange={handleNftAddyChange} value={formNftAddy} required />
                 {/* <label>Mainnet NFT Address:</label><br></br> */}
                 {/* <input type="text" id="nftAddress" name="nftAddress" onChange={handleNftAddyChange} required /> */}
                 <br></br>
