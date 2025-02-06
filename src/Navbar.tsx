@@ -33,9 +33,8 @@ function Navbar(props: any) {
 
     // Menu items for demonstration
     const menuItems = [
-      { name: 'Presale', link: "#presale" },
-      { name: 'Tokenomics', link: "#tokenomics"},
-      { name: 'Launch App', link: '/app' }
+      { name: 'Staking', link: "/staking" },
+      { name: 'Play Game', link: '/app' }
     ];
 
   return isMobile ? 
@@ -81,7 +80,7 @@ function Navbar(props: any) {
         {/* </li> */}
         {/* {window.location.pathname == "/" ?  */}
         {/* <Find4Animation size={15} animated={true} /> */}
-        <a href="/app" className='menuElement launchAppButton'>Launch App</a>
+        <a href="/app" className='menuElement launchAppButton'>Play Game</a>
           {/* : <ConnectButton></ConnectButton>} */}
           <a href="https://x.com/Find4_io" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
           <a href="https://discord.com/invite/pYsHzwZ82S" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faDiscord} /></a>
