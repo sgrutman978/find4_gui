@@ -150,7 +150,7 @@ function GameHomeScreen() {
 				</div>
 				<span style={{marginTop: 36, fontSize: "27px"}}>Show My Games<Switch color="default" onChange={handleChange} /></span>
 
-				{checked ? <div className='existingGamesContainer'>{els}</div> : "dd"}
+				{checked ? <div className='existingGamesContainer'>{els}</div> : ""}
 			</div>
 			<div className="connectButtonWrapper">
 				<ProfileButtonAndPanel></ProfileButtonAndPanel>
