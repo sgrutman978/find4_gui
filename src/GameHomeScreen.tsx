@@ -3,7 +3,7 @@ import NewGameButton from './NewGameButton';
 // import './Navbar.css';
 import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
 import Find4Animation from './Find4Animation';
-import { baseUrl, fetchEvents, GetProfile, port } from './sui_controller';
+import { baseUrl, fetchEvents, /*GetProfile,*/ port } from './sui_controller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDice, faHome, faRankingStar, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
 import ProfileButtonAndPanel from './ProfileButtonAndPanel';
@@ -11,7 +11,7 @@ import { Profile } from './GameBoard';
 import { faDiscord, faTwitter, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import Staking from './Staking';
 import axios from 'axios';
-import { getHowManyOnline, sendOnlineStatus } from './ServerConn';
+import { getHowManyOnline, getProfileFromServer, sendOnlineStatus } from './ServerConn';
 import { Switch, TextField } from '@mui/material';
 import { shortenAddy } from './Utility';
 
@@ -27,10 +27,11 @@ function GameHomeScreen() {
 	const [refresh, setRefresh] = useState(0);
 	const [checked, setChecked] = useState(false);
 	const [online, setOnline] = useState(3);
+	const [els, setEls] = useState<any>([]);
 
 	useEffect(() => { 
         if(currentAccount){
-            GetProfile(currentAccount.address).then((profile) => {
+            getProfileFromServer(currentAccount.address).then((profile) => {
                 setMyProfile(profile);
             });
 			sendOnlineStatus(currentAccount?.address!);
@@ -56,9 +57,19 @@ function GameHomeScreen() {
 		}, 10000);
 	}, []);
 
+	useEffect(() => {
+		if(myGames.length > 1){
+			getMyGamesObjects().then((elss) => {
+				setEls(elss);
+				console.log(myGames);
+				console.log(els.length);
+			});
+		}
+	}, [myGames]);
+
 	const getOnlineNumber = () => {
 		getHowManyOnline().then((n) => {
-			console.log(n);
+			// console.log(n);
 			setOnline(3+n);
 		});
 	}
@@ -89,14 +100,14 @@ function GameHomeScreen() {
 		}
 	};
 
-	const getMyGamesObjects = () => {
-		let els: any = [];
-		customSort();
-		myGames.forEach((game) => {
-			// console.log(game);
-			let opponentAddy = (game.p1 == currentAccount?.address ? game.p2 : game.p1);
-			els.push(
-			<div className="existingGame" onClick={() => window.location.href = `/app/game/${game.id}`}>
+
+
+	const getMyGamesObjectsHelper = async (game: any) => {
+		let opponentAddy = (game.p1 == currentAccount?.address ? game.p2 : game.p1);
+			return await getProfileFromServer(opponentAddy).then(async (profile) => {
+				console.log("PPPPPDWEWDUBWJHBJDW");
+				// console.log(profile);
+			return (<div className="existingGame" onClick={() => window.location.href = `/app/game/${game.id}`}>
 				{/* vs: {game.type == 1 ? "AI" : shortenAddy(opponentAddy)}<br /> */}
 				{(!game.winner ? (((game.type == 1 && game.currentPlayerTurn == 1) || 
 					(game.type == 2 && ((game.currentPlayerTurn == 1 && currentAccount?.address == game.p1) || (game.currentPlayerTurn == 2 && currentAccount?.address == game.p2)))) ? 
@@ -104,14 +115,42 @@ function GameHomeScreen() {
 					((game.type == 1 && game.winner == 1) || 
 					(game.type == 2 && ((game.winner == 1 && currentAccount?.address == game.p1) || (game.winner == 2 && currentAccount?.address == game.p2)))) ? 
 					<div style={{position: 'relative', backgroundColor: 'green', padding: 3}}>Winner!</div> : <div style={{position: 'relative', backgroundColor: 'red', padding: 3}}>Loser</div>)}
-				{game.type == 2 ? <div style={{margin: 'auto', marginTop: 5}}><FontAwesomeIcon icon={faUser}  /> {shortenAddy(opponentAddy)}</div> : <div style={{margin: 'auto', marginTop: 5}}><FontAwesomeIcon icon={faRobot} /></div>}
+				{game.type == 2 ? <div style={{margin: 'auto', marginTop: 5}}><FontAwesomeIcon icon={faUser}  /> {(profile ? profile.username : shortenAddy(opponentAddy) )}</div> : <div style={{margin: 'auto', marginTop: 5}}><FontAwesomeIcon icon={faRobot} /></div>}
 				{/* Total Chips Down: {game.nonce}<br /> */}
 				<FontAwesomeIcon icon={faDice}  /> {shortenAddy(game.id)}
 				{/* {game.winner ? () : (parseInt(game.currentPlayerTurn) == 1 && p1 == currentAccount.address ? "mine")} */}
 			</div>);
-		})
-		return <div className='existingGamesContainer'>{els}</div>;
+			}).catch(e => {
+				console.log(e);
+			});
+	};
+
+	const getMyGamesObjects = async (): Promise<any> => {
+		let els: any = [];
+		customSort();
+
+
+		
+
+		const results = await Promise.all(myGames.map(async (game) => {
+            return await getMyGamesObjectsHelper(game);
+        }));
+		console.log("RRRRRRRR");
+		console.log(results);
+		// setEls(results);
+
+
+
+
+		// await myGames.forEach(async (game) => {
+		// 	// console.log(game);
+			
+		// });
+		// console.log("TTTTTTTTTTTTTTTTTTTTTTTT");
+		// return els;
+		return results;
 	}
+
 
 	function customSort() {
 		return myGames.sort((a, b) => {
@@ -170,7 +209,7 @@ function GameHomeScreen() {
 				</div>
 				<span style={{marginTop: 36, fontSize: "27px"}}>Show My Games<Switch color="default" onChange={handleChange} /></span>
 
-				{checked ? getMyGamesObjects() : ""}
+				{checked ? <div className='existingGamesContainer'>{els}</div> : "dd"}
 			</div>
 			<div className="connectButtonWrapper">
 				<ProfileButtonAndPanel></ProfileButtonAndPanel>

@@ -1,8 +1,9 @@
 import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { useEffect, useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile,*/ create_or_edit_profile, GetProfile } from './sui_controller';
+import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile,*/ create_or_edit_profile, /*GetProfile*/ } from './sui_controller';
 import { Profile } from './GameBoard';
+import { getProfileFromServer } from './ServerConn';
  
  function ProfileButtonAndPanel(props: any) {
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -38,7 +39,7 @@ import { Profile } from './GameBoard';
         console.log("mehhhhhh1");
         if(currentAccount){
             console.log("mehhhhhh2");
-            GetProfile(currentAccount.address).then((profile) => {
+            getProfileFromServer(currentAccount.address).then((profile) => {
                 console.log("mehhhhhhhhh3");
                 console.log(profile);
                 setMyProfile(profile);

@@ -60,6 +60,17 @@ export const getP2 = async (addy: string) : Promise<string> => {
 	}
 };
 
+export const getProfileFromServer = async (addy: string) : Promise<Profile> => {
+	try {
+		const response = await axios.get(`${baseUrl}:${port}/getProfile?addy=${addy}`);
+		// console.log(response.data.p2);
+        return response.data.profile;
+	} catch (error) {
+		console.log(error);
+        return {};
+	}
+};
+
 export const getWhoTurn = async (gameId: string) : Promise<number> => {
 	try {
 		const response = await axios.get(`${baseUrl}:${port}/whoTurn?gameId=${gameId}`);
@@ -85,7 +96,7 @@ export const getLeaderboard = async () : Promise<[{}]> => {
 export const getHowManyOnline = async () : Promise<number> => {
 	try {
 		const response = await axios.get(`${baseUrl}:${port}/howmanyonline`);
-		console.log(response.data.size);
+		// console.log(response.data.size);
         return response.data.size;
 	} catch (error) {
 		console.log(error);

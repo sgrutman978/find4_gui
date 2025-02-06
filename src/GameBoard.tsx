@@ -1,12 +1,12 @@
 import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { fetchEvents, /*fetchProfile,*/ GetObjectContents, GetProfile, myNetwork, player_move, player_win } from './sui_controller';
+import { fetchEvents, /*fetchProfile,*/ GetObjectContents, /*GetProfile,*/ myNetwork, player_move, player_win } from './sui_controller';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Transaction } from '@mysten/sui/dist/cjs/transactions';
-import { getWhoTurn } from './ServerConn';
+import { getProfileFromServer, getWhoTurn } from './ServerConn';
 
 export interface Profile {
     profilePicUrl?: string,
@@ -103,11 +103,11 @@ function GameBoard() {
 
             if(key == 0){
                 // setPingGame(myTurn);
-                GetProfile(data.data["p1"]).then((profile) => {
+                getProfileFromServer(data.data["p1"]).then((profile) => {
                     setProfile1(profile);
                 });
                 if(gameType == "multi"){
-                    GetProfile(data.data["p2"]).then((profile) => {
+                    getProfileFromServer(data.data["p2"]).then((profile) => {
                         setProfile2(profile);
                     });
                 }
