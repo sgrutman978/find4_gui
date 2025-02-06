@@ -11,7 +11,7 @@ import { Profile } from './GameBoard';
 import { faDiscord, faTwitter, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import Staking from './Staking';
 import axios from 'axios';
-import { getHowManyOnline, getProfileFromServer, sendOnlineStatus } from './ServerConn';
+import { getHowManyOnline, getProfileFromServer, sendOnlineStatus, updateProfileServer } from './ServerConn';
 import { Switch, TextField } from '@mui/material';
 import { shortenAddy } from './Utility';
 
@@ -79,7 +79,10 @@ function GameHomeScreen() {
 	const getMyGamesObjectsHelper = async (game: any) => {
 		let opponentAddy = (game.p1 == currentAccount?.address ? game.p2 : game.p1);
 			return await getProfileFromServer(opponentAddy).then(async (profile) => {
-				return (<div className="existingGame" onClick={() => window.location.href = `/app/game/${game.id}`}>
+				if(!profile){
+					updateProfileServer(opponentAddy);
+				}
+				return (<div className="existingGame" onClick={() => {window.location.href = `/app/game/${game.id}`}}>
 					{(!game.winner ? (((game.type == 1 && game.currentPlayerTurn == 1) || 
 						(game.type == 2 && ((game.currentPlayerTurn == 1 && currentAccount?.address == game.p1) || (game.currentPlayerTurn == 2 && currentAccount?.address == game.p2)))) ? 
 						<div style={{position: 'relative', backgroundColor: '#90EE90', padding: 3}}>Your Turn</div> : <div style={{position: 'relative', backgroundColor: '#ffcccb', padding: 3}}>Waiting...</div>) : 

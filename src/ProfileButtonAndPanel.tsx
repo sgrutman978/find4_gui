@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
 import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile,*/ create_or_edit_profile, /*GetProfile*/ } from './sui_controller';
 import { Profile } from './GameBoard';
-import { getProfileFromServer } from './ServerConn';
+import { getProfileFromServer, updateProfileServer } from './ServerConn';
  
  function ProfileButtonAndPanel(props: any) {
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -77,7 +77,7 @@ import { getProfileFromServer } from './ServerConn';
 			onSuccess: (result) => {
 				console.log('executed transaction', result);
                 closePanel();
-                // updateProfile();
+                updateProfileServer(currentAccount?.address!);
                 setTimeout(() => {
                     window.location.reload();
                 }, 2500);

@@ -133,24 +133,24 @@ export async function getSpecificSuiObject(walletAddress: string, objectType: st
     return allObjects;
 }
 
-export const GetProfile = async (addy: String): Promise<Profile> => {
-	let data: Profile = {};
-    await suiClient.getDynamicFieldObject({
-		parentId: innerProfilesTableAddy!,
-		name: {
-            type: 'address',
-            value: addy,
-        },
-	}).then((data2) => {
-		if(data2!.data){
-			let tmp = (data2!.data!.content! as any).fields.value.fields;
-			console.log(tmp);
+// export const GetProfile = async (addy: String): Promise<Profile> => {
+// 	let data: Profile = {};
+//     await suiClient.getDynamicFieldObject({
+// 		parentId: innerProfilesTableAddy!,
+// 		name: {
+//             type: 'address',
+//             value: addy,
+//         },
+// 	}).then((data2) => {
+// 		if(data2!.data){
+// 			let tmp = (data2!.data!.content! as any).fields.value.fields;
+// 			console.log(tmp);
 
-			data = {username: tmp.username, points: parseInt(tmp.trophies), profilePicUrl: tmp.image_url};
-		}
-	});
-	return data;
-};
+// 			data = {username: tmp.username, points: parseInt(tmp.trophies), profilePicUrl: tmp.image_url};
+// 		}
+// 	});
+// 	return data;
+// };
 
 export const GetObjectContents = async (id: string): Promise<any> => {
 	let data: SuiObjectResponse = {};
