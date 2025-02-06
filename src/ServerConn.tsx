@@ -30,6 +30,25 @@ export const sendOnlineStatus = async (addy: string) => {
     });
 };
 
+// export const sendUpdateProfile = async (addy: string) => {
+//   // console.log("send online status "+addy);
+//   axios.post(`${baseUrl}:${port}/imonline`, {
+//     addy: addy,
+//   }, {
+//     headers: {
+//       'Content-Type': 'application/json' // Adjust if needed
+//     }
+//   })
+//   .then(response => {
+//     // Handle the response data
+//   //   console.log(response.data);
+//   })
+//   .catch(error => {
+//     // Handle errors
+//     console.error('Error:', error);
+//   });
+// };
+
 export const getP2 = async (addy: string) : Promise<string> => {
 	try {
 		const response = await axios.get(`${baseUrl}:${port}/getP2?addy=${addy}`);

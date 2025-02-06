@@ -12,7 +12,7 @@ import { faDiscord, faTwitter, faXTwitter } from '@fortawesome/free-brands-svg-i
 import Staking from './Staking';
 import axios from 'axios';
 import { getHowManyOnline, sendOnlineStatus } from './ServerConn';
-import { Switch } from '@mui/material';
+import { Switch, TextField } from '@mui/material';
 import { shortenAddy } from './Utility';
 
 
@@ -165,6 +165,7 @@ function GameHomeScreen() {
 					<NewGameButton gameType="single" label="Singleplayer" disabled={false}></NewGameButton>
 					{/* (Singleplayer Coming Soon) */}
 					<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
+					<NewGameButton gameType="challenge" label="Challenge" disabled={false} trophies={myProfile?.points}></NewGameButton>
 					{/* (Coming to mainnet soon! Earn trophies on testnet for mainnet airdrop!) */}
 				</div>
 				<span style={{marginTop: 36, fontSize: "27px"}}>Show My Games<Switch color="default" onChange={handleChange} /></span>

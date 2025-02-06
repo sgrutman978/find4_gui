@@ -2,9 +2,9 @@ import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-ki
 import { useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
 import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, OGAddyForEventObjType, programAddress, /*fetchProfile*/ } from './sui_controller';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faDice, faHome, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
 import { getP2 } from './ServerConn';
 // import { ExtendedProfile } from './GameBoard';
  
@@ -14,6 +14,8 @@ import { getP2 } from './ServerConn';
 	const currentAccount = useCurrentAccount();
   	const [player2Addy, setPlayer2Addy] = useState('');
 	const [loading, setLoading] = useState(false);
+	const [addyInput, setAddyInput] = useState("");
+	const [addyPasses, setAddyPasses] = useState(true);
 
   const handleChange = (val: React.ChangeEvent<HTMLInputElement>) => {
     setPlayer2Addy(val.target.value);
@@ -25,34 +27,40 @@ import { getP2 } from './ServerConn';
 	if (!currentAccount){
 		alert("Please connect a SUI wallet");
 	} else {
-		console.log("lslslslsl");
-		getP2(currentAccount.address).then(async (p2) => {
-			console.log(p2);
-		let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx(p2, props.trophies);
-			transaction!.setSender(currentAccount?.address!);
-			if(transaction){
-				signAndExecuteTransaction({
-					transaction: transaction,
-					chain: `sui:${myNetwork}`,
-				}, {
-					onSuccess: (result) => {
-						console.log('executed transaction', result);
-						setLoading(() => true);
-						if(intervalId){
-							clearInterval(intervalId);
+		if(props.gameType != "challenge" || checkAddyInput(addyInput)){
+			console.log("lslslslsl");
+			getP2(currentAccount.address).then(async (p2) => {
+				console.log(p2);
+			let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx((checkAddyInput(addyInput) ? addyInput : p2), props.trophies);
+				transaction!.setSender(currentAccount?.address!);
+				if(transaction){
+					signAndExecuteTransaction({
+						transaction: transaction,
+						chain: `sui:${myNetwork}`,
+					}, {
+						onSuccess: (result) => {
+							console.log('executed transaction', result);
+							setLoading(() => true);
+							if(intervalId){
+								clearInterval(intervalId);
+							}
+							intervalId = setInterval(() => {
+								getGameCreationEvents();
+								// console.log('Interval running...'+currentAccount.address);
+							}, 1000);
+							
+						},
+						onError: (e) => {
+							console.log(e);
 						}
-						intervalId = setInterval(() => {
-							getGameCreationEvents();
-							// console.log('Interval running...'+currentAccount.address);
-						}, 1000);
-						
-					},
-					onError: (e) => {
-						console.log(e);
-					}
-				});	
+					});	
+				}
+			});
+		}else{
+			if(!checkAddyInput(addyInput)){
+				setAddyPasses(false);
 			}
-		});
+		}
 	}
   }				
 
@@ -81,15 +89,48 @@ import { getP2 } from './ServerConn';
 		  });
 	  });
   };
+
+	const changeAddyInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setAddyInput(event.target.value);
+		console.log(addyInput);
+		checkAddyInput(event.target.value);
+	}
+
+	const checkAddyInput = (txt: string) => {
+		const suiAddressRegex = /^0x[a-fA-F0-9]{64}$/;
+		let passes = suiAddressRegex.test(txt);
+		console.log(passes);
+		console.log("chaaaaaaaaaaange");
+		setAddyPasses(passes || txt == "");
+		return passes;
+	}
+
 //   console.log(loading);
+
 	return (
 	<>
-		<button className="newGameButton" onClick={() => sendTransaction()} disabled={props.disabled} style={{marginLeft: (props.label == "Multiplayer" ? "-1.5vw" : "1.5vw")}}>
-		{props.label == "Multiplayer" ? <FontAwesomeIcon icon={faUser} style={{margin: "auto", marginBottom: 6}} /> : <FontAwesomeIcon icon={faRobot} style={{margin: "auto", marginBottom: 6}} />}
+		<button className="newGameButton" onClick={() => sendTransaction()} disabled={props.disabled} style={{marginRight: (props.label == "Challenge" ? "0vw" : "0vw")}}>
+		{<FontAwesomeIcon icon={(props.label == "Multiplayer" ? faDice : (props.label == "Challenge" ? faUser : faRobot))} style={{margin: "auto", marginBottom: 6}} />}
 			{/* <img src={
 			props.label == "Multiplayer" ? "../../ai.webp" : "../../ai.webp"
 			} className="newGameImage" /> */}
-			<span style={{width: "100%", fontSize: "2.5vw"}}>{props.label == "Multiplayer" ? "Vs." : "Bot"}</span></button>
+			<span style={{width: "100%", fontSize: "2.5vw"}}>{props.label == "Multiplayer" ? "Vs." : (props.label == "Singleplayer" ? "Bot" : "1v1")}</span></button>
+			{props.label == "Challenge" ? <TextField label="1v1 Opponent Sui Address" 
+			style={{width: "20vw", top: "4vw", fontSize: "180px"}}
+			sx={{
+				'& .MuiOutlinedInput-root': {
+				  '& fieldset': {
+					borderColor: (addyPasses ? "black" : "red"), // Change the color here
+				  },
+				  '&:hover fieldset': {
+					borderColor: (addyPasses ? "black" : "red"), // Change the hover color here
+				  },
+				  '&.Mui-focused fieldset': {
+					borderColor: (addyPasses ? "black" : "red"), // Change the focused color here
+				  },
+				},
+			  }}
+			   variant="outlined" fullWidth onChange={changeAddyInput}/> : ""}
 		{loading ? <div className="loadingScreen">
 			<a href="/app">
 				<FontAwesomeIcon icon={faHome} className="yellowHome" />

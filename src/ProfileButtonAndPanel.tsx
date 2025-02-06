@@ -76,6 +76,7 @@ import { Profile } from './GameBoard';
 			onSuccess: (result) => {
 				console.log('executed transaction', result);
                 closePanel();
+                // updateProfile();
                 setTimeout(() => {
                     window.location.reload();
                 }, 2500);

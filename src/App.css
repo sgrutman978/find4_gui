@@ -487,6 +487,12 @@ a {
     top: 3.5px;
     left: 6px;
   }
+  .leaderboard-container{
+    font-size: 30px !important;
+    td{
+      padding: 10px 20px !important;
+    }
+  }
 }
 
 .newGameButton:hover{
@@ -926,7 +932,7 @@ a {
   flex-direction: column;
   /* flex-basis: 600px; */
   font-weight: 500;
-  font-size: 30px;
+  font-size: 3vw;
   /* margin-top: 100px; */
   /* overflow: hidden; */
   align-items: center;
@@ -939,7 +945,7 @@ a {
   position:relative;
   font-family: "Balsamiq Sans", sans-serif;
   td{
-    padding: 10px 20px;
+    padding: 1vw 2vw;
     /* border-bottom: 1px solid red; */
   }
   tr{

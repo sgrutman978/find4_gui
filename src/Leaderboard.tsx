@@ -36,10 +36,11 @@ function Leaderboard() {
                 <th>Username</th>
               </tr>
             </thead> */}
-            <span style={{fontSize: 50, fontWeight: 600, margin: 20}}>Leaderboard</span>
+            <span style={{fontSize: 60, fontWeight: 600, margin: 20}}>Leaderboard</span>
             <tbody>
               {profiles.map((item: any, index: number) => (
                 <tr key={index}>
+                    <td>{index+1}</td>
                     <td><FontAwesomeIcon icon={faTrophy} /> {item.points}</td>
                   <td className="leaderboardUsernamePic">
                     <img 
@@ -47,7 +48,7 @@ function Leaderboard() {
                     //   alt={`${item.username}'s profile picture`} 
                       style={{ width: '50px', height: '50px', borderRadius: 25 }} 
                     />
-                    @{item.username}
+                    {item.username}
                   </td>
                   <td>{item.addy ? shortenAddy(item.addy) : ""}</td>
                 </tr>
