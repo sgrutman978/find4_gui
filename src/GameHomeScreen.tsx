@@ -51,7 +51,7 @@ function GameHomeScreen() {
 	}, []);
 
 	useEffect(() => {
-		if(myGames.length > 1){
+		if(myGames.length > 0){
 			getMyGamesObjects().then((elss) => {
 				setEls(elss);
 				// console.log(myGames);
