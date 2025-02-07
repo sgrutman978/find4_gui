@@ -10,7 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe, faHome, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { getLeaderboard } from './ServerConn';
-import { shortenAddy } from './Utility';
+import { ImageWithFallback, shortenAddy } from './Utility';
+import CopyToClipboard from './CopyToClipboard';
 
 function Leaderboard() {
 
@@ -25,6 +26,7 @@ function Leaderboard() {
             });
         });
     }, []);
+
 
     const SuiTable = () => {
         return (
@@ -43,14 +45,10 @@ function Leaderboard() {
                     <td>{index+1}</td>
                     <td><FontAwesomeIcon icon={faTrophy} /> {item.points}</td>
                   <td className="leaderboardUsernamePic">
-                    <img 
-                      src={item.profilePicUrl} 
-                    //   alt={`${item.username}'s profile picture`} 
-                      style={{ width: '50px', height: '50px', borderRadius: 25 }} 
-                    />
+                    <ImageWithFallback src={item.profilePicUrl} classname="" styles={{ width: '50px', height: '50px', borderRadius: 25 }} />
                     {item.username}
                   </td>
-                  <td>{item.addy ? shortenAddy(item.addy) : ""}</td>
+                  <CopyToClipboard item={item} />
                 </tr>
               ))}
             </tbody>

@@ -4,6 +4,7 @@ import { Transaction } from '@mysten/sui/transactions';
 import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile,*/ create_or_edit_profile, /*GetProfile*/ } from './sui_controller';
 import { Profile } from './GameBoard';
 import { getProfileFromServer, updateProfileServer } from './ServerConn';
+import { ImageWithFallback } from './Utility';
  
  function ProfileButtonAndPanel(props: any) {
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -14,9 +15,13 @@ import { getProfileFromServer, updateProfileServer } from './ServerConn';
 
     const [formUsername, setFormUsername] = useState("");
     const [formNftAddy, setFormNftAddy] = useState("");
+
+    const [profilePic, setProfilePic] = useState<any>("");
+
     let currentAccount = useCurrentAccount();
 
 	useEffect(() => { 
+        setProfilePic("");
         getProfile();
     }, [currentAccount]);
 
@@ -43,8 +48,14 @@ import { getProfileFromServer, updateProfileServer } from './ServerConn';
                 console.log("mehhhhhhhhh3");
                 console.log(profile);
                 setMyProfile(profile);
+                console.log(profilePic);
                 setFormUsername(profile?.username!);
-                setFormNftAddy(profile?.profilePicUrl!)
+                setFormNftAddy(profile?.profilePicUrl!);
+                if(profile){
+                    setProfilePic(<ImageWithFallback src={profile?.profilePicUrl} classname="profilePicInButton" styles={{}} />);
+                }else{
+                    setProfilePic(<ImageWithFallback src={"../../default-avatar.png"} classname="profilePicInButton" styles={{}} />);
+                }
             });
         }else{
             setMyProfile(undefined);
@@ -96,7 +107,8 @@ import { getProfileFromServer, updateProfileServer } from './ServerConn';
 	<>
 		{currentAccount ? 
             <button className="profileButton" onClick={() => openPanel()}>
-                <img className="profilePicInButton" src={myProfile?.username ? myProfile?.profilePicUrl : "../../default-avatar.png"} />
+                {profilePic}
+                {/* <img className="profilePicInButton" src={myProfile?.username ? myProfile?.profilePicUrl : "../../default-avatar.png"} /> */}
                 {myProfile?.username ? myProfile?.username : "Create"}
             </button> : <></>
         }

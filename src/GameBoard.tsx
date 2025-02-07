@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Transaction } from '@mysten/sui/dist/cjs/transactions';
 import { getProfileFromServer, getWhoTurn } from './ServerConn';
+import { ImageWithFallback } from './Utility';
 
 export interface Profile {
     profilePicUrl?: string,
@@ -32,7 +33,14 @@ function GameBoard() {
     let [key, setKey] = useState(0);
     // let [timer, setTimer] = useState(20);
     const [profile1, setProfile1] = useState<Profile>({username: "User", points: 69, profilePicUrl: "../../f4-42.png"});
+    const [profilePicObjBig1, setProfilePicObjBig1] = useState<any>("");
+    const [profilePicObjSmall1, setProfilePicObjSmall1] = useState<any>("");
+    const [profilePicObjBig2, setProfilePicObjBig2] = useState<any>("");
+    const [profilePicObjSmall2, setProfilePicObjSmall2] = useState<any>("");
+
     const [profile2, setProfile2] = useState<Profile>({username: "AI", points: 69, profilePicUrl: "../../ai.webp"});
+
+    
     // const [pingGame, setPingGame] = useState(false);
     const [oldCounter, setOldCounter] = useState(0);
     const [previousTurn, setPreviousTurn] = useState(0);
@@ -104,11 +112,18 @@ function GameBoard() {
             if(key == 0){
                 // setPingGame(myTurn);
                 getProfileFromServer(data.data["p1"]).then((profile) => {
-                    setProfile1(profile);
+                    setProfile1(prev => profile);
+                    setProfilePicObjBig1(<ImageWithFallback src={profile.profilePicUrl} classname="profilePic" styles={{}} />);
+                    setProfilePicObjSmall1(<ImageWithFallback src={profile.profilePicUrl} classname="profilePicSmall yellowBorder" styles={{}} />);
                 });
                 if(gameType == "multi"){
                     getProfileFromServer(data.data["p2"]).then((profile) => {
-                        setProfile2(profile);
+                        console.log("dsfs");
+                        console.log(profile);
+                        setProfile2(prev => profile);
+                        setProfilePicObjBig2(<ImageWithFallback src={profile.profilePicUrl} classname="profilePic" styles={{}} />);
+                        setProfilePicObjSmall2(<ImageWithFallback src={profile.profilePicUrl} classname="profilePicSmall redBorder" styles={{}} />);
+                        console.log(profile2);
                     });
                 }
                 setKey(prev => 555);
@@ -228,6 +243,10 @@ function GameBoard() {
         return `${firstPart}...${lastPart}`;
     }
 
+    const getProf2 = () => {
+        return profile2.profilePicUrl!;
+    }
+
     // If its my turn based who went first and the status, determine which type of transaction based on status
         return (<>
         <div className="connectButtonWrapper">
@@ -246,7 +265,9 @@ function GameBoard() {
                 {/* <div className="profileContainer"> */}
                         <div className="profileSmaller">
                         <span className="profilePointsSmall"><FontAwesomeIcon icon={faTrophy} /> {profile1.points}</span>
-                            <img className="profilePicSmall yellowBorder" src={profile1.profilePicUrl} />
+                            {/* {ImageWithFallback(profile1.profilePicUrl!, "profilePicSmall yellowBorder", {})} */}
+                            {/* <ImageWithFallback src={profile1.profilePicUrl!} classname="profilePicSmall yellowBorder" styles={{}} /> */}
+                            {profilePicObjSmall1}
                             <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
                                 <span className="profileUsernameSmall">{profile1.username}</span>
                                 <span className="profileAddySmall">{shorten_addy(gameStats.p1_addy)}</span>
@@ -260,7 +281,10 @@ function GameBoard() {
                 <div className="profileContainer">
                         <div className="anotherOne">
                             <span className="profilePoints"><FontAwesomeIcon icon={faTrophy} /> {profile1.points}</span>
-                            <img className="profilePic" src={profile1.profilePicUrl} />
+                            {/* <img className="profilePic" src={profile1.profilePicUrl} /> */}
+                            {/* {ImageWithFallback(profile1.profilePicUrl!, "profilePic", {})} */}
+                            {/* <ImageWithFallback src={profile1.profilePicUrl!} classname="profilePic" styles={{}} /> */}
+                            {profilePicObjBig1}
                             <span className="profileUsername">{profile1.username}</span>
                             <span className="profileAddy">{shorten_addy(gameStats.p1_addy)}</span>
                             <div className="profileGamespace" style={{backgroundColor: "yellow"}}>
@@ -285,7 +309,9 @@ function GameBoard() {
                 <div className="profileContainer">
                         <div className="anotherOne">
                             <span className="profilePoints"><FontAwesomeIcon icon={faTrophy} /> {profile2.points}</span>
-                            <img className="profilePic" src={profile2.profilePicUrl} />
+                            {/* <img className="profilePic" src={profile2.profilePicUrl} /> */}
+                            {/* {profile2 ? <ImageWithFallback src={profile2.profilePicUrl!} classname="profilePic" styles={{}} /> : ""} */}
+                            {profilePicObjBig2}
                             <span className="profileUsername">{profile2.username}</span>
                             <span className="profileAddy">{shorten_addy(gameStats.p2_addy)}</span>
                             <div className="profileGamespace" style={{backgroundColor: "red"}}>
@@ -298,7 +324,8 @@ function GameBoard() {
 
                 <div className="profileSmaller">
                         <span className="profilePointsSmall"><FontAwesomeIcon icon={faTrophy} /> {profile2.points}</span>
-                            <img className="profilePicSmall redBorder" src={profile2.profilePicUrl} />
+                            {/* <img className="profilePicSmall redBorder" src={profile2.profilePicUrl} /> */}
+                            {profilePicObjSmall2}
                             <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
                                 <span className="profileUsernameSmall">{profile2.username}</span>
                                 <span className="profileAddySmall">{shorten_addy(gameStats.p2_addy)}</span>

@@ -491,6 +491,11 @@ a {
     font-size: 30px !important;
     td{
       padding: 10px 20px !important;
+      .copyable{
+        svg{
+          font-size: 1vw;
+        }
+      }
     }
   }
 }
@@ -947,6 +952,11 @@ a {
   td{
     padding: 1vw 2vw;
     /* border-bottom: 1px solid red; */
+    .copyable{
+      svg{
+        font-size: 2vw;
+      }
+    }
   }
   tr{
     border-bottom: 1px solid black;
