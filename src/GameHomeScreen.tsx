@@ -25,6 +25,7 @@ function GameHomeScreen() {
 	const [refresh, setRefresh] = useState(0);
 	const [checked, setChecked] = useState(false);
 	const [online, setOnline] = useState(3);
+	const [myTurnEls, setMyTurnEls] = useState<any>([]);
 	const [els, setEls] = useState<any>([]);
 
 	useEffect(() => { 
@@ -54,6 +55,11 @@ function GameHomeScreen() {
 		if(myGames.length > 0){
 			getMyGamesObjects().then((elss) => {
 				setEls(elss);
+				// console.log(myGames);
+				// console.log(els.length);
+			});
+			getMyTurnGamesObjects().then((elss) => {
+				setMyTurnEls(elss);
 				// console.log(myGames);
 				// console.log(els.length);
 			});
@@ -100,7 +106,21 @@ function GameHomeScreen() {
 	const getMyGamesObjects = async (): Promise<any> => {
 		customSort();
 		const results = await Promise.all(myGames.map(async (game) => {
-            return await getMyGamesObjectsHelper(game);
+			// if its my turn dont add to normal games
+			if(  !(!game.winner && ((game.type == 1 && game.currentPlayerTurn == 1) || (game.type == 2 && ((game.currentPlayerTurn == 1 && currentAccount?.address == game.p1) || (game.currentPlayerTurn == 2 && currentAccount?.address == game.p2)))))){
+            	return await getMyGamesObjectsHelper(game);
+			}
+        }));
+		return results;
+	}
+
+	const getMyTurnGamesObjects = async (): Promise<any> => {
+		customSort();
+		const results = await Promise.all(myGames.map(async (game) => {
+			// if its my turn dont add to normal games
+			if(  (!game.winner && ((game.type == 1 && game.currentPlayerTurn == 1) || (game.type == 2 && ((game.currentPlayerTurn == 1 && currentAccount?.address == game.p1) || (game.currentPlayerTurn == 2 && currentAccount?.address == game.p2)))))){
+            	return await getMyGamesObjectsHelper(game);
+			}
         }));
 		return results;
 	}
@@ -151,9 +171,9 @@ function GameHomeScreen() {
 					<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
 					<NewGameButton gameType="challenge" label="Challenge" disabled={false} trophies={myProfile?.points}></NewGameButton>
 				</div>
-				<span style={{marginTop: 36, fontSize: "27px"}}>Show My Games<Switch color="default" onChange={handleChange} /></span>
-
-				{checked ? <div className='existingGamesContainer'>{els}</div> : ""}
+				<span style={{marginTop: 36, fontSize: "27px"}}>Show My Other Games<Switch color="default" onChange={handleChange} /></span>
+				<div className='existingGamesContainer'>{checked ? [...myTurnEls, ...els] : myTurnEls}</div>
+				{/* {checked ? <div className='existingGamesContainer'>{els}</div> : ""} */}
 			</div>
 			<div className="connectButtonWrapper">
 				<ProfileButtonAndPanel></ProfileButtonAndPanel>
