@@ -560,6 +560,10 @@ a {
   background-color: red;
 }
 
+.black{
+  background-color: grey;
+}
+
 .red_color{
   color: red !important;
 }

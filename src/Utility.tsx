@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 export const shortenAddy = (addy: string) => {
-    const first = addy.slice(0, 7);
-    let lastFive = addy.slice(-5);
+    const first = addy.slice(0, 5);
+    let lastFive = addy.slice(-3);
     return `${first}...${lastFive}`;
 }
 

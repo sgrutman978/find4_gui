@@ -6,8 +6,9 @@ import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Transaction } from '@mysten/sui/dist/cjs/transactions';
-import { getProfileFromServer, getWhoTurn } from './ServerConn';
+import { getProfileFromServer, getWhoTurn, updateProfileServer } from './ServerConn';
 import { ImageWithFallback } from './Utility';
+import CopyToClipboard from './CopyToClipboard';
 
 export interface Profile {
     profilePicUrl?: string,
@@ -24,7 +25,8 @@ export interface GameStats {
     winnerInt: number,
     myTurn: boolean,
     version: string,
-    board: string[][]
+    board: string[][],
+    lastMoveCol: number
 }
 
 function GameBoard() {
@@ -84,7 +86,8 @@ function GameBoard() {
                 winnerInt: winnerInt,
                 version: data.version && data.version != "" ? (data.version as any).Shared.initial_shared_version : "0",
                 myTurn: myTurn,
-                board: board
+                board: board,
+                lastMoveCol: Math.max(Math.min(data.data["nonce"], 6), 0)
             });
 
 
@@ -125,6 +128,9 @@ function GameBoard() {
                         setProfilePicObjSmall2(<ImageWithFallback src={profile.profilePicUrl} classname="profilePicSmall redBorder" styles={{}} />);
                         console.log(profile2);
                     });
+                }else{
+                    setProfilePicObjBig2(<ImageWithFallback src={"../../ai.webp"} classname="profilePic" styles={{}} />);
+                    setProfilePicObjSmall2(<ImageWithFallback src={"../../ai.webp"} classname="profilePicSmall redBorder" styles={{}} />);
                 }
                 setKey(prev => 555);
             }
@@ -202,6 +208,9 @@ function GameBoard() {
                     // setPingGame(false);
                     // pullGameStatsFromChain();
                     setPreviousTurn(0);
+                }else{
+                    updateProfileServer(gameStats.p1_addy);
+                    updateProfileServer(gameStats.p2_addy);
                 }
                 // getUpdatedBoard();
 			},
@@ -221,12 +230,30 @@ function GameBoard() {
     const displayRows = (key: number) => {
         const board = [];
         if(gameStats.version && gameStats.version != ""){
+            let topOne = 0;
+            let emptyBoard = true;
+            for(let c = 5; c >= 0; c--){
+                for (let r = 0; r < 7; r++) {
+                    if(gameStats.board[c][r] != "0"){
+                        emptyBoard = false;
+                    }
+                }}
+            for(let c = 0; c < 6; c++){
+                if(gameStats.board[c][gameStats.lastMoveCol] != '0'){
+                    topOne = c;
+                }
+            }
             for(let c = 5; c >= 0; c--){
                 const row = [];
                 for (let r = 0; r < 7; r++) {
+                    // seems like c is row and r is col ? idk y lol
                     const color = (gameStats.version != "" &&  gameStats.board ? gameStats.board[c][r] : "");
-                    row.push(<div className={"gamespace spaceColor"+color} key={`${c*c}${r*r}`}>
-                        <div className={"gamespaceCover spaceCover"+color} key={`${c*c}${r*r}`}></div>
+                    row.push(<div className={"gamespace spaceColor"+(gameStats.lastMoveCol == r && topOne == c && !emptyBoard ? " black" : color)} key={`${c*c}${r*r}outer`}>
+                        <div className={"gamespaceCover spaceCover"+color} key={`${c*c}${r*r}inner`}>
+                        {/* {gameStats.lastMoveCol == r && topOne == c ? <div style={{border: "3px solid black", width: "100%", height: "100%", margin: "auto", position: "relative", borderRadius: "50%"}} key={`${c*c}${r*r}`}> */}
+                        {/* </div> */}
+                         {/* : ""} */}
+                        </div>
                     </div>);
                 }
                 // board.push(<br />)
@@ -270,7 +297,7 @@ function GameBoard() {
                             {profilePicObjSmall1}
                             <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
                                 <span className="profileUsernameSmall">{profile1.username}</span>
-                                <span className="profileAddySmall">{shorten_addy(gameStats.p1_addy)}</span>
+                                <span className="profileAddySmall"><CopyToClipboard addy={gameStats.p1_addy} /></span>
                             </div>
                             {/* <div className="profileGamespaceSmall" style={{backgroundColor: "yellow"}}>
                                 <div className="gamespaceCover spaceCover1"></div>
@@ -286,7 +313,7 @@ function GameBoard() {
                             {/* <ImageWithFallback src={profile1.profilePicUrl!} classname="profilePic" styles={{}} /> */}
                             {profilePicObjBig1}
                             <span className="profileUsername">{profile1.username}</span>
-                            <span className="profileAddy">{shorten_addy(gameStats.p1_addy)}</span>
+                            <span className="profileAddy"><CopyToClipboard addy={gameStats.p1_addy} /></span>
                             <div className="profileGamespace" style={{backgroundColor: "yellow"}}>
                                 <div className="gamespaceCover spaceCover1"></div>
                             </div>
@@ -313,7 +340,7 @@ function GameBoard() {
                             {/* {profile2 ? <ImageWithFallback src={profile2.profilePicUrl!} classname="profilePic" styles={{}} /> : ""} */}
                             {profilePicObjBig2}
                             <span className="profileUsername">{profile2.username}</span>
-                            <span className="profileAddy">{shorten_addy(gameStats.p2_addy)}</span>
+                            <span className="profileAddy"><CopyToClipboard addy={gameStats.p2_addy} /></span>
                             <div className="profileGamespace" style={{backgroundColor: "red"}}>
                                 <div className="gamespaceCover spaceCover2"></div>
                             </div>
@@ -328,7 +355,7 @@ function GameBoard() {
                             {profilePicObjSmall2}
                             <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
                                 <span className="profileUsernameSmall">{profile2.username}</span>
-                                <span className="profileAddySmall">{shorten_addy(gameStats.p2_addy)}</span>
+                                <span className="profileAddySmall"><CopyToClipboard addy={gameStats.p2_addy} /></span>
                             </div>
                             {/* <div className="profileGamespaceSmall" style={{backgroundColor: "yellow"}}>
                                 <div className="gamespaceCover spaceCover1"></div>

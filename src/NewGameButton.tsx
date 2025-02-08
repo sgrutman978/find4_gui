@@ -31,9 +31,9 @@ import { getP2 } from './ServerConn';
 			console.log("lslslslsl");
 			getP2(currentAccount.address).then(async (p2) => {
 				console.log(p2);
-			let transaction = props.gameType == "single" ? await newSinglePlayerGameTx() : await newMultiPlayerGameTx((checkAddyInput(addyInput) ? addyInput : p2), props.trophies);
-				transaction!.setSender(currentAccount?.address!);
+			let transaction = props.gameType == "single" ? await newSinglePlayerGameTx(props.trophies) : await newMultiPlayerGameTx((checkAddyInput(addyInput) ? addyInput : p2), props.trophies);
 				if(transaction){
+					transaction!.setSender(currentAccount?.address!);
 					signAndExecuteTransaction({
 						transaction: transaction,
 						chain: `sui:${myNetwork}`,

@@ -193,17 +193,22 @@ export const GetObjectContents = async (id: string): Promise<any> => {
 
 
 
-export async function newSinglePlayerGameTx(): Promise<Transaction>{
-	const tx = new Transaction();
-	tx.moveCall({ target: programAddress+"::single_player::start_single_player_game3", arguments: [
-		tx.sharedObjectRef({
-			objectId: gamesTrackerAddy!,
-			mutable: true,
-			initialSharedVersion: gamesTrackerVersion!
-		}),
-		coinWithBalance({balance: 20000000})
-	]});
-	return tx;
+export async function newSinglePlayerGameTx(points: number): Promise<Transaction | undefined>{
+	if(points){
+		const tx = new Transaction();
+		tx.moveCall({ target: programAddress+"::single_player::start_single_player_game3", arguments: [
+			tx.sharedObjectRef({
+				objectId: gamesTrackerAddy!,
+				mutable: true,
+				initialSharedVersion: gamesTrackerVersion!
+			}),
+			coinWithBalance({balance: 20000000})
+		]});
+		return tx;
+	}else{
+		alert("Create profile to begin playing matches!");
+	}
+	return undefined;
 }
 // CHANGE THE BELOW TO START_MULTIPLAYER_GAME ETC NEW METHOD, PASS P2 ADDY IF NOT ALREADY, GET P2 ADDY VIA 
 // REQUEST TO BACKEND GIVEN UR NUMBER OF TROPHIES, THEY RETURN CLOSEST ONLINE PLAYER WITH THOSE TROPHIES
