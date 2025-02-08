@@ -167,7 +167,7 @@ function GameHomeScreen() {
 					</div>
 				</div>
 				<div className="newButtonsHolder">
-					<NewGameButton gameType="single" label="Singleplayer" disabled={false}></NewGameButton>
+					<NewGameButton gameType="single" label="Singleplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
 					<NewGameButton gameType="multi" label="Multiplayer" disabled={false} trophies={myProfile?.points}></NewGameButton>
 					<NewGameButton gameType="challenge" label="Challenge" disabled={false} trophies={myProfile?.points}></NewGameButton>
 				</div>
