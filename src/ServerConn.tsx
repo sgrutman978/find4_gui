@@ -83,6 +83,9 @@ export const getProfileFromServer = async (addy: string) : Promise<Profile> => {
 	try {
 		const response = await axios.get(`${baseUrl}:${port}/getProfile?addy=${addy}`);
 		// console.log(response.data.p2);
+    if(!response.data.profile.points){
+      updateProfileServer(addy);
+    }
         return response.data.profile;
 	} catch (error) {
 		console.log(error);

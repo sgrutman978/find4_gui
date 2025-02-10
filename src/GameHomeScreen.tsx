@@ -76,6 +76,7 @@ function GameHomeScreen() {
 	const getMyGames = async (addy: string) => {
 		try {
 			const response = await axios.get(`${baseUrl}:${port}/myGames?addy=${addy}`);
+			console.log(response.data.games);
 			setMyGames(response.data.games);
 		} catch (error) {
 			console.log(error);
@@ -87,6 +88,10 @@ function GameHomeScreen() {
 			return await getProfileFromServer(opponentAddy).then(async (profile) => {
 				if(!profile){
 					updateProfileServer(opponentAddy);
+				}
+				console.log(game.id);
+				if(game.id == "0x96657f3c1c2a6024334463587f885a1a4af7ecfdf8280e55942f26d9c200ef42"){
+					console.log(game);
 				}
 				return (<div className="existingGame" onClick={() => {window.location.href = `/app/game/${game.id}`}}>
 					{(!game.winner ? (((game.type == 1 && game.currentPlayerTurn == 1) || 
