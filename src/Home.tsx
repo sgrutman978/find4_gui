@@ -41,10 +41,9 @@ function Home() {
 				{/* <br /> */}
 				{/* Get in early!<br />Help redefine web3 gaming on SUI! */}
 				{/* <div className="hs5"> */}
-					{/* <div className="animated_home"> */}
-						{/* <Find4Animation size={3} animated={true} /> */}
-
-					{/* </div> */}
+					<div className="animated_home">
+						<Find4Animation size={3} animated={true} />
+					</div>
 			</div>
 			<div className='hs1 section1'>
 			{/* <a style={{color: "yellow"}} href="https://www.pinksale.finance/sui/launchpad/0x4b7d998555d653880111e60321c66e4a7a63c65d615d90cffdd27fce9ff583c8">
