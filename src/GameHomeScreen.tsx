@@ -11,7 +11,7 @@ import { Profile } from './GameBoard';
 import { faDiscord, faTwitter, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import Staking from './Staking';
 import axios from 'axios';
-import { getHowManyOnline, getProfileFromServer, sendOnlineStatus, updateProfileServer } from './ServerConn';
+import { getHowManyOnline, getOnlineList, getProfileFromServer, sendOnlineStatus, updateProfileServer } from './ServerConn';
 import { Switch, TextField } from '@mui/material';
 import { shortenAddy } from './Utility';
 

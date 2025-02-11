@@ -568,6 +568,22 @@ a {
   color: red !important;
 }
 
+.profileUsernameSmall{
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.greenCircleGameboard{
+  border-radius: 100%;
+  background-color: green;
+  justify-self: center;
+  display: flex;
+  margin-right: 5px;
+  position: relative;
+  aspect-ratio: 1;
+}
+
 .find4AnimationContainer{
   /* background-color:pink; */
   height:300px;
@@ -755,8 +771,11 @@ a {
   left: -50px;
   font-size: 30px;
   width: 270px;
-  display: block;
-  text-align: center;
+  /* display: block;
+  text-align: center; */
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
   /* margin-bottom: 20px; */
 }
 

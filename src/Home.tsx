@@ -37,7 +37,7 @@ function Home() {
 			</div> */}
 
 			<div className="hs1 section1" style={{marginTop: 11}}>
-				The best game on the SUI blockchain! 
+				Chain four in a row, on-chain! 
 				{/* <br /> */}
 				{/* Get in early!<br />Help redefine web3 gaming on SUI! */}
 				{/* <div className="hs5"> */}

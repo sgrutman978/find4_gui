@@ -79,6 +79,17 @@ export const getP2 = async (addy: string) : Promise<string> => {
 	}
 };
 
+export const getOnlineList = async () : Promise<string[]> => {
+	try {
+		const response = await axios.get(`${baseUrl}:${port}/onlineList`);
+		// console.log(response.data.p2);
+        return response.data.addys;
+	} catch (error) {
+		console.log(error);
+        return [];
+	}
+};
+
 export const getProfileFromServer = async (addy: string) : Promise<Profile> => {
 	try {
 		const response = await axios.get(`${baseUrl}:${port}/getProfile?addy=${addy}`);
@@ -119,7 +130,7 @@ export const getHowManyOnline = async () : Promise<number> => {
 	try {
 		const response = await axios.get(`${baseUrl}:${port}/howmanyonline`);
 		// console.log(response.data.size);
-        return response.data.size;
+        return response.data.size-1;
 	} catch (error) {
 		console.log(error);
         return 0;

@@ -6,7 +6,7 @@ import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Transaction } from '@mysten/sui/dist/cjs/transactions';
-import { getProfileFromServer, getWhoTurn, updateProfileServer } from './ServerConn';
+import { getOnlineList, getProfileFromServer, getWhoTurn, sendOnlineStatus, updateProfileServer } from './ServerConn';
 import { ImageWithFallback } from './Utility';
 import CopyToClipboard from './CopyToClipboard';
 
@@ -41,11 +41,11 @@ function GameBoard() {
     const [profilePicObjSmall2, setProfilePicObjSmall2] = useState<any>("");
 
     const [profile2, setProfile2] = useState<Profile>({username: "AI", points: 69, profilePicUrl: "../../ai.webp"});
-
     
     // const [pingGame, setPingGame] = useState(false);
     const [oldCounter, setOldCounter] = useState(0);
     const [previousTurn, setPreviousTurn] = useState(0);
+    const [onlineList, setOnlineList] = useState<string[]>([]);
     
     // useEffect(() => {
     //     // console.log(gameStats.myTurn);
@@ -66,6 +66,13 @@ function GameBoard() {
     //         setTimer(prev => prev - 1);
     //     }, 3000);
     // }, []);
+
+    const onlineStuffs = () => {
+        sendOnlineStatus(currentAccount?.address!);
+        getOnlineList().then((list) => {
+            setOnlineList(list);
+        });
+    }
 
     const pullGameStatsFromChain = () => {
         console.log("gettingGame");
@@ -154,13 +161,13 @@ function GameBoard() {
         }, [callback, delay]);
       }
 
-    // useEffect(()=>{
+    useEffect(()=>{
         // runUpdateBoardInterval();
         // setInterval(() => {
             
         // }, 2000);
-        
-    // },[])   
+        onlineStuffs();
+    },[])   
 
     const intervalCallback = () => {
         getWhoTurn(gameID!).then((newTurn) => {
@@ -178,6 +185,7 @@ function GameBoard() {
     }
 
     useInterval(intervalCallback, 1000);
+    useInterval(onlineStuffs, 15000);
     
     // useEffect(()=>{
     //     setPingGame(gameStats.myTurn);
@@ -296,7 +304,7 @@ function GameBoard() {
                             {/* <ImageWithFallback src={profile1.profilePicUrl!} classname="profilePicSmall yellowBorder" styles={{}} /> */}
                             {profilePicObjSmall1}
                             <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
-                                <span className="profileUsernameSmall">{profile1.username}</span>
+                                <span className="profileUsernameSmall">{onlineList.includes(gameStats.p1_addy) ? <div className="greenCircleGameboard" style={{height:"50%", top: "30%"}}></div> : ""}{profile1.username}</span>
                                 <span className="profileAddySmall"><CopyToClipboard addy={gameStats.p1_addy} /></span>
                             </div>
                             {/* <div className="profileGamespaceSmall" style={{backgroundColor: "yellow"}}>
@@ -312,7 +320,7 @@ function GameBoard() {
                             {/* {ImageWithFallback(profile1.profilePicUrl!, "profilePic", {})} */}
                             {/* <ImageWithFallback src={profile1.profilePicUrl!} classname="profilePic" styles={{}} /> */}
                             {profilePicObjBig1}
-                            <span className="profileUsername">{profile1.username}</span>
+                            <span className="profileUsername">{onlineList.includes(gameStats.p1_addy) ? <div className="greenCircleGameboard" style={{height:20, marginTop: 9}}></div> : ""}{profile1.username}</span>
                             <span className="profileAddy"><CopyToClipboard addy={gameStats.p1_addy} /></span>
                             <div className="profileGamespace" style={{backgroundColor: "yellow"}}>
                                 <div className="gamespaceCover spaceCover1"></div>
@@ -339,7 +347,7 @@ function GameBoard() {
                             {/* <img className="profilePic" src={profile2.profilePicUrl} /> */}
                             {/* {profile2 ? <ImageWithFallback src={profile2.profilePicUrl!} classname="profilePic" styles={{}} /> : ""} */}
                             {profilePicObjBig2}
-                            <span className="profileUsername">{profile2.username}</span>
+                            <span className="profileUsername">{onlineList.includes(gameStats.p2_addy) ? <div className="greenCircleGameboard" style={{height:20, marginTop: 9}}></div> : ""}{profile2.username}</span>
                             <span className="profileAddy"><CopyToClipboard addy={gameStats.p2_addy} /></span>
                             <div className="profileGamespace" style={{backgroundColor: "red"}}>
                                 <div className="gamespaceCover spaceCover2"></div>
@@ -354,7 +362,7 @@ function GameBoard() {
                             {/* <img className="profilePicSmall redBorder" src={profile2.profilePicUrl} /> */}
                             {profilePicObjSmall2}
                             <div style={{display: 'flex', flexDirection: 'column', justifyContent: "center"}}>
-                                <span className="profileUsernameSmall">{profile2.username}</span>
+                                <span className="profileUsernameSmall">{onlineList.includes(gameStats.p2_addy) ? <div className="greenCircleGameboard" style={{height:"50%", top: "30%"}}></div> : ""}{profile2.username}</span>
                                 <span className="profileAddySmall"><CopyToClipboard addy={gameStats.p2_addy} /></span>
                             </div>
                             {/* <div className="profileGamespaceSmall" style={{backgroundColor: "yellow"}}>
