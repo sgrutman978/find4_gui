@@ -308,7 +308,7 @@ function Staking() {
   //     return new SuiClient({ url: getFullnodeUrl(network) });
   //   }}
   // >
-  <div className="presale-container" style={{width:700, margin: "auto", top: 120}} id="presale">
+  <div className="presale-container" style={{width:700, margin: "auto"}} id="presale">
   <div className="connectButtonWrapper2">
     <div className="right topRight"> 
     {currentAccount ? <>Wallet: <span style={{marginRight: 7, marginLeft: 5}}>

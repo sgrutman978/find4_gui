@@ -87,10 +87,12 @@ function Home() {
 			<div  className="hs7 tokenomics section1">
 				<span>Rewards Calculations</span>
 				<span style={{fontSize: 25, padding: 30}}>
-				<span style={{fontWeight: "bold", fontSize: 30}}>Max Staking Limit</span> = 
-				<span> # of Trophies * 1,000</span><br />
+				{/* <span style={{fontWeight: "bold", fontSize: 30}}>Max Staking Limit</span> =  */}
+				{/* <span> # of Trophies * 1,000</span><br /> */}
+				<span style={{fontWeight: "bold", fontSize: 30}}>Staking Static APY</span> = 
+				<span> 15.687%</span><br />
 				<span style={{fontWeight: "bold", fontSize: 30}}>Reward for Beating the AI</span> = 
-				<span> 1 + log2(StakedTokens) + log10(StakedToken)</span>
+				<span> 100 * trophyCount * (1 + Math.floor(20 * (stakedTokens /(stakedTokens + 36000000))))</span>
 				</span>
 				{/* <img style={{width:"70%", alignSelf: 'center', marginTop: 20}} src="chart2.png" /> */}
 				{/* <img style={{width:"60%", display: 'flex', marginLeft: -519, marginTop: -49, borderRadius: 120}} src="f4-42.png" /> */}
