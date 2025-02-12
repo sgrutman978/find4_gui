@@ -162,8 +162,10 @@ flex-basis: 1200px;
   position: relative;
   margin: auto;
   /* background-color: green; */
-  width:941px;
-  height: 100px;
+  width:510px;
+  margin-bottom:10px;
+  /* text-align:center; */
+  height: 150px;
   /* top:200px; */
 }
 

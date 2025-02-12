@@ -47,21 +47,21 @@ function Home() {
 			</div>
 			<div className='hs1 section1'>
 				<div className="animated_home">
-						<Find4Animation size={5} animated={true} />
+						<Find4Animation size={7} animated={true} />
 					</div>
 			{/* <a style={{color: "yellow"}} href="https://www.pinksale.finance/sui/launchpad/0x4b7d998555d653880111e60321c66e4a7a63c65d615d90cffdd27fce9ff583c8">
 				Join the Pinksale Presale!
 			</a> */}
 			</div>
-			<img style={{width:"100%", alignSelf: 'center', borderRadius: 50, marginTop: -15}} src="IMG_1723.jpeg" />
+			{/* <img style={{width:"40%", alignSelf: 'center', borderRadius: 50, marginTop: -15}} src="IMG_1723.jpeg" /> */}
 
 			{/* <div className='hs1 section1'>
 			Join the Presale!
 			</div> */}
-			{/* <div style={{display: 'flex', justifyContent: 'center', width:"100%"}} id="presale"> */}
+			<div style={{display: 'flex', justifyContent: 'center', width:"100%"}} id="presale">
 				{/* <Presale></Presale> */}
-				{/* <Staking></Staking>
-			</div> */}
+				<Staking></Staking>
+			</div>
 
 			<div className='hs5' style={{}}><img style={{width:"100%"}} src="playing2.jpeg" /></div>
 			<div  className="hs5 section1">
