@@ -206,7 +206,7 @@ export async function newSinglePlayerGameTx(points: number): Promise<Transaction
 		]});
 		return tx;
 	}else{
-		alert("Create profile to begin playing matches!");
+		alert("Create a profile to begin playing!");
 	}
 	return undefined;
 }
@@ -246,7 +246,7 @@ export async function newMultiPlayerGameTx(addy: string, points: number): Promis
 		});
 		return tx;
 	}else{
-		alert("Create profile to begin playing matches!");
+		alert("Create a profile to begin playing!");
 	}
 	return undefined;
 }
@@ -274,10 +274,11 @@ export function player_move(gameID: string, column: number, version: string, sin
 	return tx;
 }
 
-export async function player_win(gameID: string, version: string, singleOrMulti: string): Promise<Transaction>{
+export async function player_win(gameID: string, version: string, singleOrMulti: string, stakedObjId: string | null): Promise<Transaction>{
 	const tx = new Transaction();
+	let stakedObj = stakedObjId ? [tx.object(stakedObjId!)] : [];
 	if(singleOrMulti == "single"){
-		tx.moveCall({ target: `${programAddress}::${singleOrMulti}_player::do_win_stuffs2`, arguments: [
+		tx.moveCall({ target: `${programAddress}::${singleOrMulti}_player::do_win_stuffs${(stakedObjId ? "3" : "2")}`, arguments: [
 			tx.sharedObjectRef({
 				objectId: gameID,
 				mutable: true,
@@ -292,7 +293,7 @@ export async function player_win(gameID: string, version: string, singleOrMulti:
 				objectId: profileTableAddy!,
 				mutable: true,
 				initialSharedVersion: initVersion!
-			})]
+			}), ...stakedObj]
 		});
 		return tx;
 	}else{

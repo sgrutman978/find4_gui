@@ -79,12 +79,12 @@ function Navbar(props: any) {
             {/* <a href="#play-now"><Play Now></a> */}
         {/* </li> */}
         {/* {window.location.pathname == "/" ?  */}
-        {/* <Find4Animation size={15} animated={true} /> */}
+        {/* <Find4Animation size={5} animated={true} /> */}
         <a href="/app" className='menuElement launchAppButton'>Play Game</a>
           {/* : <ConnectButton></ConnectButton>} */}
           <a href="https://x.com/Find4_io" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
           <a href="https://discord.com/invite/pYsHzwZ82S" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faDiscord} /></a>
-        <a href={`https://suivision.xyz/coin/0xd9fc80a30c89489764bc07f557dc17162a477d34a9b44e65aae48af8ead006e7::FFIO::FFIO?tab=Trades`} className="menuElement contract"><FontAwesomeIcon icon={faGlobe} /></a>
+        <a href={`https://suivision.xyz/coin/0xd9fc80a30c89489764bc07f557dc17162a477d34a9b44e65aae48af8ead006e7::FFIO::FFIO?tab=Trades`} className="menuElement contract">Explorer</a>
         {/* <div className="gameHomeFooter"> */}
 				{/* </div> */}
         <a href="/staking" className="menuElement">Staking</a>

@@ -1,5 +1,5 @@
 import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { fetchEvents, /*fetchProfile,*/ GetObjectContents, /*GetProfile,*/ myNetwork, player_move, player_win } from './sui_controller';
+import { fetchEvents, /*fetchProfile,*/ GetObjectContents, getSpecificSuiObject, /*GetProfile,*/ myNetwork, player_move, player_win } from './sui_controller';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import Find4Animation from './Find4Animation';
@@ -46,6 +46,7 @@ function GameBoard() {
     const [oldCounter, setOldCounter] = useState(0);
     const [previousTurn, setPreviousTurn] = useState(0);
     const [onlineList, setOnlineList] = useState<string[]>([]);
+    const [stakedObjId, setStakedObjId] = useState<string | null>("");
     
     // useEffect(() => {
     //     // console.log(gameStats.myTurn);
@@ -169,6 +170,19 @@ function GameBoard() {
         onlineStuffs();
     },[])   
 
+      useEffect(() => {
+        if(currentAccount){
+          getSpecificSuiObject(currentAccount?.address!, "0x4ea810be83c0fb428ee1283312cbff4aea6dc266f6db932ca9a47cae9dcb9d29::FFIO::StakeObject").then(data => {
+            console.log(data);
+            if(data && data.length > 0){
+              setStakedObjId((data[0] as any).data.content.fields.id.id);
+            }else{
+              setStakedObjId(null);
+            }
+          })
+        }
+      }, [currentAccount]);
+
     const intervalCallback = () => {
         getWhoTurn(gameID!).then((newTurn) => {
             console.log(newTurn);
@@ -184,8 +198,13 @@ function GameBoard() {
         });
     }
 
-    useInterval(intervalCallback, 1000);
+    useInterval(intervalCallback, 1500);
     useInterval(onlineStuffs, 15000);
+    // useInterval(() => {
+    //     if(gameStats.gameType == "single"){
+    //         setPreviousTurn(4);
+    //     }
+    // }, 5000);
     
     // useEffect(()=>{
     //     setPingGame(gameStats.myTurn);
@@ -197,7 +216,7 @@ function GameBoard() {
     };
 
     const sendWinTransaction = () => {
-        player_win(gameID!, gameStats.version, gameStats.gameType).then((tx) => {
+        player_win(gameID!, gameStats.version, gameStats.gameType, stakedObjId).then((tx) => {
             console.log(tx);
             doTransaction(tx, false);	
         });	

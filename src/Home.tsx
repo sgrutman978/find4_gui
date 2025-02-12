@@ -42,15 +42,18 @@ function Home() {
 				{/* Get in early!<br />Help redefine web3 gaming on SUI! */}
 				{/* <div className="hs5"> */}
 					{/* <div className="animated_home">
-						<Find4Animation size={3} animated={true} />
+						<Find4Animation size={5} animated={true} />
 					</div> */}
 			</div>
 			<div className='hs1 section1'>
+				<div className="animated_home">
+						<Find4Animation size={5} animated={true} />
+					</div>
 			{/* <a style={{color: "yellow"}} href="https://www.pinksale.finance/sui/launchpad/0x4b7d998555d653880111e60321c66e4a7a63c65d615d90cffdd27fce9ff583c8">
 				Join the Pinksale Presale!
 			</a> */}
 			</div>
-			<img style={{width:"100%", alignSelf: 'center', borderRadius: 50, marginTop: -15}} src="gameplay.png" />
+			<img style={{width:"100%", alignSelf: 'center', borderRadius: 50, marginTop: -15}} src="IMG_1723.jpeg" />
 
 			{/* <div className='hs1 section1'>
 			Join the Presale!
