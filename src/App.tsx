@@ -57,7 +57,7 @@ function App() {
 					<Route path="/app" Component={GameHomeScreen}/>
                     <Route path="/app/game/:gameID" Component={GameBoard}/>
 					{/* <Route path="/presale" Component={Presale}/> */}
-					<Route path="/staking" Component={Staking}/>
+					<Route path="/staking" Component={StakingHome}/>
 					<Route path="/leaderboard" Component={Leaderboard}/>
 				</Routes>
             </BrowserRouter>
@@ -70,3 +70,7 @@ function App() {
 }
 
 export default App;
+
+function StakingHome(){
+	return <div style={{position:"relative", top: 120}}><Staking /></div>;
+}

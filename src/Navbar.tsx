@@ -7,7 +7,7 @@ import { myNetwork, programAddress } from './sui_controller';
 import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
 import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDiscord, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faDiscord, faTelegram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar(props: any) {
@@ -84,6 +84,7 @@ function Navbar(props: any) {
           {/* : <ConnectButton></ConnectButton>} */}
           <a href="https://x.com/Find4_io" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
           <a href="https://discord.com/invite/pYsHzwZ82S" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faDiscord} /></a>
+          <a href="https://t.me/+Nc1lsI41cc9jODNh" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faTelegram} /></a>
         <a href={`https://suivision.xyz/coin/0xd9fc80a30c89489764bc07f557dc17162a477d34a9b44e65aae48af8ead006e7::FFIO::FFIO?tab=Trades`} className="menuElement contract">Explorer</a>
         {/* <div className="gameHomeFooter"> */}
 				{/* </div> */}
