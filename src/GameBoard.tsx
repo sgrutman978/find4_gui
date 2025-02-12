@@ -200,11 +200,11 @@ function GameBoard() {
 
     useInterval(intervalCallback, 1500);
     useInterval(onlineStuffs, 15000);
-    // useInterval(() => {
-    //     if(gameStats.gameType == "single"){
-    //         setPreviousTurn(4);
-    //     }
-    // }, 5000);
+    useInterval(() => {
+        if(gameStats.gameType == "single"){
+            setPreviousTurn(4);
+        }
+    }, 5000);
     
     // useEffect(()=>{
     //     setPingGame(gameStats.myTurn);
