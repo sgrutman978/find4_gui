@@ -29,7 +29,7 @@ export const shortenAddy = (addy: string) => {
       //   alt={`${item.username}'s profile picture`}  
       src={imageSrc} 
       onError={handleImageError}
-        style={styles} 
+        style={styles}  
       />
         );
       };
