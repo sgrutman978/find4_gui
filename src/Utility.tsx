@@ -22,7 +22,7 @@ export const shortenAddy = (addy: string) => {
         };
       
         return (
-          <img 
+          <img  
           className={classname}
         // src={src != "" ? src : "http://find4.io/f4-42.png"} 
         // onError={() => {src='http://example.com/existent-image.jpg'}}
