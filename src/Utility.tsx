@@ -26,7 +26,7 @@ export const shortenAddy = (addy: string) => {
           className={classname}
         // src={src != "" ? src : "http://find4.io/f4-42.png"} 
         // onError={() => {src='http://example.com/existent-image.jpg'}}
-      //   alt={`${item.username}'s profile picture`} 
+      //   alt={`${item.username}'s profile picture`}  
       src={imageSrc} 
       onError={handleImageError}
         style={styles} 
