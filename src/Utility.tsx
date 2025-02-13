@@ -20,7 +20,7 @@ export const shortenAddy = (addy: string) => {
             setImageSrc(fallbackSrc); // Only update if we haven't already tried the fallback
           }
         };
-      
+       
         return (
           <img  
           className={classname}
