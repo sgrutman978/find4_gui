@@ -194,17 +194,20 @@ function GameBoard() {
                 console.log(previousTurn);
             }
         }).catch(e => {
+            pullGameStatsFromChain();
             console.log(e);
         });
     }
 
     useInterval(intervalCallback, 1500);
     useInterval(onlineStuffs, 15000);
-    useInterval(() => {
-        if(gameStats.gameType == "single"){
-            setPreviousTurn(4);
-        }
-    }, 5000);
+    // if(){
+    //     useInterval(() => {
+    //         if(gameStats.gameType == "single"){
+                // setPreviousTurn(4);
+    //         }
+    //     }, 5000);
+    // }
     
     // useEffect(()=>{
     //     setPingGame(gameStats.myTurn);

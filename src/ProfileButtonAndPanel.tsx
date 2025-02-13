@@ -79,28 +79,33 @@ import { ImageWithFallback } from './Utility';
     };
 
     async function handleSubmit(){ //create: boolean){
-        // console.log(create);
+        console.log("create");
         // console.log(myProfile);
         // console.log(formUsername);
-        let tx = await create_or_edit_profile(formUsername, formNftAddy); //create ? await create_or_edit_profile(formUsername, formNftAddy) : await editProfile(formUsername, formNftAddy, myProfile?.id!);
-		// console.log(transaction);
-		signAndExecuteTransaction({
-			transaction: tx,
-			chain: `sui:${myNetwork}`,
-		}, {
-			onSuccess: (result) => {
-				console.log('executed transaction', result);
-                closePanel();
-                updateProfileServer(currentAccount?.address!);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2500);
-                
-			},
-			onError: (e) => {
-				console.log(e);
-			}
-		});	
+        // console.log(formNftAddy);
+        if(formUsername && formUsername){
+            let tx = await create_or_edit_profile(formUsername, formNftAddy); //create ? await create_or_edit_profile(formUsername, formNftAddy) : await editProfile(formUsername, formNftAddy, myProfile?.id!);
+            // console.log(transaction);
+            signAndExecuteTransaction({
+                transaction: tx,
+                chain: `sui:${myNetwork}`,
+            }, {
+                onSuccess: (result) => {
+                    console.log('executed transaction', result);
+                    closePanel();
+                    updateProfileServer(currentAccount?.address!);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2500);
+                    
+                },
+                onError: (e) => {
+                    console.log(e);
+                }
+            });	
+        }else{
+            alert("Missing username or profile picture URL");
+        }
     }    
  
 	return (
