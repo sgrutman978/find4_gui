@@ -47,6 +47,7 @@ function GameBoard() {
     const [previousTurn, setPreviousTurn] = useState(0);
     const [onlineList, setOnlineList] = useState<string[]>([]);
     const [stakedObjId, setStakedObjId] = useState<string | null>("");
+    const [checkinCount, setCheckinCount] = useState(0);
     
     // useEffect(() => {
     //     // console.log(gameStats.myTurn);
@@ -83,6 +84,9 @@ function GameBoard() {
             const p2_addy = data.version ? data.data["p2"] : "";
             const winnerInt = data.version && data.data["winner"];
             const myTurn = ((currentAccount?.address == p1_addy && current_player == 1) || (currentAccount?.address == p2_addy && current_player == 2));
+            if(myTurn){
+                setCheckinCount(60);
+            }
             const board = data.data["board"];
             const gameType = data.version && data.data["gameType"] == 1 ? "single" : "multi";
             setGameStats({
@@ -184,29 +188,35 @@ function GameBoard() {
       }, [currentAccount]);
 
     const intervalCallback = () => {
-        getWhoTurn(gameID!).then((newTurn) => {
-            console.log(newTurn);
-            console.log(previousTurn);
-            if (newTurn != previousTurn){
-                pullGameStatsFromChain();
-                setPreviousTurn(newTurn);
-                console.log("hahahahha");
+        if(gameStats.gameType != "single"){
+            getWhoTurn(gameID!).then((newTurn) => {
+                console.log(newTurn);
                 console.log(previousTurn);
-            }
-        }).catch(e => {
-            pullGameStatsFromChain();
-            console.log(e);
-        });
+                if (newTurn != previousTurn){
+                    pullGameStatsFromChain();
+                    setPreviousTurn(newTurn);
+                    console.log("hahahahha");
+                    console.log(previousTurn);
+                }
+            }).catch(e => {
+                pullGameStatsFromChain();
+                console.log(e);
+            });
+        }
     }
 
     useInterval(intervalCallback, 1500);
     useInterval(onlineStuffs, 15000);
     // if(){
-    //     useInterval(() => {
-    //         if(gameStats.gameType == "single"){
-                // setPreviousTurn(4);
-    //         }
-    //     }, 5000);
+        useInterval(() => {
+            if(gameStats.gameType == "single"){
+                if(checkinCount < 30){
+                    console.log(checkinCount);
+                    setCheckinCount(prev => prev + 1);
+                    // pullGameStatsFromChain();
+                }
+            }
+        }, 1000);
     // }
     
     // useEffect(()=>{
@@ -234,6 +244,7 @@ function GameBoard() {
 				console.log('executed transaction', result);
                 console.log("111111111");
                 if(isMove){
+                    setCheckinCount(0);
                     console.log("setttttttttt");
                     // setPingGame(false);
                     // pullGameStatsFromChain();

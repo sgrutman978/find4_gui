@@ -8,7 +8,7 @@ export const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
 export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
 export const port = myNetwork == "mainnet" ? 3000 : 3001;
-export const baseUrl = "https://moonsui.online"; //"http://157.230.185.221"; // "https://localhost";
+export const baseUrl = "http://localhost"; //"https://moonsui.online"; //"http://157.230.185.221"; // 
 export const programAddress = myNetwork == "mainnet" ? process.env.REACT_APP_PROGRAM_ADDY_MAINNET : process.env.REACT_APP_PROGRAM_ADDY;
 export const nonceAddy = myNetwork == "mainnet" ? process.env.REACT_APP_NONCE_ADDY_MAINNET : process.env.REACT_APP_NONCE_ADDY;
 export const treasuryAddy = myNetwork == "mainnet" ? process.env.REACT_APP_TREASURY_ADDY_MAINNET : process.env.REACT_APP_TREASURY_ADDY;
