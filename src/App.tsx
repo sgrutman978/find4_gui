@@ -15,6 +15,8 @@ import { myNetwork } from './sui_controller';
 import Presale from './Presale';
 import Staking from './Staking';
 import Leaderboard from './Leaderboard';
+import { EnokiFlowProvider } from '@mysten/enoki/react';
+import Enoki from './enoki';
 // import { useLocation } from 'react-router-dom';
 
 // Config options for the networks you want to connect to
@@ -46,10 +48,11 @@ function App() {
       
       <QueryClientProvider client={queryClient}>
         <WalletProvider autoConnect>
+		<EnokiFlowProvider apiKey="enoki_public_10094b0bafc9ba2626fcbc02a1812d6b">
           <div className="App">
 		  {window.location.pathname == "/" || window.location.pathname == "/staking" ? <Navbar /> : ""}
 		  {/* <Navbar /> */}
-
+			<Enoki />
 			{/* </Header> */}
 			<BrowserRouter>
 				<Routes>
@@ -62,6 +65,7 @@ function App() {
 				</Routes>
             </BrowserRouter>
           </div>
+		  </EnokiFlowProvider>
          </WalletProvider>
       </QueryClientProvider>
       
