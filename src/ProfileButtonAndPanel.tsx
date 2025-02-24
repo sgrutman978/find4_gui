@@ -1,13 +1,14 @@
-import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useEffect, useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile,*/ create_or_edit_profile, /*GetProfile*/ } from './sui_controller';
+import DoTransaction, { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, /*fetchProfile,*/ create_or_edit_profile, /*GetProfile*/ } from './sui_controller';
 import { Profile } from './GameBoard';
 import { getProfileFromServer, updateProfileServer } from './ServerConn';
 import { ImageWithFallback } from './Utility';
+import { useEnokiFlow } from '@mysten/enoki/react';
  
  function ProfileButtonAndPanel(props: any) {
-	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+	
 	// const currentAccount = useCurrentAccount();
   	// const [changeMade, setChangeMade] = useState(0);
     const [myProfile, setMyProfile] = useState<Profile>();
@@ -19,6 +20,7 @@ import { ImageWithFallback } from './Utility';
     const [profilePic, setProfilePic] = useState<any>("");
 
     let currentAccount = useCurrentAccount();
+    const doTx = DoTransaction();
 
 	useEffect(() => { 
         setProfilePic("");
@@ -86,23 +88,13 @@ import { ImageWithFallback } from './Utility';
         if(formUsername && formUsername){
             let tx = await create_or_edit_profile(formUsername, formNftAddy); //create ? await create_or_edit_profile(formUsername, formNftAddy) : await editProfile(formUsername, formNftAddy, myProfile?.id!);
             // console.log(transaction);
-            signAndExecuteTransaction({
-                transaction: tx,
-                chain: `sui:${myNetwork}`,
-            }, {
-                onSuccess: (result) => {
-                    console.log('executed transaction', result);
-                    closePanel();
+            doTx(tx, () => {
+                closePanel();
                     updateProfileServer(currentAccount?.address!);
                     setTimeout(() => {
                         window.location.reload();
                     }, 2500);
-                    
-                },
-                onError: (e) => {
-                    console.log(e);
-                }
-            });	
+            });
         }else{
             alert("Missing username or profile picture URL");
         }

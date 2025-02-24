@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CoinStruct, SuiClient, SuiClientOptions, getFullnodeUrl } from '@mysten/sui/client';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromB64 } from '@mysten/bcs';
-import { GetObjectContents, OGAddyForEventObjType, presaleStateMainnet, programAddress, suiClient_Mainnet } from './sui_controller';
-import { ConnectButton, SuiClientProvider, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
+import DoTransaction, { GetObjectContents, OGAddyForEventObjType, presaleStateMainnet, programAddress, suiClient_Mainnet } from './sui_controller';
+import { ConnectButton, SuiClientProvider, useAutoConnectWallet, useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 
 import TextField from '@mui/material/TextField';
 
@@ -12,6 +12,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEquals, faExchange } from '@fortawesome/free-solid-svg-icons';
+import { useEnokiFlow } from '@mysten/enoki/react';
 
 const OneCoinNineDecimals = 1000000000;
 
@@ -24,8 +25,9 @@ function Presale() {
   const meh = useSuiClient();
 
   const currentAccount = useCurrentAccount();
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const enokiFlow = useEnokiFlow();
   const autoConnectionStatus = useAutoConnectWallet();
+  const doTx = DoTransaction();
 
   const [progress, setProgress] = React.useState(0);
 
@@ -109,22 +111,13 @@ function Presale() {
         ],
       });
       
-      signAndExecuteTransaction({
-        transaction: tx,
-        chain: `sui:mainnet`,
-      }, {
-        onSuccess: (result) => {
-          console.log('executed transaction', result);
-          if (result.digest) {
-            alert('Transaction successful!');
-            fetchPresaleState();
-            getBalances();
-          }
-        },
-        onError: (error) => {
-          console.log(error);
-      }
-      },);
+      doTx(tx, (result) => {
+        if (result.digest) {
+          alert('Transaction successful!');
+          fetchPresaleState();
+          getBalances();
+        }
+      });
       
       
     } catch (err) {

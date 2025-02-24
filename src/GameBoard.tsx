@@ -1,5 +1,5 @@
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { fetchEvents, /*fetchProfile,*/ GetObjectContents, getSpecificSuiObject, /*GetProfile,*/ myNetwork, player_move, player_win } from './sui_controller';
+import { ConnectButton, useCurrentAccount } from '@mysten/dapp-kit';
+import DoTransaction, { fetchEvents, /*fetchProfile,*/ GetObjectContents, getSpecificSuiObject, /*GetProfile,*/ myNetwork, player_move, player_win } from './sui_controller';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import Find4Animation from './Find4Animation';
@@ -9,6 +9,7 @@ import { Transaction } from '@mysten/sui/dist/cjs/transactions';
 import { getOnlineList, getProfileFromServer, getWhoTurn, sendOnlineStatus, updateProfileServer } from './ServerConn';
 import { ImageWithFallback } from './Utility';
 import CopyToClipboard from './CopyToClipboard';
+import { useEnokiFlow } from '@mysten/enoki/react';
 
 export interface Profile {
     profilePicUrl?: string,
@@ -48,6 +49,7 @@ function GameBoard() {
     const [onlineList, setOnlineList] = useState<string[]>([]);
     const [stakedObjId, setStakedObjId] = useState<string | null>("");
     const [checkinCount, setCheckinCount] = useState(0);
+    const doTx = DoTransaction();
     
     // useEffect(() => {
     //     // console.log(gameStats.myTurn);
@@ -149,9 +151,8 @@ function GameBoard() {
         });
     };
 
-    
-    const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
     const currentAccount = useCurrentAccount();
+    const enokiFlow = useEnokiFlow();
     const { gameID } = useParams();
     const amIWinner = gameStats.version && ((gameStats.winnerInt == 1 && currentAccount?.address == gameStats.p1_addy) || (gameStats.winnerInt == 2 && currentAccount?.address == gameStats.p2_addy))
 
@@ -225,48 +226,30 @@ function GameBoard() {
 
     const sendPlayerMoveTransaction = (column: number) => {
         let transaction = player_move(gameID!, column, gameStats.version, gameStats.gameType);
-		doTransaction(transaction, true);			
+		doMyTransaction(transaction, true);			
     };
 
     const sendWinTransaction = () => {
         player_win(gameID!, gameStats.version, gameStats.gameType, stakedObjId).then((tx) => {
             console.log(tx);
-            doTransaction(tx, false);	
+            doMyTransaction(tx, false);	
         });	
     };
 
-    const doTransaction = (transaction: Transaction, isMove: boolean) => {
-        signAndExecuteTransaction({
-			transaction: transaction!,
-			chain: `sui:${myNetwork}`,
-		}, {
-		    onSuccess: (result) => {
-				console.log('executed transaction', result);
-                console.log("111111111");
-                if(isMove){
-                    setCheckinCount(0);
-                    console.log("setttttttttt");
-                    // setPingGame(false);
-                    // pullGameStatsFromChain();
-                    setPreviousTurn(0);
-                }else{
-                    updateProfileServer(gameStats.p1_addy);
-                    updateProfileServer(gameStats.p2_addy);
-                }
-                // getUpdatedBoard();
-			},
-            onError: (error) => {
-                console.log(error);
-            }
-		});	
+    const doMyTransaction = (transaction: Transaction, isMove: boolean) => {
+        doTx(transaction, () => {
+            console.log("111111111");
+            if(isMove){
+                setCheckinCount(0);
+                console.log("setttttttttt");
+                // setPingGame(false);
+                // pullGameStatsFromChain();
+                setPreviousTurn(0);
+            }else{
+                updateProfileServer(gameStats.p1_addy);
+                updateProfileServer(gameStats.p2_addy);
+        }});
     };
-
-    // const runUpdateBoardInterval = () => {
-    //     clearInterval(interval);
-    //     interval = setInterval(() => {
-    //         setKey(prevKey => prevKey + 1);
-    //     }, 1800);
-    // };
 
     const displayRows = (key: number) => {
         const board = [];

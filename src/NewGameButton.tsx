@@ -1,21 +1,23 @@
-import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
-import { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, OGAddyForEventObjType, programAddress, /*fetchProfile*/ } from './sui_controller';
+import DoTransaction, { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, OGAddyForEventObjType, programAddress, /*fetchProfile*/ } from './sui_controller';
 import { CircularProgress, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDice, faHome, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
 import { getP2 } from './ServerConn';
+import { useEnokiFlow } from '@mysten/enoki/react';
 // import { ExtendedProfile } from './GameBoard';
  
  function NewGameButton(props: any) {
-	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 	const [digest, setDigest] = useState('');
 	const currentAccount = useCurrentAccount();
+	const enokiFlow = useEnokiFlow();
   	const [player2Addy, setPlayer2Addy] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [addyInput, setAddyInput] = useState("");
 	const [addyPasses, setAddyPasses] = useState(true);
+	const doTx = DoTransaction();
 
   const handleChange = (val: React.ChangeEvent<HTMLInputElement>) => {
     setPlayer2Addy(val.target.value);
@@ -34,13 +36,8 @@ import { getP2 } from './ServerConn';
 			let transaction = props.gameType == "single" ? await newSinglePlayerGameTx(props.trophies) : await newMultiPlayerGameTx((checkAddyInput(addyInput) ? addyInput : p2), props.trophies);
 				if(transaction){
 					transaction!.setSender(currentAccount?.address!);
-					signAndExecuteTransaction({
-						transaction: transaction,
-						chain: `sui:${myNetwork}`,
-					}, {
-						onSuccess: (result) => {
-							console.log('executed transaction', result);
-							setLoading(() => true);
+					doTx(transaction, () => {
+						setLoading(() => true);
 							if(intervalId){
 								clearInterval(intervalId);
 							}
@@ -48,12 +45,7 @@ import { getP2 } from './ServerConn';
 								getGameCreationEvents();
 								// console.log('Interval running...'+currentAccount.address);
 							}, 1000);
-							
-						},
-						onError: (e) => {
-							console.log(e);
-						}
-					});	
+					});
 				}
 			});
 		}else{

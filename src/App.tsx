@@ -16,7 +16,7 @@ import Presale from './Presale';
 import Staking from './Staking';
 import Leaderboard from './Leaderboard';
 import { EnokiFlowProvider } from '@mysten/enoki/react';
-import Enoki from './enoki';
+import Enoki from './enoki_auth';
 // import { useLocation } from 'react-router-dom';
 
 // Config options for the networks you want to connect to

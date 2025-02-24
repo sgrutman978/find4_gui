@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { getFullnodeUrl, SuiClient, SuiClientOptions } from '@mysten/sui/client';
 // import { useWalletKit } from '@mysten/wallet-kit';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { ConnectButton, SuiClientProvider, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { initVersion, myNetwork, OGAddyForEventObjType, programAddress, treasuryAddy, stakingPoolAddy, stakingPoolVersion, getSpecificSuiObject, suiClient } from './sui_controller';
+import { ConnectButton, SuiClientProvider, useCurrentAccount } from '@mysten/dapp-kit';
+import DoTransaction, { initVersion, myNetwork, OGAddyForEventObjType, programAddress, treasuryAddy, stakingPoolAddy, stakingPoolVersion, getSpecificSuiObject, suiClient } from './sui_controller';
 import { Button, LinearProgress, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEnokiFlow } from '@mysten/enoki/react';
 
 const networks = {
 	testnet: { url: getFullnodeUrl('testnet') },
@@ -28,7 +29,7 @@ function Staking() {
   const client = new SuiClient({ url: getFullnodeUrl('devnet') }); // Use 'testnet' or 'mainnet' as needed
 
   const currentAccount = useCurrentAccount();
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const doTx = DoTransaction();
 
   useEffect(() => {
     calculateRewards();
@@ -93,7 +94,7 @@ function Staking() {
       ],
     });
 
-    doTransaction(tx);
+    doMyTransaction(tx);
   }
 
   const existing = async () => {
@@ -123,7 +124,7 @@ function Staking() {
       ],
     });
 
-    doTransaction(tx);
+    doMyTransaction(tx);
   }
 
   const unstake = async () => {
@@ -151,7 +152,7 @@ function Staking() {
       ], 
     });
 
-    doTransaction(tx);
+    doMyTransaction(tx);
   }
 
   const collect = async () => {
@@ -179,7 +180,7 @@ function Staking() {
       ], 
     });
 
-    doTransaction(tx);
+    doMyTransaction(tx);
   }
 
   const stakeOrExisting = () => {
@@ -194,24 +195,16 @@ function Staking() {
     }
   }
 
-  const doTransaction = (tx: Transaction) => {
-    signAndExecuteTransaction({
-        transaction: tx,
-        chain: `sui:${myNetwork}`,
-      }, {
-        onSuccess: (result) => {
-          console.log('executed transaction', result);
-          setMessage('Staking transaction sent: ' + result.digest);
+  const doMyTransaction = (tx: Transaction) => {
+    doTx(tx, (result: any) => {
+      setMessage('Staking transaction sent: ' + result.digest);
           if (result.digest) {
             alert('Transaction successful!');
             // fetchPresaleState();
           }
-        },
-        onError: (error) => {
-          console.log(error);
-          setMessage('Error in staking: ' + error.message);
-      }
-      },);
+    }, (error) => {
+      setMessage('Error in staking: ' + error.message);
+    });
   }
 
   function massDistributeHelper(){
@@ -259,20 +252,11 @@ function Staking() {
       tx.pure.u64(10000*OneCoinNineDecimals),
       ],
     });
-    signAndExecuteTransaction({
-      transaction: tx,
-      chain: `sui:mainnet`,
-    }, {
-      onSuccess: (result) => {
-      console.log('executed transaction', result);
+    doTx(tx, (result: any) => {
       if (result.digest) {
         alert('Distribution successful!');
       }
-      },
-      onError: (error) => {
-      console.log(error);
-    }
-    },);
+    });
   }
 
   function getCurrentEpochSeconds(): number {

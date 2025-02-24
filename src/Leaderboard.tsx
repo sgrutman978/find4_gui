@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { myNetwork, programAddress } from './sui_controller';
 // import Header from './Header';
 // import './Navbar.css';
-import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
+import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit';
 import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faXTwitter } from '@fortawesome/free-brands-svg-icons';

@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import NewGameButton from './NewGameButton';
 // import './Navbar.css';
-import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
+import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit';
 import Find4Animation from './Find4Animation';
 import { baseUrl, fetchEvents, /*GetProfile,*/ port } from './sui_controller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

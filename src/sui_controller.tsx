@@ -2,13 +2,17 @@ import { getFullnodeUrl, PaginatedObjectsResponse, QueryEventsParams, SuiClient,
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 import { Profile } from './GameBoard';
+import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { useEnokiFlow } from '@mysten/enoki/react';
+import { executeTransactionBlockWithoutSponsorship } from './enoki_controller';
+import { EnokiFlow } from '@mysten/enoki';
 
 export const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
 										export let myNetwork = "mainnet";
 export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
 export const port = myNetwork == "mainnet" ? 3000 : 3001;
-export const baseUrl = "http://localhost"; //"https://moonsui.online"; //"http://157.230.185.221"; // 
+export const baseUrl =  "https://moonsui.online"; //"http://157.230.185.221"; // "http://localhost";
 export const programAddress = myNetwork == "mainnet" ? process.env.REACT_APP_PROGRAM_ADDY_MAINNET : process.env.REACT_APP_PROGRAM_ADDY;
 export const nonceAddy = myNetwork == "mainnet" ? process.env.REACT_APP_NONCE_ADDY_MAINNET : process.env.REACT_APP_NONCE_ADDY;
 export const treasuryAddy = myNetwork == "mainnet" ? process.env.REACT_APP_TREASURY_ADDY_MAINNET : process.env.REACT_APP_TREASURY_ADDY;
@@ -28,6 +32,45 @@ export const presaleStateMainnet = myNetwork == "mainnet" ? process.env.REACT_AP
 
 // export const programAddress_Mainnet = myNetwork == "mainnet" ? process.env.REACT_APP_PROGRAM_ADDY_MAINNET;
 // export const OGAddyForEventObjType_Mainnet = myNetwork == "mainnet" ? process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE_MAINNET;
+export default function DoTransaction(){
+	let currentAccount = useCurrentAccount();
+	const enokiFlow = useEnokiFlow();
+	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+
+	 const doTransaction = (transaction: Transaction, callback: (result: any) => void, errorCallback?: (error: any) => void) => {
+		console.log("ENOKI CHECCCCCCKK");
+		let enokiLoggedIn = "false";
+		enokiFlow.$zkLoginState.subscribe((state) => {
+            enokiLoggedIn = state?.address!;
+            console.log(state);
+        });
+		console.log(enokiFlow.getSession());
+		if(enokiLoggedIn){
+			executeTransactionBlockWithoutSponsorship(transaction, enokiFlow, suiClient, callback, errorCallback);
+		}else{
+			doTraditionalTransaction(transaction, callback, errorCallback);
+		}
+	};
+
+	const doTraditionalTransaction = (transaction: Transaction, callback: (result: any) => void, errorCallback?: (error: any) => void) => {
+		signAndExecuteTransaction({
+			transaction: transaction!,
+			chain: `sui:${myNetwork}`,
+		}, {
+			onSuccess: (result) => {
+				console.log('executed transaction', result);
+				callback(result);
+			},
+			onError: (error) => {
+				console.log(error);
+				if(errorCallback){
+					errorCallback(error);
+				}
+			}
+		});	
+	};
+	return doTransaction;
+};
 
   export const fetchEvents = async () => {
 	try {
