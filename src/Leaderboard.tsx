@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import NewGameButton from './NewGameButton';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { myNetwork, programAddress } from './sui_controller';
+import GameSuiteClient, { myNetwork, programAddress } from './sui_controller';
 // import Header from './Header';
 // import './Navbar.css';
-import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit';
+import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClientQuery } from '@mysten/dapp-kit';
 import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faXTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -13,12 +13,22 @@ import { getLeaderboard, getOnlineList, sendOnlineStatus } from './ServerConn';
 import { ImageWithFallback, shortenAddy } from './Utility';
 import CopyToClipboard from './CopyToClipboard';
 import ProfileButtonAndPanel from './ProfileButtonAndPanel';
+import { useEnokiFlow } from '@mysten/enoki/react';
 
 function Leaderboard() {
 
-    let currentAccount = useCurrentAccount();
+      // const enokiFlow = useEnokiFlow();
+      // const [myAddy, setMyAddy] = useState("");
+      // useEffect(() => {
+      //   enokiFlow.$zkLoginState.subscribe((state) => {
+      //           setMyAddy(state?.address!);
+      //       });
+      // }, [enokiFlow.$zkLoginState]);
     const [profiles, setProfiles] = useState([{}]);
     const [onlineList, setOnlineList] = useState<string[]>([]);
+
+          const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+          const gsl = new GameSuiteClient(useEnokiFlow(), useCurrentAccount(), signAndExecuteTransaction);
 
     useEffect(() => {
         getLeaderboard().then((profiles) => {
@@ -32,7 +42,7 @@ function Leaderboard() {
 
     useEffect(() => {
         setInterval(() => {
-            sendOnlineStatus(currentAccount?.address!);
+            sendOnlineStatus(gsl.myAddy);
         }, 10000);
     }, []);
 
@@ -60,7 +70,7 @@ function Leaderboard() {
             <span style={{fontSize: 60, fontWeight: 600, margin: 20}}>Leaderboard</span>
             <div className="connectButtonWrapper">
 				<ProfileButtonAndPanel></ProfileButtonAndPanel>
-				<ConnectButton></ConnectButton>
+				{/* <ConnectButton></ConnectButton> */}
 			</div>
             <tbody>
               {profiles.map((item: any, index: number) => (

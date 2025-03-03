@@ -1,4 +1,4 @@
-import { ConnectButton, useCurrentAccount } from '@mysten/dapp-kit';
+
 import DoTransaction, { fetchEvents, /*fetchProfile,*/ GetObjectContents, getSpecificSuiObject, /*GetProfile,*/ myNetwork, player_move, player_win } from './sui_controller';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
@@ -10,6 +10,9 @@ import { getOnlineList, getProfileFromServer, getWhoTurn, sendOnlineStatus, upda
 import { ImageWithFallback } from './Utility';
 import CopyToClipboard from './CopyToClipboard';
 import { useEnokiFlow } from '@mysten/enoki/react';
+import ProfileButtonAndPanel from './ProfileButtonAndPanel';
+import GameSuiteClient from './sui_controller';
+import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 
 export interface Profile {
     profilePicUrl?: string,
@@ -40,6 +43,7 @@ function GameBoard() {
     const [profilePicObjSmall1, setProfilePicObjSmall1] = useState<any>("");
     const [profilePicObjBig2, setProfilePicObjBig2] = useState<any>("");
     const [profilePicObjSmall2, setProfilePicObjSmall2] = useState<any>("");
+    let myKey = -1;
 
     const [profile2, setProfile2] = useState<Profile>({username: "AI", points: 69, profilePicUrl: "../../ai.webp"});
     
@@ -49,7 +53,15 @@ function GameBoard() {
     const [onlineList, setOnlineList] = useState<string[]>([]);
     const [stakedObjId, setStakedObjId] = useState<string | null>("");
     const [checkinCount, setCheckinCount] = useState(0);
-    const doTx = DoTransaction();
+      const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+      const gsl = new GameSuiteClient(useEnokiFlow(), useCurrentAccount(), signAndExecuteTransaction);
+
+	// const [myAddy, setMyAddy] = useState("");
+	// useEffect(() => {
+	// 	enokiFlow.$zkLoginState.subscribe((state) => {
+    //         setMyAddy(state?.address!);
+    //     });
+	// }, [enokiFlow.$zkLoginState]);
     
     // useEffect(() => {
     //     // console.log(gameStats.myTurn);
@@ -72,7 +84,7 @@ function GameBoard() {
     // }, []);
 
     const onlineStuffs = () => {
-        sendOnlineStatus(currentAccount?.address!);
+        sendOnlineStatus(gsl.myAddy);
         getOnlineList().then((list) => {
             setOnlineList(list);
         });
@@ -85,9 +97,10 @@ function GameBoard() {
             const p1_addy = data.version ? data.data["p1"] : "";
             const p2_addy = data.version ? data.data["p2"] : "";
             const winnerInt = data.version && data.data["winner"];
-            const myTurn = ((currentAccount?.address == p1_addy && current_player == 1) || (currentAccount?.address == p2_addy && current_player == 2));
+            const myTurn = ((gsl.myAddy == p1_addy && current_player == 1) || (gsl.myAddy == p2_addy && current_player == 2));
             if(myTurn){
-                setCheckinCount(60);
+                setCheckinCount(60 - previousTurn);
+                setPreviousTurn(0);
             }
             const board = data.data["board"];
             const gameType = data.version && data.data["gameType"] == 1 ? "single" : "multi";
@@ -116,7 +129,7 @@ function GameBoard() {
                 }
                 // console.log(counter);
                 // console.log(oldCounter);
-                if(counter > oldCounter && currentAccount?.address){
+                if(counter > oldCounter && gsl.myAddy){
                     // console.log("pppppppppppppppppp");
                     // console.log(myTurn);
                     // console.log(p1_addy);
@@ -151,10 +164,8 @@ function GameBoard() {
         });
     };
 
-    const currentAccount = useCurrentAccount();
-    const enokiFlow = useEnokiFlow();
     const { gameID } = useParams();
-    const amIWinner = gameStats.version && ((gameStats.winnerInt == 1 && currentAccount?.address == gameStats.p1_addy) || (gameStats.winnerInt == 2 && currentAccount?.address == gameStats.p2_addy))
+    const amIWinner = gameStats.version && ((gameStats.winnerInt == 1 && gsl.myAddy == gameStats.p1_addy) || (gameStats.winnerInt == 2 && gsl.myAddy == gameStats.p2_addy))
 
     // console.log(winner);
 
@@ -176,8 +187,8 @@ function GameBoard() {
     },[])   
 
       useEffect(() => {
-        if(currentAccount){
-          getSpecificSuiObject(currentAccount?.address!, "0x4ea810be83c0fb428ee1283312cbff4aea6dc266f6db932ca9a47cae9dcb9d29::FFIO::StakeObject").then(data => {
+        if(gsl.myAddy){
+          getSpecificSuiObject(gsl.myAddy, "0x4ea810be83c0fb428ee1283312cbff4aea6dc266f6db932ca9a47cae9dcb9d29::FFIO::StakeObject").then(data => {
             console.log(data);
             if(data && data.length > 0){
               setStakedObjId((data[0] as any).data.content.fields.id.id);
@@ -186,14 +197,14 @@ function GameBoard() {
             }
           })
         }
-      }, [currentAccount]);
+      }, [gsl.myAddy]);
 
     const intervalCallback = () => {
         if(gameStats.gameType != "single"){
             getWhoTurn(gameID!).then((newTurn) => {
                 console.log(newTurn);
                 console.log(previousTurn);
-                if (newTurn != previousTurn){
+                if (newTurn != previousTurn && !(newTurn == 0 && previousTurn == -1)){
                     pullGameStatsFromChain();
                     setPreviousTurn(newTurn);
                     console.log("hahahahha");
@@ -214,7 +225,7 @@ function GameBoard() {
                 if(checkinCount < 30){
                     console.log(checkinCount);
                     setCheckinCount(prev => prev + 1);
-                    // pullGameStatsFromChain();
+                    pullGameStatsFromChain();
                 }
             }
         }, 1000);
@@ -225,6 +236,29 @@ function GameBoard() {
     // },[currentAccount])   
 
     const sendPlayerMoveTransaction = (column: number) => {
+        // let newGameStats = gameStats;
+        // let col = -1;
+        for(let i = 0; i < 6; i++){
+            if(gameStats.board[i][column] == "0"){
+                gameStats.board[i][column] = "1";
+                gameStats.lastMoveCol = column;
+                // col = i;
+                break;
+            }
+        }
+
+        // newGameStats.myTurn = false;
+        // setGameStats(prev => newGameStats);
+        // gameStats.myTurn = false;
+        // console.log()
+        // console.log("did my turn");
+        setPreviousTurn(-1);
+        // intervalCallback();
+        // displayRows();
+        // setKey(prev => 1);
+        // gameStats.myTurn = false;
+        // myKey = myKey + 1;
+        // pullGameStatsFromChain();
         let transaction = player_move(gameID!, column, gameStats.version, gameStats.gameType);
 		doMyTransaction(transaction, true);			
     };
@@ -237,21 +271,27 @@ function GameBoard() {
     };
 
     const doMyTransaction = (transaction: Transaction, isMove: boolean) => {
-        doTx(transaction, () => {
+        gsl.doTransaction(transaction, () => {
             console.log("111111111");
             if(isMove){
                 setCheckinCount(0);
                 console.log("setttttttttt");
                 // setPingGame(false);
                 // pullGameStatsFromChain();
-                setPreviousTurn(0);
+                // setPreviousTurn(0);
             }else{
                 updateProfileServer(gameStats.p1_addy);
                 updateProfileServer(gameStats.p2_addy);
-        }});
+        }}, (e) => {
+            setPreviousTurn(0);
+            pullGameStatsFromChain();
+            console.log(e);
+        });
     };
 
-    const displayRows = (key: number) => {
+    const displayRows = () => {
+        console.log("BOARD");
+        console.log(gameStats.board);
         const board = [];
         if(gameStats.version && gameStats.version != ""){
             let topOne = 0;
@@ -301,7 +341,7 @@ function GameBoard() {
     // If its my turn based who went first and the status, determine which type of transaction based on status
         return (<>
         <div className="connectButtonWrapper">
-                    <ConnectButton></ConnectButton>
+                    <ProfileButtonAndPanel />
 			    </div>
 
                 <div className="logo_gameboard">
@@ -344,9 +384,9 @@ function GameBoard() {
                         </div>
                 </div>
                 
-                <div id="gameboard">
-                {displayRows(key)}
-                {gameStats.myTurn ? <div className="selectColumnContainer">
+                <div id="gameboard" className={`${key}`}>
+                {displayRows()}
+                {previousTurn != -1 && checkinCount != 59 && gameStats.myTurn ? <div className="selectColumnContainer">
                     <button className="selectColumn" style={{marginLeft: 0}} onClick={() => {sendPlayerMoveTransaction(0)}}></button>
                     <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(1)}}></button>
                     <button className="selectColumn" onClick={() => {sendPlayerMoveTransaction(2)}}></button>
@@ -386,7 +426,7 @@ function GameBoard() {
                             </div> */}
                         </div>
 
-                {currentAccount && gameStats.gameOver ? 
+                {gsl.myAddy && gameStats.gameOver ? 
                 <div className="winnerLoserDiv">
                     {amIWinner ? <>
                     Winner

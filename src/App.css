@@ -1216,3 +1216,86 @@ a {
 .existingGame:hover{
   cursor:pointer;
 }
+
+
+
+
+
+
+/* CSS */
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.login-panel {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 200px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.login-panel.active {
+  display: flex;
+}
+
+.login-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.wallet-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.wallet-btn:hover {
+  background: #45a049;
+}
+
+.google-btn {
+  background: #4285F4;
+  color: white;
+}
+
+.google-btn:hover {
+  background: #357abd;
+}
+
+.logout-btn {
+  background: #f44242;
+  color: white;
+}
+
+.logout-btn:hover {
+  background: #bd3535;
+}
+
+.other-btn {
+  background: #666;
+  color: white;
+}
+
+.other-btn:hover {
+  background: #555;
+}

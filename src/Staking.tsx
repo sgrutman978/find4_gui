@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { getFullnodeUrl, SuiClient, SuiClientOptions } from '@mysten/sui/client';
 // import { useWalletKit } from '@mysten/wallet-kit';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { ConnectButton, SuiClientProvider, useCurrentAccount } from '@mysten/dapp-kit';
+import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import DoTransaction, { initVersion, myNetwork, OGAddyForEventObjType, programAddress, treasuryAddy, stakingPoolAddy, stakingPoolVersion, getSpecificSuiObject, suiClient } from './sui_controller';
 import { Button, LinearProgress, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEnokiFlow } from '@mysten/enoki/react';
+import GameSuiteClient from './sui_controller';
+
 
 const networks = {
 	testnet: { url: getFullnodeUrl('testnet') },
@@ -27,9 +29,18 @@ function Staking() {
     const [suiBalance, setSuiBalance] = useState("");
     const [ffioBalance, setFfioBalance] = useState("");
   const client = new SuiClient({ url: getFullnodeUrl('devnet') }); // Use 'testnet' or 'mainnet' as needed
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const gsl = new GameSuiteClient(useEnokiFlow(), useCurrentAccount(), signAndExecuteTransaction);
 
-  const currentAccount = useCurrentAccount();
-  const doTx = DoTransaction();
+  // const doTx = DoTransaction();
+
+      // const enokiFlow = useEnokiFlow();
+      // const [myAddy, setMyAddy] = useState<string>();
+      // useEffect(() => {
+      //   enokiFlow.$zkLoginState.subscribe((state) => {
+      //     setMyAddy(state?.address!);
+      //   });
+      // }, [enokiFlow.$zkLoginState]);
 
   useEffect(() => {
     calculateRewards();
@@ -45,17 +56,17 @@ function Staking() {
   };
 
   useEffect(() => {
-    if (!currentAccount) {
+    if (!gsl.myAddy) {
       setMessage('Please connect your wallet');
     } else {
       setMessage('Wallet connected');
     }
-  }, [currentAccount]);
+  }, [gsl.myAddy]);
 
   useEffect(() => {
-    if(currentAccount){
+    if(gsl.myAddy){
       getBalances();
-      getSpecificSuiObject(currentAccount?.address!, "0x4ea810be83c0fb428ee1283312cbff4aea6dc266f6db932ca9a47cae9dcb9d29::FFIO::StakeObject").then(data => {
+      getSpecificSuiObject(gsl.myAddy, "0x4ea810be83c0fb428ee1283312cbff4aea6dc266f6db932ca9a47cae9dcb9d29::FFIO::StakeObject").then(data => {
         console.log(data);
         if(data && data.length > 0){
           setStaked((data[0] as any).data.content.fields);
@@ -66,16 +77,16 @@ function Staking() {
         // setRewards((staked as any).reward_rate*(getCurrentEpochSeconds() - parseInt((staked as any).start_epoch))*((staked as any).amount)/OneCoinNineDecimals);
       })
     }
-  }, [message, currentAccount]);
+  }, [message, gsl.myAddy]);
 
   const stake = async () => {
-    if (!currentAccount) {
+    if (!gsl.myAddy) {
       setMessage('Wallet not connected');
       return;
     }
     const tx = new Transaction();
     // const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(Number(stakeAmount) * 1e9)]); // Convert to MIST
-    tx.setSender(currentAccount.address);
+    tx.setSender(gsl.myAddy);
     tx.moveCall({
       target: `${programAddress}::FFIO::stake_new_ffio`,
       arguments: [
@@ -98,13 +109,13 @@ function Staking() {
   }
 
   const existing = async () => {
-    if (!currentAccount) {
+    if (!gsl.myAddy) {
       setMessage('Wallet not connected');
       return;
     }
     const tx = new Transaction();
     // const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(Number(stakeAmount) * 1e9)]); // Convert to MIST
-    tx.setSender(currentAccount.address);
+    tx.setSender(gsl.myAddy);
     tx.moveCall({
       target: `${programAddress}::FFIO::stake_existing_ffio`,
       arguments: [
@@ -128,7 +139,7 @@ function Staking() {
   }
 
   const unstake = async () => {
-    if (!currentAccount) {
+    if (!gsl.myAddy) {
       setMessage('Wallet not connected');
       return;
     }
@@ -156,7 +167,7 @@ function Staking() {
   }
 
   const collect = async () => {
-    if (!currentAccount) {
+    if (!gsl.myAddy) {
       setMessage('Wallet not connected');
       return;
     }
@@ -196,7 +207,7 @@ function Staking() {
   }
 
   const doMyTransaction = (tx: Transaction) => {
-    doTx(tx, (result: any) => {
+    gsl.doTransaction(tx, (result: any) => {
       setMessage('Staking transaction sent: ' + result.digest);
           if (result.digest) {
             alert('Transaction successful!');
@@ -252,7 +263,7 @@ function Staking() {
       tx.pure.u64(10000*OneCoinNineDecimals),
       ],
     });
-    doTx(tx, (result: any) => {
+    gsl.doTransaction(tx, (result: any) => {
       if (result.digest) {
         alert('Distribution successful!');
       }
@@ -264,14 +275,14 @@ function Staking() {
   }
 
     async function getBalances(){
-      if(currentAccount){
-        suiClient.getBalance({ owner: currentAccount?.address! }).then((res) => {
+      if(gsl.myAddy){
+        suiClient.getBalance({ owner: gsl.myAddy }).then((res) => {
           console.log(res.totalBalance);
           const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
           setSuiBalance(b+"");
           console.log(suiBalance);
         });
-        suiClient.getBalance({ owner: currentAccount?.address!, coinType: `${OGAddyForEventObjType}::FFIO::FFIO` }).then((res) => {
+        suiClient.getBalance({ owner: gsl.myAddy, coinType: `${OGAddyForEventObjType}::FFIO::FFIO` }).then((res) => {
           console.log(res.totalBalance);
           const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
           setFfioBalance(b+"");
@@ -295,7 +306,7 @@ function Staking() {
   <div className="presale-container" style={{width:700, margin: "auto"}} id="presale">
   <div className="connectButtonWrapper2">
     <div className="right topRight"> 
-    {currentAccount ? <>Wallet: <span style={{marginRight: 7, marginLeft: 5}}>
+    {gsl.myAddy ? <>Wallet: <span style={{marginRight: 7, marginLeft: 5}}>
               <img style={{width: 18, marginRight: 2, top: 2, position: "relative"}} src="./sui-logo.png" />
               <span style={{fontSize: 18}}>{suiBalance}</span>
             </span> 

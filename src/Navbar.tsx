@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import NewGameButton from './NewGameButton';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { myNetwork, programAddress } from './sui_controller';
-// import Header from './Header';
-// import './Navbar.css';
-import { ConnectButton, useAutoConnectWallet, useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit';
-import Find4Animation from './Find4Animation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faTelegram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
@@ -45,7 +39,7 @@ function Navbar(props: any) {
         <div className="bar2"></div>
         <div className="bar3"></div>
       </div>
-      <a href="/" className="logo logoMobile"><span style={{position: "relative", bottom: 14}}>Find</span><img src="../f4-42.png" style={{width: 50, height: 50, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 13}}>.io</span></a>
+      <a href="/info" className="logo logoMobile"><span style={{position: "relative", bottom: 14}}>Find</span><img src="../f4-42.png" style={{width: 50, height: 50, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 13}}>.io</span></a>
       
       <div className={`menu-popup ${isOpen ? 'open' : ''}`}>
             <ul>
@@ -67,7 +61,7 @@ function Navbar(props: any) {
   ) : 
    (
     <nav className="navbar">
-      <a href="/" className="logo"><span style={{position: "relative", bottom: 14}}>Find</span><img src="../f4-42.png" style={{width: 50, height: 50, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 13}}>.io</span></a>
+      <a href="/info" className="logo"><span style={{position: "relative", bottom: 14}}>Find</span><img src="../f4-42.png" style={{width: 50, height: 50, marginLeft: 3, bottom: 4, position: "relative"}} /><span style={{position: "relative", bottom: 13}}>.io</span></a>
       {/* <ul className="nav-links"> */}
         {/* <li> */}
             {/* <BrowserRouter>
@@ -80,7 +74,7 @@ function Navbar(props: any) {
         {/* </li> */}
         {/* {window.location.pathname == "/" ?  */}
         {/* <Find4Animation size={5} animated={true} /> */}
-        <a href="/app" className='menuElement launchAppButton'>Play Game</a>
+        <a href="/" className='menuElement launchAppButton'>Play Game</a>
           {/* : <ConnectButton></ConnectButton>} */}
           <a href="https://x.com/Find4_io" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
           <a href="https://discord.com/invite/pYsHzwZ82S" className="menuElement noDecs" target="_blank"><FontAwesomeIcon icon={faDiscord} /></a>

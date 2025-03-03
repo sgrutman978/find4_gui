@@ -1,5 +1,4 @@
-import { useCurrentAccount } from '@mysten/dapp-kit';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
 import DoTransaction, { newMultiPlayerGameTx, fetchEvents, myNetwork, newSinglePlayerGameTx, OGAddyForEventObjType, programAddress, /*fetchProfile*/ } from './sui_controller';
 import { CircularProgress, TextField } from '@mui/material';
@@ -7,36 +6,31 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDice, faHome, faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
 import { getP2 } from './ServerConn';
 import { useEnokiFlow } from '@mysten/enoki/react';
+import GameSuiteClient from './sui_controller';
+import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 // import { ExtendedProfile } from './GameBoard';
  
  function NewGameButton(props: any) {
-	const [digest, setDigest] = useState('');
-	const currentAccount = useCurrentAccount();
-	const enokiFlow = useEnokiFlow();
-  	const [player2Addy, setPlayer2Addy] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [addyInput, setAddyInput] = useState("");
 	const [addyPasses, setAddyPasses] = useState(true);
-	const doTx = DoTransaction();
-
-  const handleChange = (val: React.ChangeEvent<HTMLInputElement>) => {
-    setPlayer2Addy(val.target.value);
-  };
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const gsl = new GameSuiteClient(useEnokiFlow(), useCurrentAccount(), signAndExecuteTransaction);
 
   let intervalId: string | number | NodeJS.Timeout | undefined = undefined;
 
   const sendTransaction = async () => {
-	if (!currentAccount){
+	if (!gsl.myAddy){
 		alert("Please connect a SUI wallet");
 	} else {
 		if(props.gameType != "challenge" || checkAddyInput(addyInput)){
 			console.log("lslslslsl");
-			getP2(currentAccount.address).then(async (p2) => {
+			getP2(gsl.myAddy).then(async (p2) => {
 				console.log(p2);
 			let transaction = props.gameType == "single" ? await newSinglePlayerGameTx(props.trophies) : await newMultiPlayerGameTx((checkAddyInput(addyInput) ? addyInput : p2), props.trophies);
 				if(transaction){
-					transaction!.setSender(currentAccount?.address!);
-					doTx(transaction, () => {
+					transaction!.setSender(gsl.myAddy);
+					gsl.doTransaction(transaction, () => {
 						setLoading(() => true);
 							if(intervalId){
 								clearInterval(intervalId);
@@ -71,9 +65,8 @@ import { useEnokiFlow } from '@mysten/enoki/react';
 				  console.log(Number(event.timestampMs));
 				  console.log((Date.now() - Number(event.timestampMs)));
 				  console.log(x);
-				  console.log(currentAccount?.address);
 				  console.log(eventData.p1);
-				  if (x && (eventData.p1 == currentAccount?.address || eventData.p2 == currentAccount?.address)){
+				  if (x && (eventData.p1 == gsl.myAddy || eventData.p2 == gsl.myAddy)){
 					  //redirect to game page the event described
 					  window.location.href = '/app/game/'+eventData.game;
 				  }

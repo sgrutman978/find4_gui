@@ -3,7 +3,7 @@ import { CoinStruct, SuiClient, SuiClientOptions, getFullnodeUrl } from '@mysten
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromB64 } from '@mysten/bcs';
 import DoTransaction, { GetObjectContents, OGAddyForEventObjType, presaleStateMainnet, programAddress, suiClient_Mainnet } from './sui_controller';
-import { ConnectButton, SuiClientProvider, useAutoConnectWallet, useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { ConnectButton, SuiClientProvider, useAutoConnectWallet, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
 import TextField from '@mui/material/TextField';
 
@@ -13,6 +13,8 @@ import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEquals, faExchange } from '@fortawesome/free-solid-svg-icons';
 import { useEnokiFlow } from '@mysten/enoki/react';
+import ProfileButtonAndPanel from './ProfileButtonAndPanel';
+import GameSuiteClient from './sui_controller';
 
 const OneCoinNineDecimals = 1000000000;
 
@@ -22,12 +24,17 @@ function Presale() {
   const [error, setError] = useState("");
   const [suiBalance, setSuiBalance] = useState("");
   const [ffioBalance, setFfioBalance] = useState("");
-  const meh = useSuiClient();
 
-  const currentAccount = useCurrentAccount();
-  const enokiFlow = useEnokiFlow();
-  const autoConnectionStatus = useAutoConnectWallet();
-  const doTx = DoTransaction();
+    const enokiFlow = useEnokiFlow();
+    // const [myAddy, setMyAddy] = useState("");
+    // useEffect(() => {
+    //     enokiFlow.getKeypair().then((pair) => {
+    //         setMyAddy(pair.toSuiAddress());
+    //     });
+    // }, [enokiFlow]);
+
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const gsl = new GameSuiteClient(useEnokiFlow(), useCurrentAccount(), signAndExecuteTransaction);
 
   const [progress, setProgress] = React.useState(0);
 
@@ -48,7 +55,7 @@ function Presale() {
 
   useEffect(() => {
     getBalances();
-  }, [currentAccount]);
+  }, [enokiFlow]);
 
   async function fetchPresaleState() {
     GetObjectContents(presaleStateMainnet!).then((obj) => {
@@ -58,14 +65,14 @@ function Presale() {
   }
 
   async function getBalances(){
-    if(currentAccount){
-      suiClient_Mainnet.getBalance({ owner: currentAccount?.address! }).then((res) => {
+    if(enokiFlow){
+      suiClient_Mainnet.getBalance({ owner: gsl.myAddy }).then((res) => {
         console.log(res.totalBalance);
         const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
         setSuiBalance(b+"");
         console.log(suiBalance);
       });
-      suiClient_Mainnet.getBalance({ owner: currentAccount?.address!, coinType: `${OGAddyForEventObjType}::FFIO::FFIO` }).then((res) => {
+      suiClient_Mainnet.getBalance({ owner: gsl.myAddy, coinType: `${OGAddyForEventObjType}::FFIO::FFIO` }).then((res) => {
         console.log(res.totalBalance);
         const b = Math.floor((parseInt(res.totalBalance)/OneCoinNineDecimals)*10000)/10000;
         setFfioBalance(b+"");
@@ -100,7 +107,7 @@ function Presale() {
       // Split coins if needed, here we're splitting 100 MIST (0.01 SUI)
       // const [coin2] = tx.splitCoins(tx.object(coin), [amount*presaleState.price]); //tx.object(userCoins.data[0].coinObjectId
 
-      tx.setSender(currentAccount?.address!);
+      tx.setSender(gsl.myAddy);
       // Assuming you have the address of the package where your Move module is published
       tx.moveCall({
         target: `${programAddress}::FFIO::buy_token`,
@@ -111,7 +118,7 @@ function Presale() {
         ],
       });
       
-      doTx(tx, (result) => {
+      gsl.doTransaction(tx, (result) => {
         if (result.digest) {
           alert('Transaction successful!');
           fetchPresaleState();
@@ -132,7 +139,7 @@ function Presale() {
       <div className="presale-container">
         <div className="connectButtonWrapper2">
           <div className="right topRight"> 
-          {currentAccount ? <>Wallet: <span style={{marginRight: 7, marginLeft: 5}}>
+          {gsl.myAddy ? <>Wallet: <span style={{marginRight: 7, marginLeft: 5}}>
               <img style={{width: 18, marginRight: 2, top: 2, position: "relative"}} src="./sui-logo.png" />
               <span style={{fontSize: 18}}>{suiBalance}</span>
             </span> 
@@ -142,6 +149,7 @@ function Presale() {
             </span></> 
             : <></>}
             <ConnectButton></ConnectButton>
+            <ProfileButtonAndPanel />
           </div>
           {/* {autoConnectionStatus} */}
         </div>

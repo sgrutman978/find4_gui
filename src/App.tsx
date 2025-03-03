@@ -16,7 +16,6 @@ import Presale from './Presale';
 import Staking from './Staking';
 import Leaderboard from './Leaderboard';
 import { EnokiFlowProvider } from '@mysten/enoki/react';
-import Enoki from './enoki_auth';
 // import { useLocation } from 'react-router-dom';
 
 // Config options for the networks you want to connect to
@@ -52,12 +51,14 @@ function App() {
           <div className="App">
 		  {window.location.pathname == "/" || window.location.pathname == "/staking" ? <Navbar /> : ""}
 		  {/* <Navbar /> */}
-			<Enoki />
+			{/* <Enoki /> */}
 			{/* </Header> */}
 			<BrowserRouter>
 				<Routes>
-                    <Route path="/"  Component={Home} />
-					<Route path="/app" Component={GameHomeScreen}/>
+                    <Route path="/"  Component={GameHomeScreen} />
+					<Route path="/app"  Component={GameHomeScreen} />
+					<Route path="/info" Component={Home}/>
+					<Route path="/login_redirect" Component={GameHomeScreen}/>
                     <Route path="/app/game/:gameID" Component={GameBoard}/>
 					{/* <Route path="/presale" Component={Presale}/> */}
 					<Route path="/staking" Component={StakingHome}/>

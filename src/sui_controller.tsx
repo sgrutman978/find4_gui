@@ -2,13 +2,16 @@ import { getFullnodeUrl, PaginatedObjectsResponse, QueryEventsParams, SuiClient,
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 import { Profile } from './GameBoard';
-import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { useEnokiFlow } from '@mysten/enoki/react';
-import { executeTransactionBlockWithoutSponsorship } from './enoki_controller';
-import { EnokiFlow } from '@mysten/enoki';
+import { executeTransactionBlockWithoutSponsorship,  } from './enoki_controller';
+import { AuthProvider, EnokiFlow } from '@mysten/enoki';
+import { useEffect, useState } from 'react';
+import { useCurrentAccount } from '@mysten/dapp-kit';
+import type { WalletAccount } from '@mysten/wallet-standard';
 
 export const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
-										export let myNetwork = "mainnet";
+export let myNetwork = "mainnet";
 export const suiClient_Mainnet = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
 export const port = myNetwork == "mainnet" ? 3000 : 3001;
@@ -32,36 +35,71 @@ export const presaleStateMainnet = myNetwork == "mainnet" ? process.env.REACT_AP
 
 // export const programAddress_Mainnet = myNetwork == "mainnet" ? process.env.REACT_APP_PROGRAM_ADDY_MAINNET;
 // export const OGAddyForEventObjType_Mainnet = myNetwork == "mainnet" ? process.env.REACT_APP_ORIGINAL_ADDRESS_FOR_EVENT_AND_OBJECT_TYPE_MAINNET;
-export default function DoTransaction(){
-	let currentAccount = useCurrentAccount();
-	const enokiFlow = useEnokiFlow();
-	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
-
-	 const doTransaction = (transaction: Transaction, callback: (result: any) => void, errorCallback?: (error: any) => void) => {
-		console.log("ENOKI CHECCCCCCKK");
-		let enokiLoggedIn = "false";
-		enokiFlow.$zkLoginState.subscribe((state) => {
-            enokiLoggedIn = state?.address!;
-            console.log(state);
+export default class GameSuiteClient{
+	enokiFlow: EnokiFlow = useEnokiFlow();
+	currentAccount: WalletAccount | null; 
+	myAddy: string = "";
+	isEnoki: boolean = false;
+	signAndExec: any;
+	
+	constructor(enokiFlow: EnokiFlow, currentAccount: WalletAccount | null, signAndExec: any){
+		this.enokiFlow = enokiFlow;
+		this.currentAccount = currentAccount;
+		this.signAndExec = signAndExec;
+		this.enokiFlow.$zkLoginState.subscribe((state) => {
+			if(state?.address!){
+            	this.myAddy = state?.address!;
+				console.log("yyyyyy");
+				console.log(state.address);
+				this.isEnoki = true;
+			}else{
+				if(currentAccount?.address!){
+					this.myAddy = currentAccount?.address!;
+				}
+			}
         });
-		console.log(enokiFlow.getSession());
-		if(enokiLoggedIn){
-			executeTransactionBlockWithoutSponsorship(transaction, enokiFlow, suiClient, callback, errorCallback);
+	}
+
+	handleEnokiLogins(redirectUrl: string, provider: AuthProvider, clientId: string){
+        this.enokiFlow.createAuthorizationURL({
+            provider: provider,
+            network: 'mainnet',
+            clientId: clientId,
+            redirectUrl,
+            extraParams: {
+                scope: ['openid', 'email', 'profile'],
+            },
+        }).then((url) => {
+            window.location.href = url;
+        }).catch((error) => {
+            console.error(error);
+        });
+	}
+
+	logoutEnoki(){
+		this.enokiFlow.logout();
+	}
+
+	doTransaction(transaction: Transaction, callback: (result: any) => void, errorCallback?: (error: any) => void) {
+		console.log("ENOKI CHECCCCCCKK");
+		if(this.isEnoki){
+			executeTransactionBlockWithoutSponsorship(transaction, this.enokiFlow, suiClient, callback, errorCallback);
 		}else{
-			doTraditionalTransaction(transaction, callback, errorCallback);
+			this.doTraditionalTransaction(transaction, callback, errorCallback);
 		}
 	};
-
-	const doTraditionalTransaction = (transaction: Transaction, callback: (result: any) => void, errorCallback?: (error: any) => void) => {
-		signAndExecuteTransaction({
+	
+	doTraditionalTransaction(transaction: Transaction, callback: (result: any) => void, errorCallback?: (error: any) => void) {
+		// const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+		this.signAndExec({
 			transaction: transaction!,
 			chain: `sui:${myNetwork}`,
 		}, {
-			onSuccess: (result) => {
+			onSuccess: (result: any) => {
 				console.log('executed transaction', result);
 				callback(result);
 			},
-			onError: (error) => {
+			onError: (error: any) => {
 				console.log(error);
 				if(errorCallback){
 					errorCallback(error);
@@ -69,8 +107,9 @@ export default function DoTransaction(){
 			}
 		});	
 	};
-	return doTransaction;
 };
+
+
 
   export const fetchEvents = async () => {
 	try {
